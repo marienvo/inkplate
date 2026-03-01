@@ -5,6 +5,7 @@ import {
   MousePointer2,
   Cloud,
   Calendar,
+  UtensilsCrossed,
   CalendarDays,
   Clock1,
   Clock2,
@@ -174,7 +175,7 @@ export default function App() {
     .filter((appointment) => appointment.date === todayIsoDate)
     .sort((a, b) => a.startTime.localeCompare(b.startTime));
 
-  const visibleAppointments = todayAppointments.slice(0, 5);
+  const visibleAppointments = todayAppointments.slice(0, 3);
   const hiddenAppointmentsCount = todayAppointments.length - visibleAppointments.length;
   const windDirectionStyle = {
     "--wind-rotation": `${weather.windDirectionDegrees 
@@ -270,6 +271,10 @@ export default function App() {
             </ul>
           )}
           {hiddenAppointmentsCount > 0 && <p className="more-indicator">{hiddenAppointmentsCount} more</p>}
+        </Section>
+
+        <Section icon={<UtensilsCrossed />} title="Food">
+          <p className="empty-state">No meals planned</p>
         </Section>
       </div>
 
