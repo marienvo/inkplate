@@ -1,0 +1,24 @@
+---
+description: Always run and maintain TypeScript type checks
+alwaysApply: true
+---
+
+# Typecheck Discipline
+
+- Run `npm run typecheck` after relevant code changes in TypeScript or shared runtime paths.
+- Resolve introduced type errors before finishing the task.
+- If a change intentionally alters types, update affected annotations and call sites in the same task.
+- Prefer precise types over `any`; use narrowing and explicit unions when needed.
+- Keep type checks fast and local to project scripts.
+
+## Example
+
+```ts
+type Status = "idle" | "loading" | "done";
+
+function renderStatus(status: Status): string {
+  if (status === "loading") return "Loading...";
+  if (status === "done") return "Done";
+  return "Idle";
+}
+```

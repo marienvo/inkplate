@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "vite",
     "test": "vitest run",
+    "typecheck": "tsc --noEmit",
     "fetch-weather": "tsx scripts/fetch-weather.ts",
     "prebuild": "npm run fetch-weather",
     "build": "vite build",

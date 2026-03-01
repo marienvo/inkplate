@@ -137,7 +137,7 @@ function getAppointmentClockIcon(startTime: string): ReactNode {
   }
 
   const roundedHour24 = (hours + (minutes >= 30 ? 1 : 0)) % 24;
-  const hourOn12 = roundedHour24 % 12 || 12;
+  const hourOn12 = (roundedHour24 % 12 || 12) as 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12;
   const CLOCK_ICONS = {
     1: Clock1,
     2: Clock2,
