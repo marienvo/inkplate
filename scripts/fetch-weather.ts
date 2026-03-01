@@ -3,6 +3,7 @@ import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
 import { API_KEY } from "../config.js";
+import { getOutdoorFeel, type OutdoorFeel, type WeatherApiSnapshot } from "../src/lib/outdoor-feel.ts";
 
 type WeerLiveCurrent = {
   fout?: string;
@@ -10,9 +11,15 @@ type WeerLiveCurrent = {
   gtemp?: number;
   samenv?: string;
   lv?: number;
+  windms?: number;
   windr?: string;
+  windrgr?: number;
   windbft?: number;
   windkmh?: number;
+  windknp?: number;
+  luchtd?: number;
+  dauwp?: number;
+  zicht?: number;
   verw?: string;
 };
 
@@ -34,6 +41,7 @@ type WeatherData = {
   windBft: number;
   rainChance: number;
   forecast: string;
+  outdoorFeel: OutdoorFeel;
 };
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -66,15 +74,34 @@ function mapApiResponse(body: WeerLiveResponse): WeatherData {
     throw new Error(`Weather API error: ${current.fout}`);
   }
 
-  return {
+  const snapshot: WeatherApiSnapshot = {
     temp: requiredNumber(current.temp, "liveweer[0].temp"),
+    gtemp: current.gtemp,
+    lv: requiredNumber(current.lv, "liveweer[0].lv"),
+    windms: requiredNumber(current.windms, "liveweer[0].windms"),
+    windbft: current.windbft,
+    windkmh: current.windkmh,
+    windknp: current.windknp,
+    windr: current.windr,
+    windrgr: current.windrgr,
+    luchtd: current.luchtd,
+    dauwp: requiredNumber(current.dauwp, "liveweer[0].dauwp"),
+    zicht: requiredNumber(current.zicht, "liveweer[0].zicht"),
+    samenv: current.samenv
+  };
+
+  const outdoorFeel = getOutdoorFeel(snapshot);
+
+  return {
+    temp: snapshot.temp,
     feelsLike: requiredNumber(current.gtemp, "liveweer[0].gtemp"),
-    summary: requiredString(current.samenv, "liveweer[0].samenv"),
-    humidity: requiredNumber(current.lv, "liveweer[0].lv"),
+    summary: requiredString(snapshot.samenv, "liveweer[0].samenv"),
+    humidity: snapshot.lv,
     windDirection: requiredString(current.windr, "liveweer[0].windr"),
     windBft: requiredNumber(current.windbft, "liveweer[0].windbft"),
     rainChance: requiredNumber(dayForecast?.neersl_perc_dag, "wk_verw[0].neersl_perc_dag"),
-    forecast: requiredString(current.verw, "liveweer[0].verw")
+    forecast: requiredString(current.verw, "liveweer[0].verw"),
+    outdoorFeel
   };
 }
 

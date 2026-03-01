@@ -1,7 +1,19 @@
 import type { ReactNode } from "react";
-import { Thermometer, CloudRain, Wind, Droplets, Cloud, Calendar, Clock } from "lucide-react";
+import {
+  Thermometer,
+  CloudRain,
+  Wind,
+  Droplets,
+  Cloud,
+  Calendar,
+  Clock,
+  Eye,
+  AlertTriangle,
+  Smile
+} from "lucide-react";
 import calendarData from "./data/calendar.json";
 import weatherData from "./data/weather.json";
+import type { OutdoorFeel } from "./lib/outdoor-feel";
 
 type WeatherItem = {
   icon: ReactNode;
@@ -24,6 +36,7 @@ type WeatherData = {
   windBft: number;
   rainChance: number;
   forecast: string;
+  outdoorFeel?: OutdoorFeel;
 };
 
 function ordinal(n: number): string {
@@ -80,6 +93,8 @@ function Section({ icon, title, children }: SectionProps) {
 
 export default function App() {
   const weather = weatherData as WeatherData;
+  const outdoorFeel = weather.outdoorFeel;
+  const hasOutdoorFeel = Boolean(outdoorFeel);
   const now = new Date();
   const todayIsoDate = formatIsoDate(now);
   const todayTitle = formatDateForTitle(now);
@@ -89,17 +104,41 @@ export default function App() {
 
   const visibleAppointments = todayAppointments.slice(0, 5);
   const hiddenAppointmentsCount = todayAppointments.length - visibleAppointments.length;
+  const warningParts: string[] = [];
+  if (outdoorFeel) {
+    if (outdoorFeel.details.condensationRisk !== "Low") {
+      warningParts.push(`${outdoorFeel.details.condensationRisk} condensation risk`);
+    }
+    if (outdoorFeel.details.frostOrSlipHint !== "None") {
+      warningParts.push(
+        outdoorFeel.details.frostOrSlipHint === "Likely" ? "Slip risk likely" : "Slip risk possible"
+      );
+    }
+  }
+
   const weatherItems: WeatherItem[] = [
     {
       icon: <Thermometer />,
       label: "Temperature",
-      value: `${Math.round(weather.temp)}°C (feels like ${Math.round(weather.feelsLike)}°C)`
+      value: `${Math.round(weather.temp)}°C (feels like ${Math.round(outdoorFeel?.feelsLikeC ?? weather.feelsLike)}°C)`
     },
     { icon: <Cloud />, label: "Condition", value: weather.summary },
     { icon: <CloudRain />, label: "Rain", value: `${Math.round(weather.rainChance)}% chance` },
     { icon: <Wind />, label: "Wind", value: `${Math.round(weather.windBft)} bft ${weather.windDirection}` },
-    { icon: <Droplets />, label: "Humidity", value: `${Math.round(weather.humidity)}%` }
   ];
+
+  if (hasOutdoorFeel && outdoorFeel) {
+    weatherItems.push({ icon: <Smile />, label: "Feel", value: outdoorFeel.feelText });
+    weatherItems.push({ icon: <Eye />, label: "Visibility", value: outdoorFeel.details.visibilityFeel });
+  }
+
+  if (warningParts.length > 0) {
+    weatherItems.push({
+      icon: <AlertTriangle />,
+      label: "Warnings",
+      value: warningParts.join(" · ")
+    });
+  }
 
   return (
     <main className="frame">
