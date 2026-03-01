@@ -83,6 +83,12 @@ function formatIsoDate(d: Date): string {
   return `${year}-${month}-${day}`;
 }
 
+function format24HourTime(d: Date): string {
+  const hours = String(d.getHours()).padStart(2, "0");
+  const minutes = String(d.getMinutes()).padStart(2, "0");
+  return `${hours}:${minutes}`;
+}
+
 function formatRenderTime(): string {
   const d = new Date();
   const weekday = new Intl.DateTimeFormat("en-US", { weekday: "long" }).format(d);
@@ -182,8 +188,19 @@ export default function App() {
     .filter((appointment) => appointment.date === todayIsoDate)
     .sort((a, b) => a.startTime.localeCompare(b.startTime));
 
-  const visibleAppointments = todayAppointments.slice(0, 3);
-  const hiddenAppointmentsCount = todayAppointments.length - visibleAppointments.length;
+  const maxVisibleAppointments = 3;
+  const currentTime = format24HourTime(now);
+  const firstUpcomingIndex = todayAppointments.findIndex(
+    (appointment) => appointment.startTime >= currentTime
+  );
+  const upcomingAnchorIndex =
+    firstUpcomingIndex === -1 ? todayAppointments.length : firstUpcomingIndex;
+  const startIndex = Math.max(0, Math.min(upcomingAnchorIndex, todayAppointments.length - maxVisibleAppointments));
+  const visibleAppointments = todayAppointments.slice(startIndex, startIndex + maxVisibleAppointments);
+  const hiddenAppointmentsCount = Math.max(
+    0,
+    todayAppointments.length - (startIndex + visibleAppointments.length)
+  );
   const windDirectionStyle = {
     "--wind-rotation": `${weather.windDirectionDegrees 
     + 90 // meteorological → CSS
