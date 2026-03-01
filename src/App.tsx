@@ -109,7 +109,10 @@ export default function App() {
   const visibleAppointments = todayAppointments.slice(0, 5);
   const hiddenAppointmentsCount = todayAppointments.length - visibleAppointments.length;
   const windDirectionStyle = {
-    "--wind-rotation": `${weather.windDirectionDegrees - 315}deg`
+    "--wind-rotation": `${weather.windDirectionDegrees 
+    + 90 // meteorological → CSS
+    + 45 // icon offset
+    }deg`
   } as CSSProperties;
   const warningParts: string[] = [];
   if (outdoorFeel) {
