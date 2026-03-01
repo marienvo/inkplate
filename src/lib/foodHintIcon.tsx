@@ -28,7 +28,7 @@ export type FoodHintItem = {
   value: string;
 };
 
-const FOOD_HINT_ICONS: Record<string, LucideIcon> = {
+export const FOOD_HINT_ICONS: Record<string, LucideIcon> = {
   'Meal prep': CookingPot,
   'Batch cook': ChefHat,
   'Prep & freeze': Refrigerator,

@@ -20,7 +20,7 @@ import {
   Wind,
 } from 'lucide-react';
 
-const HINT_ICONS: Record<string, LucideIcon> = {
+export const HINT_ICONS: Record<string, LucideIcon> = {
   'Indoor day': Home,
   'Do not bike': Ban,
   'Slippery outside': TriangleAlert,
