@@ -11,7 +11,9 @@ This project renders a React dashboard to a PNG and serves it to an Inkplate 5V2
 ## 1) Install
 
 ```bash
-sudo dnf install arduino-cli
+curl -fsSL https://raw.githubusercontent.com/arduino/arduino-cli/master/install.sh | sh
+mkdir -p ~/.local/bin
+mv ./bin/arduino-cli ~/.local/bin/
 npm install
 ```
 
