@@ -1,0 +1,17 @@
+---
+description: Enforce file naming conventions across the project
+alwaysApply: true
+---
+
+# File Naming Conventions
+
+- Use `camelCase` for regular source files in TypeScript/JavaScript.
+- Use `PascalCase` for React component files.
+- Keep framework and ecosystem default filenames as-is (for example `package.json`, `tsconfig.json`, `vite.config.ts`, `firmware.ino`).
+- Keep directory names in `kebab-case` where practical.
+
+## Examples
+
+- Prefer `fetchWeather.ts` over `fetch-weather.ts`.
+- Prefer `outdoorFeel.ts` over `outdoor-feel.ts`.
+- Keep component files like `App.tsx` or `WeatherPanel.tsx` in `PascalCase`.

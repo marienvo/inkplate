@@ -1,5 +1,5 @@
 import { expect, test } from "vitest";
-import { getOutdoorFeel, type WeatherApiSnapshot } from "./outdoor-feel";
+import { getOutdoorFeel, type WeatherApiSnapshot } from "./outdoorFeel";
 
 function baseSnapshot(overrides: Partial<WeatherApiSnapshot> = {}): WeatherApiSnapshot {
   return {

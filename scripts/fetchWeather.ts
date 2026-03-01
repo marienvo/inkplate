@@ -3,7 +3,7 @@ import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
 import { API_KEY } from "../config.js";
-import { getOutdoorFeel, type OutdoorFeel, type WeatherApiSnapshot } from "../src/lib/outdoor-feel.ts";
+import { getOutdoorFeel, type OutdoorFeel, type WeatherApiSnapshot } from "../src/lib/outdoorFeel.ts";
 import { getWeekendFoodPlan } from "../src/lib/food.ts";
 import { getWeekendOneLiner, type DaySnapshot } from "../src/lib/weekend.ts";
 

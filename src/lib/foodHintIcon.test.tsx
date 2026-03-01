@@ -1,7 +1,7 @@
 import { isValidElement } from "react";
 import { expect, test } from "vitest";
 import { CookingPot, UtensilsCrossed } from "lucide-react";
-import { renderFoodHint } from "./food-hint-icon";
+import { renderFoodHint } from "./foodHintIcon";
 
 test("parses prefixed food hint into label and value", () => {
   const item = renderFoodHint("Meal prep: leek, kale");

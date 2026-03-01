@@ -24,9 +24,9 @@ import {
 } from "lucide-react";
 import calendarData from "./data/calendar.json";
 import weatherData from "./data/weather.json";
-import type { OutdoorFeel } from "./lib/outdoor-feel";
-import { renderActivityHint } from "./lib/activity-hint-icon";
-import { renderFoodHint } from "./lib/food-hint-icon";
+import type { OutdoorFeel } from "./lib/outdoorFeel";
+import { renderActivityHint } from "./lib/activityHintIcon";
+import { renderFoodHint } from "./lib/foodHintIcon";
 
 type WeatherItem = {
   icon: ReactNode;

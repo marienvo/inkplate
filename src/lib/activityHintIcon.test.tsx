@@ -1,7 +1,7 @@
 import { isValidElement, type ReactElement } from "react";
 import { expect, test } from "vitest";
 import { Home } from "lucide-react";
-import { renderActivityHint } from "./activity-hint-icon";
+import { renderActivityHint } from "./activityHintIcon";
 
 test("returns text as-is for unknown hints", () => {
   const result = renderActivityHint("Some unknown hint");
