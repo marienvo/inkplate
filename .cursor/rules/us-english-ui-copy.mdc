@@ -1,0 +1,17 @@
+---
+description: Keep dashboard UI copy in US English
+globs: src/**/*.tsx
+alwaysApply: false
+---
+
+# US English Dashboard Copy
+
+- Write all user-facing dashboard text in US English.
+- Prefer concise, natural labels used in apps (for example: "Last updated", not "Last render").
+- Use US date/locale formatting for UI timestamps unless a task explicitly requests another locale.
+- Keep weather and agenda labels in English, including accessibility labels (`aria-label`).
+
+## Examples
+
+- Good: `Last updated`, `Weather`, `Today`, `Status icons`
+- Avoid: `Laatste render`, `Weer`, `Vandaag`, `Status iconen`

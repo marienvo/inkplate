@@ -8,7 +8,7 @@
 
 body {
   margin: 0;
-  background: #ddd;
+  background: #d9d9d9;
 }
 
 #root {
@@ -20,45 +20,113 @@ body {
 .frame {
   width: 720px;
   height: 1280px;
-  padding: 48px;
   background: #fff;
   color: #000;
   display: flex;
   flex-direction: column;
-  gap: 32px;
+  overflow: hidden;
 }
 
-.header h1 {
+.frame-content {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+}
+
+.status-bar {
+  min-height: 28px;
+  flex-shrink: 0;
+  background: #fff;
+  color: #666;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 2px 8px;
+  border-top: 1px solid #ddd;
+}
+
+.status-time {
   margin: 0;
-  font-size: 72px;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0;
+  line-height: 1.2;
+}
+
+.status-icons {
+  margin: 0;
+  font-size: 12px;
+  letter-spacing: 1px;
   line-height: 1;
 }
 
-.header p {
-  margin: 12px 0 0;
-  font-size: 28px;
-  color: #333;
+.section {
+  padding: 24px 28px 0;
 }
 
-.grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 20px;
-}
-
-.card {
-  border: 3px solid #000;
-  background: #f0f0f0;
-  padding: 24px;
-  min-height: 180px;
-}
-
-.card h2 {
+.section-header {
   margin: 0;
-  font-size: 30px;
+  padding-bottom: 12px;
+  border-bottom: 2px solid #111;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 36px;
+  font-weight: 600;
+  letter-spacing: 0.2px;
 }
 
-.card p {
-  margin: 18px 0 0;
-  font-size: 36px;
+.list {
+  list-style: none;
+  margin: 8px 0 0;
+  padding: 0;
+}
+
+.list-item {
+  min-height: 84px;
+  border-bottom: 1px solid #c8c8c8;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.item-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.item-label {
+  font-size: 30px;
+  font-weight: 600;
+  line-height: 1.25;
+}
+
+.item-value {
+  font-size: 30px;
+  line-height: 1.25;
+  color: #111;
+  text-align: right;
+}
+
+.emoji {
+  width: 1.35em;
+  text-align: center;
+  font-size: 34px;
+  line-height: 1;
+}
+
+.today-list .item-label {
+  width: 180px;
+}
+
+.today-list .item-value {
+  flex: 1;
+  text-align: left;
+}
+
+.today-list .emoji {
+  font-size: 30px;
 }
