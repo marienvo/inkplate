@@ -136,7 +136,7 @@ export default function App() {
     {
       icon: <Wind/>,
       label: "Wind",
-      value: <>{Math.round(weather.windBft)} bft <MousePointer2 className="wind-direction-icon" style={windDirectionStyle} /></>
+      value: <><MousePointer2 className="wind-direction-icon" style={windDirectionStyle} /> {Math.round(weather.windBft)} bft</>
     },
   ];
 
