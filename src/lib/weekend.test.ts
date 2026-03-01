@@ -1,4 +1,5 @@
 import { expect, test } from 'vitest';
+import { ACTIVITY_HINTS } from './activityHints';
 import { getActivityHint, getWeekendOneLiner, type DaySnapshot } from './weekend';
 
 function makeDay(overrides: Partial<DaySnapshot> = {}): DaySnapshot {
@@ -14,7 +15,7 @@ function makeDay(overrides: Partial<DaySnapshot> = {}): DaySnapshot {
 
 test('returns Indoor day for very wet weather', () => {
   const hint = getActivityHint(makeDay({ rainChance: 85 }));
-  expect(hint).toBe('Indoor day');
+  expect(hint).toBe(ACTIVITY_HINTS.INDOOR_DAY);
 });
 
 test('returns Do not bike for wet and gale conditions', () => {
@@ -24,10 +25,10 @@ test('returns Do not bike for wet and gale conditions', () => {
       windbft: 8,
     }),
   );
-  expect(hint).toBe('Do not bike');
+  expect(hint).toBe(ACTIVITY_HINTS.DO_NOT_BIKE);
 });
 
-test('returns Golden outdoor day for mild, dry, calm, crystal clear weather', () => {
+test('returns Golden day for mild, dry, calm, crystal clear weather', () => {
   const hint = getActivityHint(
     makeDay({
       feelsLike: 15,
@@ -36,7 +37,7 @@ test('returns Golden outdoor day for mild, dry, calm, crystal clear weather', ()
       zicht: 40000,
     }),
   );
-  expect(hint).toBe('Golden outdoor day');
+  expect(hint).toBe(ACTIVITY_HINTS.GOLDEN_DAY);
 });
 
 test('adds other-day suffix when weekend contrast is large', () => {
@@ -55,5 +56,7 @@ test('adds other-day suffix when weekend contrast is large', () => {
     zicht: 8000,
   });
 
-  expect(getWeekendOneLiner(goodDay, badDay)).toBe('Golden outdoor day (other day stormy)');
+  expect(getWeekendOneLiner(goodDay, badDay)).toBe(
+    `${ACTIVITY_HINTS.GOLDEN_DAY} (${ACTIVITY_HINTS.OTHER_DAY_STORMY})`,
+  );
 });
