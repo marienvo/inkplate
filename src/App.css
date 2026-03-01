@@ -92,12 +92,12 @@ strong {
 }
 
 .list-item {
-  min-height: 84px;
+  padding: 23px 0;
   border-bottom: 1px solid #c8c8c8;
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 24px;
 }
 
 .list-item:last-child {
@@ -108,7 +108,8 @@ strong {
   display: flex;
   align-items: center;
   gap: 10px;
-  min-width: 0;
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .item-label {
@@ -118,6 +119,8 @@ strong {
 }
 
 .item-value {
+  flex: 1;
+  min-width: 0;
   font-size: 30px;
   line-height: 1.25;
   color: #111;
@@ -145,7 +148,7 @@ strong {
 
 .activity-hint {
   display: inline-flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 0.45em;
 }
 
@@ -153,10 +156,11 @@ strong {
   width: 0.9em;
   height: 0.9em;
   flex-shrink: 0;
+  margin-top: 0.15em;
 }
 
 .today-list .item-label {
-  width: 180px;
+  width: 140px;
 }
 
 .today-list .item-value {
@@ -189,5 +193,5 @@ strong {
 }
 
 .dev-list-item {
-  min-height: 64px;
+  padding: 13px 0;
 }
