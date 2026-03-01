@@ -54,6 +54,7 @@ type WeatherData = {
     label: "This weekend" | "Tomorrow" | "Next weekend";
     value: string;
   };
+  foodHint?: string;
 };
 
 function ordinal(n: number): string {
@@ -274,7 +275,11 @@ export default function App() {
         </Section>
 
         <Section icon={<UtensilsCrossed />} title="Food">
-          <p className="empty-state">No meals planned</p>
+          {weather.foodHint ? (
+            <p className="food-hint">{weather.foodHint}</p>
+          ) : (
+            <p className="empty-state">No meals planned</p>
+          )}
         </Section>
       </div>
 
