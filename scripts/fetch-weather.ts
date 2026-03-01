@@ -4,6 +4,7 @@ import { fileURLToPath } from "node:url";
 
 import { API_KEY } from "../config.js";
 import { getOutdoorFeel, type OutdoorFeel, type WeatherApiSnapshot } from "../src/lib/outdoor-feel.ts";
+import { getWeekendOneLiner, type DaySnapshot } from "../src/lib/weekend.ts";
 
 type WeerLiveCurrent = {
   fout?: string;
@@ -42,6 +43,23 @@ type WeatherData = {
   rainChance: number;
   forecast: string;
   outdoorFeel: OutdoorFeel;
+  weekend?: {
+    label: "Weekend" | "Tomorrow" | "Next weekend";
+    value: string;
+  };
+};
+
+type OpenMeteoDaily = {
+  time?: string[];
+  apparent_temperature_max?: Array<number | null>;
+  precipitation_probability_max?: Array<number | null>;
+  wind_speed_10m_max?: Array<number | null>;
+  temperature_2m_min?: Array<number | null>;
+  weather_code?: Array<number | null>;
+};
+
+type OpenMeteoResponse = {
+  daily?: OpenMeteoDaily;
 };
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -60,6 +78,125 @@ function requiredString(value: string | undefined, name: string): string {
     throw new Error(`Missing string field: ${name}`);
   }
   return value;
+}
+
+function kmhToBft(windKmh: number): number {
+  if (windKmh < 1) return 0;
+  if (windKmh < 6) return 1;
+  if (windKmh < 12) return 2;
+  if (windKmh < 20) return 3;
+  if (windKmh < 29) return 4;
+  if (windKmh < 39) return 5;
+  if (windKmh < 50) return 6;
+  if (windKmh < 62) return 7;
+  if (windKmh < 75) return 8;
+  if (windKmh < 89) return 9;
+  if (windKmh < 103) return 10;
+  if (windKmh < 118) return 11;
+  return 12;
+}
+
+function visibilityFromCodeAndRain(weatherCode: number, rainChance: number): number {
+  const isFog = weatherCode === 45 || weatherCode === 48;
+  if (isFog) return 1000;
+  if (rainChance >= 55) return 8000;
+  return 20000;
+}
+
+function buildDaySnapshot(
+  feelsLike: number | null,
+  rainChance: number | null,
+  windKmh: number | null,
+  tempMin: number | null,
+  weatherCode: number | null
+): DaySnapshot | null {
+  if (
+    feelsLike === null ||
+    rainChance === null ||
+    windKmh === null ||
+    tempMin === null ||
+    weatherCode === null
+  ) {
+    return null;
+  }
+
+  const windbft = kmhToBft(windKmh);
+  return {
+    feelsLike,
+    rainChance,
+    windbft,
+    dauwp: tempMin,
+    zicht: visibilityFromCodeAndRain(weatherCode, rainChance)
+  };
+}
+
+function weekendTargetFromDay(day: number): {
+  label: "Weekend" | "Tomorrow" | "Next weekend";
+  firstOffset: number;
+  secondOffset: number;
+} {
+  if (day === 0) {
+    return { label: "Next weekend", firstOffset: 6, secondOffset: 7 };
+  }
+
+  if (day === 6) {
+    return { label: "Tomorrow", firstOffset: 1, secondOffset: 1 };
+  }
+
+  return {
+    label: "Weekend",
+    firstOffset: 6 - day,
+    secondOffset: 7 - day
+  };
+}
+
+async function fetchWeekendOneLiner(): Promise<WeatherData["weekend"]> {
+  const endpoint = new URL("https://api.open-meteo.com/v1/forecast");
+  endpoint.searchParams.set("latitude", "51.9225");
+  endpoint.searchParams.set("longitude", "4.4791");
+  endpoint.searchParams.set(
+    "daily",
+    "apparent_temperature_max,precipitation_probability_max,wind_speed_10m_max,temperature_2m_min,weather_code"
+  );
+  endpoint.searchParams.set("timezone", "Europe/Berlin");
+  endpoint.searchParams.set("forecast_days", "10");
+
+  const response = await fetch(endpoint);
+  if (!response.ok) {
+    throw new Error(`OpenMeteo request failed: ${response.status} ${response.statusText}`);
+  }
+
+  const body = (await response.json()) as OpenMeteoResponse;
+  const daily = body.daily;
+  if (!daily) {
+    throw new Error("OpenMeteo response missing daily forecast");
+  }
+
+  const { firstOffset, secondOffset, label } = weekendTargetFromDay(new Date().getDay());
+
+  const day1 = buildDaySnapshot(
+    daily.apparent_temperature_max?.[firstOffset] ?? null,
+    daily.precipitation_probability_max?.[firstOffset] ?? null,
+    daily.wind_speed_10m_max?.[firstOffset] ?? null,
+    daily.temperature_2m_min?.[firstOffset] ?? null,
+    daily.weather_code?.[firstOffset] ?? null
+  );
+  const day2 = buildDaySnapshot(
+    daily.apparent_temperature_max?.[secondOffset] ?? null,
+    daily.precipitation_probability_max?.[secondOffset] ?? null,
+    daily.wind_speed_10m_max?.[secondOffset] ?? null,
+    daily.temperature_2m_min?.[secondOffset] ?? null,
+    daily.weather_code?.[secondOffset] ?? null
+  );
+
+  if (!day1 || !day2) {
+    throw new Error("OpenMeteo did not provide enough data for weekend one-liner");
+  }
+
+  return {
+    label,
+    value: getWeekendOneLiner(day1, day2)
+  };
 }
 
 function mapApiResponse(body: WeerLiveResponse): WeatherData {
@@ -120,7 +257,16 @@ async function fetchWeather(): Promise<WeatherData> {
   }
 
   const body = (await response.json()) as WeerLiveResponse;
-  return mapApiResponse(body);
+  const weather = mapApiResponse(body);
+
+  try {
+    weather.weekend = await fetchWeekendOneLiner();
+  } catch (error) {
+    const message = error instanceof Error ? error.message : String(error);
+    console.warn(`Skipping weekend one-liner: ${message}`);
+  }
+
+  return weather;
 }
 
 async function main(): Promise<void> {

@@ -3,9 +3,9 @@ import {
   Thermometer,
   CloudRain,
   Wind,
-  Droplets,
   Cloud,
   Calendar,
+  CalendarDays,
   Clock,
   Eye,
   AlertTriangle,
@@ -37,6 +37,10 @@ type WeatherData = {
   rainChance: number;
   forecast: string;
   outdoorFeel?: OutdoorFeel;
+  weekend?: {
+    label: "Weekend" | "Tomorrow" | "Next weekend";
+    value: string;
+  };
 };
 
 function ordinal(n: number): string {
@@ -129,6 +133,14 @@ export default function App() {
   if (hasOutdoorFeel && outdoorFeel) {
     weatherItems.push({ icon: <Eye />, label: "Visibility", value: outdoorFeel.details.visibilityFeel });
     weatherItems.push({ icon: <Smile />, label: "Feel", value: outdoorFeel.feelText });
+  }
+
+  if (weather.weekend) {
+    weatherItems.push({
+      icon: <CalendarDays />,
+      label: weather.weekend.label,
+      value: weather.weekend.value
+    });
   }
 
   if (warningParts.length > 0) {
