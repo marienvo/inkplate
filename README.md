@@ -74,6 +74,5 @@ If you prefer, you can open `firmware/firmware.ino` in Arduino IDE and upload fr
 
 ## Notes
 
-- Existing `Inkplate5V2_Hello_World/Inkplate5V2_Hello_World.ino` is left untouched.
 - Dashboard target resolution is `720x1280`.
 - Firmware uses deep sleep and wakes every `SLEEP_HOURS`.
