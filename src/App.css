@@ -36,13 +36,12 @@ body {
 .status-bar {
   min-height: 40px;
   flex-shrink: 0;
-  background: #fff;
-  color: #666;
+  background: #666;
+  color: #fff;
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 6px 12px;
-  border-top: 2px solid #ddd;
 }
 
 .status-time {

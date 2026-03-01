@@ -94,10 +94,8 @@ export default function App() {
       </div>
 
       <header className="status-bar">
-        <p className="status-time">🔁 Last updated: {formatRenderTime()}</p>
-        <p className="status-icons" aria-label="Info">
-          ℹ️
-        </p>
+        <p className="status-time">Last updated: {formatRenderTime()}</p>
+        <p className="status-icons" aria-label="Info"></p>
       </header>
     </main>
   );
