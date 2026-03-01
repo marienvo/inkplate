@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
-import { Thermometer, Sun, CloudRain, Wind, Droplets, Cloud, Calendar, Clock } from "lucide-react";
+import { Thermometer, CloudRain, Wind, Droplets, Cloud, Calendar, Clock } from "lucide-react";
 import calendarData from "./data/calendar.json";
+import weatherData from "./data/weather.json";
 
 type WeatherItem = {
   icon: ReactNode;
@@ -14,13 +15,16 @@ type Appointment = {
   title: string;
 };
 
-const weatherItems: WeatherItem[] = [
-  { icon: <Thermometer />, label: "Temperature", value: "57°F" },
-  { icon: <Sun />, label: "Sun", value: "Partly cloudy" },
-  { icon: <CloudRain />, label: "Rain", value: "20% chance" },
-  { icon: <Wind />, label: "Wind", value: "15 km/h WSW" },
-  { icon: <Droplets />, label: "Humidity", value: "78%" }
-];
+type WeatherData = {
+  temp: number;
+  feelsLike: number;
+  summary: string;
+  humidity: number;
+  windDirection: string;
+  windBft: number;
+  rainChance: number;
+  forecast: string;
+};
 
 function ordinal(n: number): string {
   const s = ["th", "st", "nd", "rd"];
@@ -75,6 +79,7 @@ function Section({ icon, title, children }: SectionProps) {
 }
 
 export default function App() {
+  const weather = weatherData as WeatherData;
   const now = new Date();
   const todayIsoDate = formatIsoDate(now);
   const todayTitle = formatDateForTitle(now);
@@ -84,6 +89,17 @@ export default function App() {
 
   const visibleAppointments = todayAppointments.slice(0, 5);
   const hiddenAppointmentsCount = todayAppointments.length - visibleAppointments.length;
+  const weatherItems: WeatherItem[] = [
+    {
+      icon: <Thermometer />,
+      label: "Temperature",
+      value: `${Math.round(weather.temp)}°C (feels like ${Math.round(weather.feelsLike)}°C)`
+    },
+    { icon: <Cloud />, label: "Condition", value: weather.summary },
+    { icon: <CloudRain />, label: "Rain", value: `${Math.round(weather.rainChance)}% chance` },
+    { icon: <Wind />, label: "Wind", value: `${Math.round(weather.windBft)} bft ${weather.windDirection}` },
+    { icon: <Droplets />, label: "Humidity", value: `${Math.round(weather.humidity)}%` }
+  ];
 
   return (
     <main className="frame">

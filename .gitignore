@@ -8,3 +8,6 @@ firmware/config.h
 
 # Local JS config (API keys, etc.)
 config.js
+
+# Build-time generated weather snapshot
+src/data/weather.json

@@ -5,6 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "fetch-weather": "tsx scripts/fetch-weather.ts",
+    "prebuild": "npm run fetch-weather",
     "build": "vite build",
     "serve": "tsx server/index.ts",
     "generate": "tsx server/index.ts --once",
