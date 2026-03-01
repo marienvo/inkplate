@@ -1,4 +1,4 @@
-import type { CSSProperties, ReactNode } from 'react';
+import { useRef, type CSSProperties, type ReactNode } from 'react';
 import {
   Thermometer,
   CloudRain,
@@ -25,6 +25,7 @@ import {
 } from 'lucide-react';
 import calendarData from './data/calendar.json';
 import weatherData from './data/weather.json';
+import { useSmartAgendaLimit } from './hooks/useSmartAgendaLimit';
 import type { OutdoorFeel } from './lib/outdoorFeel';
 import { renderActivityHint } from './lib/activityHintIcon';
 import { renderFoodHint } from './lib/foodHintIcon';
@@ -179,6 +180,7 @@ function Section({ icon, title, children }: SectionProps) {
 }
 
 export default function App() {
+  const contentRef = useRef<HTMLDivElement>(null);
   const weather = weatherData as WeatherData;
   const outdoorFeel = weather.outdoorFeel;
   const hasOutdoorFeel = Boolean(outdoorFeel);
@@ -189,7 +191,7 @@ export default function App() {
     .filter((appointment) => appointment.date === todayIsoDate)
     .sort((a, b) => a.startTime.localeCompare(b.startTime));
 
-  const maxVisibleAppointments = 3;
+  const maxVisibleAppointments = useSmartAgendaLimit(contentRef, 3, 2);
   const currentTime = format24HourTime(now);
   const firstUpcomingIndex = todayAppointments.findIndex(
     (appointment) => appointment.startTime >= currentTime,
@@ -277,7 +279,7 @@ export default function App() {
 
   return (
     <main className="frame">
-      <div className="frame-content">
+      <div className="frame-content" ref={contentRef}>
         <Section icon={<Cloud />} title="Weather - Rotterdam">
           <ul className="list weather-list">
             {weatherItems.map((item) => (
