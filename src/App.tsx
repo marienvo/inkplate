@@ -6,7 +6,18 @@ import {
   Cloud,
   Calendar,
   CalendarDays,
-  Clock,
+  Clock1,
+  Clock2,
+  Clock3,
+  Clock4,
+  Clock5,
+  Clock6,
+  Clock7,
+  Clock8,
+  Clock9,
+  Clock10,
+  Clock11,
+  Clock12,
   AlertTriangle,
   Smile, Wind
 } from "lucide-react";
@@ -74,6 +85,62 @@ function formatRenderTime(): string {
     minute: "2-digit"
   }).format(d);
   return `${weekday}, ${month} ${ordinal(d.getDate())}, ${year}; ${time}`;
+}
+
+function formatAppointmentTime(startTime: string): string {
+  const [hoursPart, minutesPart] = startTime.split(":");
+  const hours = Number(hoursPart);
+  const minutes = Number(minutesPart);
+  if (
+    Number.isNaN(hours) ||
+    Number.isNaN(minutes) ||
+    hours < 0 ||
+    hours > 23 ||
+    minutes < 0 ||
+    minutes > 59
+  ) {
+    return startTime;
+  }
+
+  const period = hours >= 12 ? "PM" : "AM";
+  const displayHour = hours % 12 || 12;
+  return `${displayHour}:${String(minutes).padStart(2, "0")} ${period}`;
+}
+
+function getAppointmentClockIcon(startTime: string): ReactNode {
+  const [hoursPart, minutesPart] = startTime.split(":");
+  const hours = Number(hoursPart);
+  const minutes = Number(minutesPart);
+  if (
+    Number.isNaN(hours) ||
+    Number.isNaN(minutes) ||
+    hours < 0 ||
+    hours > 23 ||
+    minutes < 0 ||
+    minutes > 59
+  ) {
+    return <Clock12 />;
+  }
+
+  const roundedHour24 = (hours + (minutes >= 30 ? 1 : 0)) % 24;
+  const hourOn12 = roundedHour24 % 12 || 12;
+  const CLOCK_ICONS = {
+    1: Clock1,
+    2: Clock2,
+    3: Clock3,
+    4: Clock4,
+    5: Clock5,
+    6: Clock6,
+    7: Clock7,
+    8: Clock8,
+    9: Clock9,
+    10: Clock10,
+    11: Clock11,
+    12: Clock12
+  } as const;
+
+  const Icon = CLOCK_ICONS[hourOn12];
+  return <Icon />;
 }
 
 type SectionProps = {
@@ -193,9 +260,9 @@ export default function App() {
                 >
                   <span className="item-left">
                     <span className="emoji" aria-hidden="true">
-                      <Clock />
+                      {getAppointmentClockIcon(appointment.startTime)}
                     </span>
-                    <span className="item-label">{appointment.startTime}</span>
+                    <span className="item-label">{formatAppointmentTime(appointment.startTime)}</span>
                   </span>
                   <span className="item-value">{appointment.title}</span>
                 </li>
