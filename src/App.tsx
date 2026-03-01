@@ -122,7 +122,6 @@ export default function App() {
       label: "Temperature",
       value: `${Math.round(weather.temp)}°C (feels like ${Math.round(outdoorFeel?.feelsLikeC ?? weather.feelsLike)}°C)`
     },
-    { icon: <Cloud />, label: "Condition", value: weather.summary },
     { icon: <CloudRain />, label: "Rain", value: `${Math.round(weather.rainChance)}% chance` },
     { icon: <Wind />, label: "Wind", value: `${Math.round(weather.windBft)} bft ${weather.windDirection}` },
   ];
