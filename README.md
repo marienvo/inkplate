@@ -5,7 +5,7 @@ This project renders a React dashboard to a PNG and serves it to an Inkplate 5V2
 ## Requirements
 
 - Node.js 20+
-- Arduino CLI (not needed on CRON server, only for `npm run upload`)
+- Arduino CLI (not needed on CRON server, only for Inkplate device firmware)
 - Inkplate Arduino board support installed (`Inkplate_Boards:esp32`)
 
 ![img.png](img.png)
