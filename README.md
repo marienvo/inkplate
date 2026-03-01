@@ -78,3 +78,4 @@ If you prefer, you can open `firmware/firmware.ino` in Arduino IDE and upload fr
 
 - Dashboard target resolution is `720x1280`.
 - Firmware uses deep sleep and wakes every `SLEEP_HOURS`.
+- Architecture and CRON deployment details: [`specs/architecture.md`](specs/architecture.md).
