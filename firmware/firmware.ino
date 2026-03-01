@@ -22,8 +22,8 @@ void setup() {
   delay(200);
 
   display.begin();
-  // Zet de rotatie op 1 (of 3) voor portrait mode (staand)
-  display.setRotation(1);
+  // Zet de rotatie op 3 voor portrait mode (staand)
+  display.setRotation(3);
   display.clearDisplay();
 
   Serial.println("Connecting to WiFi...");
