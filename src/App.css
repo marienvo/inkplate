@@ -143,6 +143,18 @@ strong {
   transform: rotate(var(--wind-rotation, 0deg));
 }
 
+.activity-hint {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45em;
+}
+
+.activity-hint-icon {
+  width: 0.9em;
+  height: 0.9em;
+  flex-shrink: 0;
+}
+
 .today-list .item-label {
   width: 180px;
 }

@@ -13,6 +13,7 @@ import {
 import calendarData from "./data/calendar.json";
 import weatherData from "./data/weather.json";
 import type { OutdoorFeel } from "./lib/outdoor-feel";
+import { renderActivityHint } from "./lib/activity-hint-icon";
 
 type WeatherItem = {
   icon: ReactNode;
@@ -149,7 +150,7 @@ export default function App() {
     weatherItems.push({
       icon: <CalendarDays />,
       label: weather.weekend.label,
-      value: weather.weekend.value
+      value: renderActivityHint(weather.weekend.value)
     });
   }
 
