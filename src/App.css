@@ -44,12 +44,20 @@ body {
   padding: 6px 12px;
 }
 
+strong {
+  font-weight: 600;
+}
+
 .status-time {
   margin: 0;
   font-size: 16px;
-  font-weight: 600;
+  font-weight: 300;
   letter-spacing: 0;
+  color: #eee;
   line-height: 1.2;
+}
+.status-time strong {
+  color: #fff
 }
 
 .status-icons {

@@ -25,15 +25,23 @@ const todayAppointments: Appointment[] = [
   { time: "03:00 PM", title: "Dentist appointment" }
 ];
 
+function ordinal(n: number): string {
+  const s = ["th", "st", "nd", "rd"];
+  const v = n % 100;
+  if (v >= 11 && v <= 13) return n + "th";
+  return n + (s[v % 10] ?? "th");
+}
+
 function formatRenderTime(): string {
-  return new Intl.DateTimeFormat("en-US", {
-    weekday: "short",
-    day: "2-digit",
-    month: "short",
-    year: "numeric",
+  const d = new Date();
+  const weekday = new Intl.DateTimeFormat("en-US", { weekday: "long" }).format(d);
+  const month = new Intl.DateTimeFormat("en-US", { month: "long" }).format(d);
+  const year = new Intl.DateTimeFormat("en-US", { year: "numeric" }).format(d);
+  const time = new Intl.DateTimeFormat("en-US", {
     hour: "2-digit",
     minute: "2-digit"
-  }).format(new Date());
+  }).format(d);
+  return `${weekday}, ${month} ${ordinal(d.getDate())}, ${year}; ${time}`;
 }
 
 type SectionProps = {
@@ -94,7 +102,7 @@ export default function App() {
       </div>
 
       <header className="status-bar">
-        <p className="status-time">Last updated: {formatRenderTime()}</p>
+        <p className="status-time">Last update: &nbsp;<strong>{formatRenderTime()}</strong></p>
         <p className="status-icons" aria-label="Info"></p>
       </header>
     </main>
