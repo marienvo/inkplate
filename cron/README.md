@@ -21,7 +21,7 @@ Then add this line to deploy every 10 minutes:
 
 ## 2) Verify it works
 
-- View active crontab: 
+- View active crontab:
   - `crontab -l`
 - Follow the log:
   - `tail -f /home/pi/inkplate/cron/deploy.log`

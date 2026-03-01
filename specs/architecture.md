@@ -12,7 +12,7 @@ This document describes how screenshot generation and deployment work, and how t
 
 - Dashboard and weather build pipeline in `scripts/fetchWeather.ts` and Vite build scripts from `package.json`.
 - Screenshot generation server in `server/index.ts` (`npm run generate` via `--once`).
-- Deployment command in `package.json`: `npm run surge` runs generation + `surge dist/ ...`.
+- Deployment command in `package.json`: `npm run surge` runs generation + Surge deploy using `SURGE_DOMAIN` from `config.js`.
 - New CRON entrypoint in `cron/deploy.sh` for Raspberry Pi scheduling.
 
 ## End-to-End Flow
@@ -33,14 +33,15 @@ flowchart TD
 ## CRON Setup on Raspberry Pi
 
 1. Clone this repo on the Pi and run `npm install`.
-2. Ensure Surge auth is configured once on the Pi (so `surge` can publish non-interactively).
-3. Add CRON entry using `crontab -e`:
+2. Copy `config.example.js` to `config.js` and set `SURGE_DOMAIN` to your Surge domain.
+3. Ensure Surge auth is configured once on the Pi (so `surge` can publish non-interactively).
+4. Add CRON entry using `crontab -e`:
 
 ```cron
 */10 * * * * /home/pi/inkplate/cron/deploy.sh >> /home/pi/inkplate/cron/deploy.log 2>&1
 ```
 
-4. Verify with:
+5. Verify with:
    - `tail -f /home/pi/inkplate/cron/deploy.log`
    - Check that `dashboard.png` on your Surge domain updates every 10 minutes.
 
