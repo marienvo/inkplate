@@ -38,7 +38,7 @@ type WeatherData = {
   forecast: string;
   outdoorFeel?: OutdoorFeel;
   weekend?: {
-    label: "Weekend" | "Tomorrow" | "Next weekend";
+    label: "This weekend" | "Tomorrow" | "Next weekend";
     value: string;
   };
 };
@@ -131,7 +131,7 @@ export default function App() {
   ];
 
   if (hasOutdoorFeel && outdoorFeel) {
-    weatherItems.push({ icon: <Eye />, label: "Visibility", value: outdoorFeel.details.visibilityFeel });
+    // weatherItems.push({ icon: <Eye />, label: "Visibility", value: outdoorFeel.details.visibilityFeel });
     weatherItems.push({ icon: <Smile />, label: "Feel", value: outdoorFeel.feelText });
   }
 
