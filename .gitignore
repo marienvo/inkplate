@@ -5,3 +5,6 @@ dist/
 
 # Local firmware credentials
 firmware/config.h
+
+# Local JS config (API keys, etc.)
+config.js
