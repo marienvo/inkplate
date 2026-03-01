@@ -128,8 +128,8 @@ export default function App() {
   ];
 
   if (hasOutdoorFeel && outdoorFeel) {
-    weatherItems.push({ icon: <Smile />, label: "Feel", value: outdoorFeel.feelText });
     weatherItems.push({ icon: <Eye />, label: "Visibility", value: outdoorFeel.details.visibilityFeel });
+    weatherItems.push({ icon: <Smile />, label: "Feel", value: outdoorFeel.feelText });
   }
 
   if (warningParts.length > 0) {
