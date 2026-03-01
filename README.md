@@ -6,7 +6,7 @@ This project renders a React dashboard to a PNG and serves it to an Inkplate 5V2
 
 - Node.js 20+
 - Arduino CLI (optional, only for `npm run upload`)
-- Inkplate Arduino board support installed (`Soldered:esp32`)
+- Inkplate Arduino board support installed (`Inkplate_Boards:esp32`)
 
 ## 1) Install
 
@@ -14,6 +14,9 @@ This project renders a React dashboard to a PNG and serves it to an Inkplate 5V2
 curl -fsSL https://raw.githubusercontent.com/arduino/arduino-cli/master/install.sh | sh
 mkdir -p ~/.local/bin
 mv ./bin/arduino-cli ~/.local/bin/
+arduino-cli config add board_manager.additional_urls https://github.com/SolderedElectronics/Inkplate-Board-Definitions-for-Arduino-IDE/raw/master/package_inkplate_index.json
+arduino-cli core update-index
+arduino-cli core install Inkplate_Boards:esp32
 npm install
 ```
 
