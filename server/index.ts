@@ -13,6 +13,7 @@ const outputPath = path.join(distDir, "dashboard.png");
 const chromeStateDir = path.join(rootDir, ".tmp", "chromium");
 const port = Number(process.env.PORT ?? 3000);
 const recaptureMinutes = Number(process.env.RECAPTURE_MINUTES ?? 0);
+const runOnce = process.argv.includes("--once");
 
 function buildFrontend() {
   execSync("npm run build", {
@@ -94,15 +95,28 @@ async function main() {
   app.use(express.static(distDir, { etag: false, maxAge: 0 }));
   app.get("/health", (_req, res) => res.json({ ok: true }));
 
-  await new Promise<void>((resolve) => {
-    app.listen(port, () => {
+  const server = await new Promise<ReturnType<typeof app.listen>>((resolve) => {
+    const startedServer = app.listen(port, () => {
       console.log(`Serving dashboard image on http://localhost:${port}/dashboard.png`);
-      resolve();
+      resolve(startedServer);
     });
   });
 
   const dashboardUrl = `http://localhost:${port}/`;
   await captureDashboard(dashboardUrl);
+
+  if (runOnce) {
+    await new Promise<void>((resolve, reject) => {
+      server.close((error) => {
+        if (error) {
+          reject(error);
+          return;
+        }
+        resolve();
+      });
+    });
+    return;
+  }
 
   if (recaptureMinutes > 0) {
     setInterval(async () => {

@@ -7,9 +7,10 @@
     "dev": "vite",
     "build": "vite build",
     "serve": "tsx server/index.ts",
+    "generate": "tsx server/index.ts --once",
     "browser:install": "puppeteer browsers install chrome",
     "upload": "arduino-cli compile --fqbn Soldered:esp32:inkplate5v2 firmware && arduino-cli upload -p ${INKPLATE_PORT:?Set INKPLATE_PORT env var} --fqbn Soldered:esp32:inkplate5v2 firmware",
-    "surge": "surge dist/ b93t6z.marienvanoverbeek.nl"
+    "surge": "npm run generate && surge dist/ b93t6z.marienvanoverbeek.nl"
   },
   "keywords": [],
   "author": "",
