@@ -19,4 +19,7 @@ npm run lint -- --max-warnings 0 <changed-file-1> <changed-file-2>
 
 # Full project: no lint errors
 npm run lint
+
+# Always run prettier format
+npm run format
 ```
