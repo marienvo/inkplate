@@ -1,0 +1,32 @@
+{
+  "name": "inkplate",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "serve": "tsx server/index.ts",
+    "browser:install": "puppeteer browsers install chrome",
+    "upload": "arduino-cli compile --fqbn Soldered:esp32:inkplate5v2 firmware && arduino-cli upload -p ${INKPLATE_PORT:?Set INKPLATE_PORT env var} --fqbn Soldered:esp32:inkplate5v2 firmware"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "express": "^5.2.1",
+    "puppeteer": "^24.37.5",
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.6",
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^5.1.4",
+    "tsx": "^4.21.0",
+    "typescript": "^5.9.3",
+    "vite": "^7.3.1"
+  }
+}
