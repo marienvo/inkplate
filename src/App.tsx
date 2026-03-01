@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import { Thermometer, Sun, CloudRain, Wind, Droplets, Cloud, Calendar, Clock } from "lucide-react";
+import calendarData from "./data/calendar.json";
 
 type WeatherItem = {
   icon: ReactNode;
@@ -8,7 +9,8 @@ type WeatherItem = {
 };
 
 type Appointment = {
-  time: string;
+  date: string;
+  startTime: string;
   title: string;
 };
 
@@ -20,17 +22,24 @@ const weatherItems: WeatherItem[] = [
   { icon: <Droplets />, label: "Humidity", value: "78%" }
 ];
 
-const todayAppointments: Appointment[] = [
-  { time: "09:00 AM", title: "Team standup" },
-  { time: "12:30 PM", title: "Lunch with Alex" },
-  { time: "03:00 PM", title: "Dentist appointment" }
-];
-
 function ordinal(n: number): string {
   const s = ["th", "st", "nd", "rd"];
   const v = n % 100;
   if (v >= 11 && v <= 13) return n + "th";
   return n + (s[v % 10] ?? "th");
+}
+
+function formatDateForTitle(d: Date): string {
+  const weekday = new Intl.DateTimeFormat("en-US", { weekday: "long" }).format(d);
+  const month = new Intl.DateTimeFormat("en-US", { month: "long" }).format(d);
+  return `${weekday}, ${month} ${ordinal(d.getDate())}`;
+}
+
+function formatIsoDate(d: Date): string {
+  const year = d.getFullYear();
+  const month = String(d.getMonth() + 1).padStart(2, "0");
+  const day = String(d.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
 }
 
 function formatRenderTime(): string {
@@ -66,6 +75,16 @@ function Section({ icon, title, children }: SectionProps) {
 }
 
 export default function App() {
+  const now = new Date();
+  const todayIsoDate = formatIsoDate(now);
+  const todayTitle = formatDateForTitle(now);
+  const todayAppointments = (calendarData as Appointment[])
+    .filter((appointment) => appointment.date === todayIsoDate)
+    .sort((a, b) => a.startTime.localeCompare(b.startTime));
+
+  const visibleAppointments = todayAppointments.slice(0, 5);
+  const hiddenAppointmentsCount = todayAppointments.length - visibleAppointments.length;
+
   return (
     <main className="frame">
       <div className="frame-content">
@@ -85,20 +104,28 @@ export default function App() {
           </ul>
         </Section>
 
-        <Section icon={<Calendar />} title="Sunday, March 1st">
-          <ul className="list today-list">
-          {todayAppointments.map((appointment) => (
-            <li key={appointment.time} className="list-item">
-              <span className="item-left">
-                <span className="emoji" aria-hidden="true">
-                  <Clock />
-                </span>
-                <span className="item-label">{appointment.time}</span>
-              </span>
-              <span className="item-value">{appointment.title}</span>
-            </li>
-          ))}
-          </ul>
+        <Section icon={<Calendar />} title={todayTitle}>
+          {visibleAppointments.length === 0 ? (
+            <p className="empty-state">No events today</p>
+          ) : (
+            <ul className="list today-list">
+              {visibleAppointments.map((appointment) => (
+                <li
+                  key={`${appointment.date}-${appointment.startTime}-${appointment.title}`}
+                  className="list-item"
+                >
+                  <span className="item-left">
+                    <span className="emoji" aria-hidden="true">
+                      <Clock />
+                    </span>
+                    <span className="item-label">{appointment.startTime}</span>
+                  </span>
+                  <span className="item-value">{appointment.title}</span>
+                </li>
+              ))}
+            </ul>
+          )}
+          {hiddenAppointmentsCount > 0 && <p className="more-indicator">{hiddenAppointmentsCount} more</p>}
         </Section>
       </div>
 
