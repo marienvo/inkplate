@@ -99,6 +99,10 @@ strong {
   gap: 16px;
 }
 
+.list-item:last-child {
+  border-bottom: none;
+}
+
 .item-left {
   display: flex;
   align-items: center;
