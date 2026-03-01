@@ -1,0 +1,23 @@
+---
+description: Run and maintain tests for relevant changes
+alwaysApply: true
+---
+
+# Testing Discipline
+
+- Run relevant automated tests after making meaningful code changes.
+- If no targeted test exists for changed behavior, add one when it is practical and valuable.
+- If existing tests fail because behavior intentionally changed, update those tests to match the new expected behavior.
+- Keep tests small and focused on observable behavior.
+- Prefer fast, deterministic tests; avoid unnecessary network or timing dependencies.
+
+## Examples
+
+```ts
+// Behavior changed: add or update a focused test.
+import { expect, test } from "vitest";
+
+test("returns fallback when value is missing", () => {
+  expect(getLabel(undefined)).toBe("Unknown");
+});
+```

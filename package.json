@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "test": "vitest run",
     "fetch-weather": "tsx scripts/fetch-weather.ts",
     "prebuild": "npm run fetch-weather",
     "build": "vite build",
@@ -32,6 +33,7 @@
     "@vitejs/plugin-react": "^5.1.4",
     "tsx": "^4.21.0",
     "typescript": "^5.9.3",
-    "vite": "^7.3.1"
+    "vite": "^7.3.1",
+    "vitest": "^4.0.18"
   }
 }
