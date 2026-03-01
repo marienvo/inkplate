@@ -10,7 +10,6 @@ const __dirname = path.dirname(__filename);
 const rootDir = path.resolve(__dirname, "..");
 const distDir = path.join(rootDir, "dist");
 const outputPath = path.join(distDir, "dashboard.png");
-const dashboardUrl = "file://" + path.join(distDir, "index.html");
 const chromeStateDir = path.join(rootDir, ".tmp", "chromium");
 const port = Number(process.env.PORT ?? 3000);
 const recaptureMinutes = Number(process.env.RECAPTURE_MINUTES ?? 0);
@@ -30,7 +29,7 @@ function installChromeForPuppeteer() {
   });
 }
 
-async function captureDashboard() {
+async function captureDashboard(dashboardUrl: string) {
   mkdirSync(chromeStateDir, { recursive: true });
 
   const launchOptions = {
@@ -73,6 +72,11 @@ async function captureDashboard() {
       deviceScaleFactor: 1
     });
     await page.goto(dashboardUrl, { waitUntil: "networkidle0" });
+    await page.waitForSelector("#root");
+    await page.waitForFunction(() => {
+      const root = document.getElementById("root");
+      return !!root && root.childElementCount > 0;
+    });
     await page.screenshot({
       path: outputPath,
       type: "png",
@@ -85,20 +89,25 @@ async function captureDashboard() {
 
 async function main() {
   buildFrontend();
-  await captureDashboard();
 
   const app = express();
   app.use(express.static(distDir, { etag: false, maxAge: 0 }));
   app.get("/health", (_req, res) => res.json({ ok: true }));
 
-  app.listen(port, () => {
-    console.log(`Serving dashboard image on http://localhost:${port}/dashboard.png`);
+  await new Promise<void>((resolve) => {
+    app.listen(port, () => {
+      console.log(`Serving dashboard image on http://localhost:${port}/dashboard.png`);
+      resolve();
+    });
   });
+
+  const dashboardUrl = `http://localhost:${port}/`;
+  await captureDashboard(dashboardUrl);
 
   if (recaptureMinutes > 0) {
     setInterval(async () => {
       try {
-        await captureDashboard();
+        await captureDashboard(dashboardUrl);
         console.log("Dashboard screenshot refreshed");
       } catch (error) {
         console.error("Failed to refresh dashboard screenshot", error);
