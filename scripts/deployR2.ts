@@ -82,6 +82,7 @@ async function uploadDashboardPng(config: R2Config): Promise<void> {
       Key: objectKey,
       Body: pngBody,
       ContentType: 'image/png',
+      CacheControl: 'no-store, max-age=0, must-revalidate',
     }),
   );
 }
