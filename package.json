@@ -10,7 +10,7 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "test": "vitest run",
-    "typecheck": "tsc --noEmit",
+    "typecheck": "tsc --noEmit -p tsconfig.json && tsc --noEmit -p scripts/tsconfig.json",
     "fetch-weather": "tsx scripts/fetchWeather.ts",
     "prebuild": "npm run fetch-weather",
     "build": "vite build",
@@ -34,6 +34,7 @@
   "devDependencies": {
     "@eslint/js": "^9.39.3",
     "@types/express": "^5.0.6",
+    "@types/node": "^25.3.3",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^5.1.4",
