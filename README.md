@@ -1,4 +1,4 @@
-# Inkplate Dashboard (Route 1)
+# Inkplate Dashboard
 
 This project renders a React dashboard to a PNG and serves it to an Inkplate 5V2.
 
