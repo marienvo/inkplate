@@ -10,5 +10,5 @@ export PATH="/usr/local/bin:/usr/bin:/bin:${HOME}/.local/bin:${HOME}/.nvm/versio
 cd "${PROJECT_ROOT}"
 
 echo "[$(date '+%Y-%m-%d %H:%M:%S')] Starting scheduled surge deployment"
-npm run surge
+npm run r2
 echo "[$(date '+%Y-%m-%d %H:%M:%S')] Scheduled surge deployment finished"
