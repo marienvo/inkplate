@@ -4,7 +4,7 @@ import { fileURLToPath } from "node:url";
 
 import { API_KEY } from "../config.js";
 import { getOutdoorFeel, type OutdoorFeel, type WeatherApiSnapshot } from "../src/lib/outdoor-feel.ts";
-import { getWeekendFoodHint } from "../src/lib/food.ts";
+import { getWeekendFoodPlan } from "../src/lib/food.ts";
 import { getWeekendOneLiner, type DaySnapshot } from "../src/lib/weekend.ts";
 
 type WeerLiveCurrent = {
@@ -49,7 +49,10 @@ type WeatherData = {
     label: "Weekend" | "Tomorrow" | "Next weekend";
     value: string;
   };
-  foodHint?: string;
+  food?: {
+    savory: string;
+    sweet: string;
+  };
 };
 
 type OpenMeteoDaily = {
@@ -155,7 +158,7 @@ function weekendTargetFromDay(day: number): {
 
 async function fetchWeekendData(): Promise<{
   weekend: NonNullable<WeatherData["weekend"]>;
-  foodHint: string;
+  food: NonNullable<WeatherData["food"]>;
 }> {
   const endpoint = new URL("https://api.open-meteo.com/v1/forecast");
   endpoint.searchParams.set("latitude", "51.9225");
@@ -204,7 +207,7 @@ async function fetchWeekendData(): Promise<{
       label,
       value: getWeekendOneLiner(day1, day2)
     },
-    foodHint: getWeekendFoodHint(new Date(), day1, day2)
+    food: getWeekendFoodPlan(new Date(), day1, day2)
   };
 }
 
@@ -272,7 +275,7 @@ async function fetchWeather(): Promise<WeatherData> {
   try {
     const weekendData = await fetchWeekendData();
     weather.weekend = weekendData.weekend;
-    weather.foodHint = weekendData.foodHint;
+    weather.food = weekendData.food;
   } catch (error) {
     const message = error instanceof Error ? error.message : String(error);
     console.warn(`Skipping weekend extras: ${message}`);

@@ -1,16 +1,20 @@
 import type { ReactNode } from "react";
 import type { LucideIcon } from "lucide-react";
 import {
+  Apple,
+  CakeSlice,
   Carrot,
   ChefHat,
+  Cherry,
+  Cookie,
   CookingPot,
+  Croissant,
   LeafyGreen,
   Microwave,
   Refrigerator,
   Salad,
   Soup,
-  UtensilsCrossed,
-  Wheat
+  UtensilsCrossed
 } from "lucide-react";
 
 type FoodHintParts = {
@@ -34,7 +38,16 @@ const FOOD_HINT_ICONS: Record<string, LucideIcon> = {
   "Quick pasta": CookingPot,
   "Warm bowl": Soup,
   "Big salad": Salad,
-  "Roast veggies": Carrot
+  "Roast veggies": Carrot,
+  Bake: CakeSlice,
+  Sweet: Apple,
+  crumble: Cookie,
+  cake: CakeSlice,
+  pie: Cherry,
+  muffins: Croissant,
+  galette: Cherry,
+  bars: Cookie,
+  compote: Apple
 };
 
 function parseFoodHint(hint: string): FoodHintParts {

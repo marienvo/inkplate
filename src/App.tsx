@@ -55,6 +55,11 @@ type WeatherData = {
     label: "This weekend" | "Tomorrow" | "Next weekend";
     value: string;
   };
+  food?: {
+    savory: string;
+    sweet: string;
+  };
+  // Keep backward compatibility with older generated weather.json files.
   foodHint?: string;
 };
 
@@ -231,7 +236,12 @@ export default function App() {
       value: warningParts.join(" · ")
     });
   }
-  const foodItem = weather.foodHint ? renderFoodHint(weather.foodHint) : null;
+  const foodEntries = weather.food
+    ? [weather.food.savory, weather.food.sweet]
+    : weather.foodHint
+      ? [weather.foodHint]
+      : [];
+  const foodItems = foodEntries.filter(Boolean).map((entry) => renderFoodHint(entry));
 
   return (
     <main className="frame">
@@ -277,17 +287,19 @@ export default function App() {
         </Section>
 
         <Section icon={<UtensilsCrossed />} title="Food">
-          {foodItem ? (
+          {foodItems.length > 0 ? (
             <ul className="list food-list">
-              <li className="list-item">
-                <span className="item-left">
-                  <span className="emoji" aria-hidden="true">
-                    {foodItem.icon}
+              {foodItems.map((foodItem, index) => (
+                <li key={`${foodItem.label}-${foodItem.value}-${index}`} className="list-item">
+                  <span className="item-left">
+                    <span className="emoji" aria-hidden="true">
+                      {foodItem.icon}
+                    </span>
+                    <span className="item-label">{foodItem.label}</span>
                   </span>
-                  <span className="item-label">{foodItem.label}</span>
-                </span>
-                <span className="item-value">{foodItem.value}</span>
-              </li>
+                  <span className="item-value">{foodItem.value}</span>
+                </li>
+              ))}
             </ul>
           ) : (
             <p className="empty-state">No meals planned</p>

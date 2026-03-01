@@ -25,12 +25,30 @@ type VegKey =
   | "cucumber"
   | "pumpkin";
 
+type FruitKey =
+  | "apple"
+  | "pear"
+  | "rhubarb"
+  | "strawberry"
+  | "cherry"
+  | "plum"
+  | "blueberry"
+  | "blackberry"
+  | "grape";
+
 type Month = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12;
 
 type SeasonalVeg = {
   key: VegKey;
   label: string;
   months: Month[];
+};
+
+type SeasonalFruit = {
+  key: FruitKey;
+  label: string;
+  months: Month[];
+  bakeWeight: number;
 };
 
 const SEASONAL_NL: SeasonalVeg[] = [
@@ -57,6 +75,18 @@ const SEASONAL_NL: SeasonalVeg[] = [
   { key: "cucumber", label: "cucumber", months: [7, 8, 9] },
   { key: "eggplant", label: "eggplant", months: [7, 8, 9] },
   { key: "pumpkin", label: "pumpkin", months: [9, 10, 11] }
+];
+
+const SEASONAL_NL_FRUIT: SeasonalFruit[] = [
+  { key: "apple", label: "apple", months: [9, 10, 11, 12, 1, 2, 3, 4], bakeWeight: 1.0 },
+  { key: "pear", label: "pear", months: [9, 10, 11, 12, 1, 2, 3], bakeWeight: 1.0 },
+  { key: "rhubarb", label: "rhubarb", months: [4, 5, 6], bakeWeight: 1.0 },
+  { key: "strawberry", label: "strawberry", months: [5, 6, 7], bakeWeight: 0.7 },
+  { key: "cherry", label: "cherry", months: [6, 7], bakeWeight: 0.8 },
+  { key: "plum", label: "plum", months: [7, 8, 9], bakeWeight: 1.0 },
+  { key: "blueberry", label: "blueberry", months: [7, 8], bakeWeight: 0.85 },
+  { key: "blackberry", label: "blackberry", months: [8, 9], bakeWeight: 0.85 },
+  { key: "grape", label: "grape", months: [9, 10], bakeWeight: 0.55 }
 ];
 
 function clamp(value: number, min: number, max: number): number {
@@ -112,9 +142,9 @@ function hashSeed(date: Date, day: DaySnapshot): number {
   );
 }
 
-function seasonalVegForDate(date: Date): SeasonalVeg[] {
+function seasonalForDate<T extends { months: Month[] }>(items: T[], date: Date): T[] {
   const month = (date.getMonth() + 1) as Month;
-  return SEASONAL_NL.filter((v) => v.months.includes(month));
+  return items.filter((item) => item.months.includes(month));
 }
 
 function pickUnique<T>(items: T[], count: number, rnd: () => number): T[] {
@@ -127,8 +157,18 @@ function pickUnique<T>(items: T[], count: number, rnd: () => number): T[] {
   return chosen;
 }
 
-function formatVegListShort(vegs: SeasonalVeg[]): string {
-  return vegs.map((v) => v.label).join(", ");
+function weightedPick<T>(items: T[], weightOf: (item: T) => number, rnd: () => number): T {
+  const total = items.reduce((sum, item) => sum + weightOf(item), 0);
+  let roll = rnd() * total;
+  for (const item of items) {
+    roll -= weightOf(item);
+    if (roll <= 0) return item;
+  }
+  return items[items.length - 1];
+}
+
+function formatListShort(items: { label: string }[]): string {
+  return items.map((item) => item.label).join(", ");
 }
 
 function isBadWeatherForOutdoors(day: DaySnapshot): boolean {
@@ -146,14 +186,14 @@ function isBadWeatherForOutdoors(day: DaySnapshot): boolean {
   return false;
 }
 
-type FoodMode = "mealPrep" | "freshCook";
+type SavoryMode = "mealPrep" | "freshCook";
 
-function getFoodMode(day: DaySnapshot): FoodMode {
+function getSavoryMode(day: DaySnapshot): SavoryMode {
   return isBadWeatherForOutdoors(day) ? "mealPrep" : "freshCook";
 }
 
-function shortFoodLine(mode: FoodMode, vegs: SeasonalVeg[], rnd: () => number): string {
-  const vegText = formatVegListShort(vegs);
+function savoryLine(mode: SavoryMode, vegs: SeasonalVeg[], rnd: () => number): string {
+  const vegText = formatListShort(vegs);
 
   const mealPrepTemplates = [
     `Meal prep: ${vegText}`,
@@ -175,30 +215,88 @@ function shortFoodLine(mode: FoodMode, vegs: SeasonalVeg[], rnd: () => number): 
   return templates[Math.floor(rnd() * templates.length)];
 }
 
+type BakeStyle =
+  | "crumble"
+  | "cake"
+  | "pie"
+  | "muffins"
+  | "galette"
+  | "bars"
+  | "compote";
+
+function bakeLine(fruit: SeasonalFruit, bestDay: DaySnapshot, rnd: () => number): string {
+  const indoor = isBadWeatherForOutdoors(bestDay);
+  const indoorStyles: BakeStyle[] = ["crumble", "cake", "pie", "galette", "bars"];
+  const outdoorStyles: BakeStyle[] = ["muffins", "compote", "cake", "crumble"];
+  const styles = indoor ? indoorStyles : outdoorStyles;
+
+  const allowedStyles = styles.filter((style) => {
+    if (fruit.key === "rhubarb") return style !== "pie";
+    if (fruit.key === "grape") return style === "cake" || style === "compote";
+    return true;
+  });
+
+  const style = allowedStyles[Math.floor(rnd() * allowedStyles.length)];
+  const templatesByStyle: Record<BakeStyle, string[]> = {
+    crumble: [`Bake: ${fruit.label} crumble`, `Bake: warm ${fruit.label} crumble`],
+    cake: [`Bake: ${fruit.label} cake`, `Bake: ${fruit.label} loaf`],
+    pie: [`Bake: ${fruit.label} pie`, `Bake: rustic ${fruit.label} pie`],
+    muffins: [`Bake: ${fruit.label} muffins`, `Bake: ${fruit.label} muffins (batch)`],
+    galette: [`Bake: ${fruit.label} galette`, `Bake: rustic ${fruit.label} galette`],
+    bars: [`Bake: ${fruit.label} bars`, `Bake: ${fruit.label} oat bars`],
+    compote: [`Bake: ${fruit.label} compote`, `Bake: oven ${fruit.label} compote`]
+  };
+
+  const templates = templatesByStyle[style];
+  const pickIndex =
+    indoor && templates.length > 1
+      ? (rnd() < 0.7 ? 1 : 0)
+      : Math.floor(rnd() * templates.length);
+
+  return templates[Math.max(0, Math.min(pickIndex, templates.length - 1))];
+}
+
 /**
- * Very short seasonal cooking hint for the nicest weekend day.
- * Bad weather -> meal prep focus. Good weather -> fresh/quick cook.
+ * Two-line weekend food plan:
+ * Line 1: savory seasonal idea (meal prep vs fresh cook)
+ * Line 2: baking/sweet suggestion using seasonal fruit
+ *
  * Output is deterministic but varied.
  */
-export function getWeekendFoodHint(date: Date, day1: DaySnapshot, day2: DaySnapshot): string {
+export function getWeekendFoodPlan(
+  date: Date,
+  day1: DaySnapshot,
+  day2: DaySnapshot
+): { savory: string; sweet: string } {
   const best = pickBestDay(day1, day2);
-  const seasonal = seasonalVegForDate(date);
+  const seasonalVeg = seasonalForDate(SEASONAL_NL, date);
+  const seasonalFruit = seasonalForDate(SEASONAL_NL_FRUIT, date);
 
-  const safeFallback: SeasonalVeg[] = [
+  const safeVegFallback: SeasonalVeg[] = [
     { key: "onion", label: "onion", months: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12] },
     { key: "carrot", label: "carrot", months: [1, 2, 3, 4, 10, 11, 12] },
     { key: "potato", label: "potato", months: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12] }
   ];
+  const safeFruitFallback: SeasonalFruit[] = [
+    { key: "apple", label: "apple", months: [1, 2, 3, 4, 9, 10, 11, 12], bakeWeight: 1.0 },
+    { key: "pear", label: "pear", months: [1, 2, 3, 9, 10, 11, 12], bakeWeight: 1.0 }
+  ];
 
   const seed = hashSeed(date, best);
   const rnd = mulberry32(seed);
-
-  const pool = seasonal.length >= 6 ? seasonal : [...seasonal, ...safeFallback];
+  const vegPool = seasonalVeg.length >= 6 ? seasonalVeg : [...seasonalVeg, ...safeVegFallback];
+  const fruitPool = seasonalFruit.length > 0 ? seasonalFruit : safeFruitFallback;
 
   // 2-3 veggies keeps it short but still varied
   const vegCount = rnd() < 0.65 ? 2 : 3;
-  const pickedVeg = pickUnique(pool, vegCount, rnd);
+  const pickedVeg = pickUnique(vegPool, vegCount, rnd);
+  const mode = getSavoryMode(best);
+  const savory = savoryLine(mode, pickedVeg, rnd);
 
-  const mode = getFoodMode(best);
-  return shortFoodLine(mode, pickedVeg, rnd);
+  const indoor = isBadWeatherForOutdoors(best);
+  const shouldBake = indoor ? true : rnd() < 0.55;
+  const fruit = weightedPick(fruitPool, (item) => item.bakeWeight, rnd);
+  const sweet = shouldBake ? bakeLine(fruit, best, rnd) : `Sweet: ${fruit.label}`;
+
+  return { savory, sweet };
 }
