@@ -1,4 +1,4 @@
-import type { CSSProperties, ReactNode } from "react";
+import type { CSSProperties, ReactNode } from 'react';
 import {
   Thermometer,
   CloudRain,
@@ -20,13 +20,14 @@ import {
   Clock11,
   Clock12,
   AlertTriangle,
-  Smile, Wind
-} from "lucide-react";
-import calendarData from "./data/calendar.json";
-import weatherData from "./data/weather.json";
-import type { OutdoorFeel } from "./lib/outdoorFeel";
-import { renderActivityHint } from "./lib/activityHintIcon";
-import { renderFoodHint } from "./lib/foodHintIcon";
+  Smile,
+  Wind,
+} from 'lucide-react';
+import calendarData from './data/calendar.json';
+import weatherData from './data/weather.json';
+import type { OutdoorFeel } from './lib/outdoorFeel';
+import { renderActivityHint } from './lib/activityHintIcon';
+import { renderFoodHint } from './lib/foodHintIcon';
 
 type WeatherItem = {
   icon: ReactNode;
@@ -52,7 +53,7 @@ type WeatherData = {
   forecast: string;
   outdoorFeel?: OutdoorFeel;
   weekend?: {
-    label: "This weekend" | "Tomorrow" | "Next weekend";
+    label: 'This weekend' | 'Tomorrow' | 'Next weekend';
     value: string;
   };
   food?: {
@@ -64,45 +65,45 @@ type WeatherData = {
 };
 
 function ordinal(n: number): string {
-  const s = ["th", "st", "nd", "rd"];
+  const s = ['th', 'st', 'nd', 'rd'];
   const v = n % 100;
-  if (v >= 11 && v <= 13) return n + "th";
-  return n + (s[v % 10] ?? "th");
+  if (v >= 11 && v <= 13) return n + 'th';
+  return n + (s[v % 10] ?? 'th');
 }
 
 function formatDateForTitle(d: Date): string {
-  const weekday = new Intl.DateTimeFormat("en-US", { weekday: "long" }).format(d);
-  const month = new Intl.DateTimeFormat("en-US", { month: "long" }).format(d);
+  const weekday = new Intl.DateTimeFormat('en-US', { weekday: 'long' }).format(d);
+  const month = new Intl.DateTimeFormat('en-US', { month: 'long' }).format(d);
   return `${weekday}, ${month} ${ordinal(d.getDate())}`;
 }
 
 function formatIsoDate(d: Date): string {
   const year = d.getFullYear();
-  const month = String(d.getMonth() + 1).padStart(2, "0");
-  const day = String(d.getDate()).padStart(2, "0");
+  const month = String(d.getMonth() + 1).padStart(2, '0');
+  const day = String(d.getDate()).padStart(2, '0');
   return `${year}-${month}-${day}`;
 }
 
 function format24HourTime(d: Date): string {
-  const hours = String(d.getHours()).padStart(2, "0");
-  const minutes = String(d.getMinutes()).padStart(2, "0");
+  const hours = String(d.getHours()).padStart(2, '0');
+  const minutes = String(d.getMinutes()).padStart(2, '0');
   return `${hours}:${minutes}`;
 }
 
 function formatRenderTime(): string {
   const d = new Date();
-  const weekday = new Intl.DateTimeFormat("en-US", { weekday: "long" }).format(d);
-  const month = new Intl.DateTimeFormat("en-US", { month: "long" }).format(d);
-  const year = new Intl.DateTimeFormat("en-US", { year: "numeric" }).format(d);
-  const time = new Intl.DateTimeFormat("en-US", {
-    hour: "2-digit",
-    minute: "2-digit"
+  const weekday = new Intl.DateTimeFormat('en-US', { weekday: 'long' }).format(d);
+  const month = new Intl.DateTimeFormat('en-US', { month: 'long' }).format(d);
+  const year = new Intl.DateTimeFormat('en-US', { year: 'numeric' }).format(d);
+  const time = new Intl.DateTimeFormat('en-US', {
+    hour: '2-digit',
+    minute: '2-digit',
   }).format(d);
   return `${weekday}, ${month} ${ordinal(d.getDate())}, ${year}; ${time}`;
 }
 
 function formatAppointmentTime(startTime: string): string {
-  const [hoursPart, minutesPart] = startTime.split(":");
+  const [hoursPart, minutesPart] = startTime.split(':');
   const hours = Number(hoursPart);
   const minutes = Number(minutesPart);
   if (
@@ -116,13 +117,13 @@ function formatAppointmentTime(startTime: string): string {
     return startTime;
   }
 
-  const period = hours >= 12 ? "PM" : "AM";
+  const period = hours >= 12 ? 'PM' : 'AM';
   const displayHour = hours % 12 || 12;
-  return `${displayHour}:${String(minutes).padStart(2, "0")} ${period}`;
+  return `${displayHour}:${String(minutes).padStart(2, '0')} ${period}`;
 }
 
 function getAppointmentClockIcon(startTime: string): ReactNode {
-  const [hoursPart, minutesPart] = startTime.split(":");
+  const [hoursPart, minutesPart] = startTime.split(':');
   const hours = Number(hoursPart);
   const minutes = Number(minutesPart);
   if (
@@ -150,7 +151,7 @@ function getAppointmentClockIcon(startTime: string): ReactNode {
     9: Clock9,
     10: Clock10,
     11: Clock11,
-    12: Clock12
+    12: Clock12,
   } as const;
 
   const Icon = CLOCK_ICONS[hourOn12];
@@ -191,30 +192,39 @@ export default function App() {
   const maxVisibleAppointments = 3;
   const currentTime = format24HourTime(now);
   const firstUpcomingIndex = todayAppointments.findIndex(
-    (appointment) => appointment.startTime >= currentTime
+    (appointment) => appointment.startTime >= currentTime,
   );
   const upcomingAnchorIndex =
     firstUpcomingIndex === -1 ? todayAppointments.length : firstUpcomingIndex;
-  const startIndex = Math.max(0, Math.min(upcomingAnchorIndex, todayAppointments.length - maxVisibleAppointments));
-  const visibleAppointments = todayAppointments.slice(startIndex, startIndex + maxVisibleAppointments);
+  const startIndex = Math.max(
+    0,
+    Math.min(upcomingAnchorIndex, todayAppointments.length - maxVisibleAppointments),
+  );
+  const visibleAppointments = todayAppointments.slice(
+    startIndex,
+    startIndex + maxVisibleAppointments,
+  );
   const hiddenAppointmentsCount = Math.max(
     0,
-    todayAppointments.length - (startIndex + visibleAppointments.length)
+    todayAppointments.length - (startIndex + visibleAppointments.length),
   );
   const windDirectionStyle = {
-    "--wind-rotation": `${weather.windDirectionDegrees 
-    + 90 // meteorological → CSS
-    + 45 // icon offset
-    }deg`
+    '--wind-rotation': `${
+      weather.windDirectionDegrees +
+      90 + // meteorological → CSS
+      45 // icon offset
+    }deg`,
   } as CSSProperties;
   const warningParts: string[] = [];
   if (outdoorFeel) {
-    if (outdoorFeel.details.condensationRisk !== "Low") {
+    if (outdoorFeel.details.condensationRisk !== 'Low') {
       warningParts.push(`${outdoorFeel.details.condensationRisk} condensation risk`);
     }
-    if (outdoorFeel.details.frostOrSlipHint !== "None") {
+    if (outdoorFeel.details.frostOrSlipHint !== 'None') {
       warningParts.push(
-        outdoorFeel.details.frostOrSlipHint === "Likely" ? "Slip risk likely" : "Slip risk possible"
+        outdoorFeel.details.frostOrSlipHint === 'Likely'
+          ? 'Slip risk likely'
+          : 'Slip risk possible',
       );
     }
   }
@@ -222,35 +232,40 @@ export default function App() {
   const weatherItems: WeatherItem[] = [
     {
       icon: <Thermometer />,
-      label: "Temperature",
-      value: `${Math.round(weather.temp)}°C (feels like ${Math.round(outdoorFeel?.feelsLikeC ?? weather.feelsLike)}°C)`
+      label: 'Temperature',
+      value: `${Math.round(weather.temp)}°C (feels like ${Math.round(outdoorFeel?.feelsLikeC ?? weather.feelsLike)}°C)`,
     },
-    { icon: <CloudRain />, label: "Rain", value: `${Math.round(weather.rainChance)}% chance` },
+    { icon: <CloudRain />, label: 'Rain', value: `${Math.round(weather.rainChance)}% chance` },
     {
-      icon: <Wind/>,
-      label: "Wind",
-      value: <><MousePointer2 className="wind-direction-icon" style={windDirectionStyle} /> {Math.round(weather.windBft)} bft</>
+      icon: <Wind />,
+      label: 'Wind',
+      value: (
+        <>
+          <MousePointer2 className="wind-direction-icon" style={windDirectionStyle} />{' '}
+          {Math.round(weather.windBft)} bft
+        </>
+      ),
     },
   ];
 
   if (hasOutdoorFeel && outdoorFeel) {
     // weatherItems.push({ icon: <Eye />, label: "Visibility", value: outdoorFeel.details.visibilityFeel });
-    weatherItems.push({ icon: <Smile />, label: "Feel", value: outdoorFeel.feelText });
+    weatherItems.push({ icon: <Smile />, label: 'Feel', value: outdoorFeel.feelText });
   }
 
   if (weather.weekend) {
     weatherItems.push({
       icon: <CalendarDays />,
       label: weather.weekend.label,
-      value: renderActivityHint(weather.weekend.value)
+      value: renderActivityHint(weather.weekend.value),
     });
   }
 
   if (warningParts.length > 0) {
     weatherItems.push({
       icon: <AlertTriangle />,
-      label: "Warnings",
-      value: warningParts.join(" · ")
+      label: 'Warnings',
+      value: warningParts.join(' · '),
     });
   }
   const foodEntries = weather.food
@@ -265,17 +280,17 @@ export default function App() {
       <div className="frame-content">
         <Section icon={<Cloud />} title="Weather - Rotterdam">
           <ul className="list weather-list">
-          {weatherItems.map((item) => (
-            <li key={item.label} className="list-item">
-              <span className="item-left">
-                <span className="emoji" aria-hidden="true">
-                  {item.icon}
+            {weatherItems.map((item) => (
+              <li key={item.label} className="list-item">
+                <span className="item-left">
+                  <span className="emoji" aria-hidden="true">
+                    {item.icon}
+                  </span>
+                  <span className="item-label">{item.label}</span>
                 </span>
-                <span className="item-label">{item.label}</span>
-              </span>
-              <span className="item-value">{item.value}</span>
-            </li>
-          ))}
+                <span className="item-value">{item.value}</span>
+              </li>
+            ))}
           </ul>
         </Section>
 
@@ -293,14 +308,18 @@ export default function App() {
                     <span className="emoji" aria-hidden="true">
                       {getAppointmentClockIcon(appointment.startTime)}
                     </span>
-                    <span className="item-label">{formatAppointmentTime(appointment.startTime)}</span>
+                    <span className="item-label">
+                      {formatAppointmentTime(appointment.startTime)}
+                    </span>
                   </span>
                   <span className="item-value">{appointment.title}</span>
                 </li>
               ))}
             </ul>
           )}
-          {hiddenAppointmentsCount > 0 && <p className="more-indicator">{hiddenAppointmentsCount} more</p>}
+          {hiddenAppointmentsCount > 0 && (
+            <p className="more-indicator">{hiddenAppointmentsCount} more</p>
+          )}
         </Section>
 
         <Section icon={<UtensilsCrossed />} title="Food">
@@ -325,7 +344,9 @@ export default function App() {
       </div>
 
       <header className="status-bar">
-        <p className="status-time">Last update: &nbsp;<strong>{formatRenderTime()}</strong></p>
+        <p className="status-time">
+          Last update: &nbsp;<strong>{formatRenderTime()}</strong>
+        </p>
         <p className="status-icons" aria-label="Info"></p>
       </header>
     </main>

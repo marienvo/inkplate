@@ -1,40 +1,40 @@
-import type { DaySnapshot } from "./weekend";
+import type { DaySnapshot } from './weekend';
 
 type VegKey =
-  | "leek"
-  | "kale"
-  | "sprouts"
-  | "cabbage"
-  | "carrot"
-  | "parsnip"
-  | "celeriac"
-  | "beet"
-  | "onion"
-  | "potato"
-  | "spinach"
-  | "endive"
-  | "chicory"
-  | "cauliflower"
-  | "broccoli"
-  | "greenBeans"
-  | "peas"
-  | "asparagus"
-  | "zucchini"
-  | "eggplant"
-  | "tomato"
-  | "cucumber"
-  | "pumpkin";
+  | 'leek'
+  | 'kale'
+  | 'sprouts'
+  | 'cabbage'
+  | 'carrot'
+  | 'parsnip'
+  | 'celeriac'
+  | 'beet'
+  | 'onion'
+  | 'potato'
+  | 'spinach'
+  | 'endive'
+  | 'chicory'
+  | 'cauliflower'
+  | 'broccoli'
+  | 'greenBeans'
+  | 'peas'
+  | 'asparagus'
+  | 'zucchini'
+  | 'eggplant'
+  | 'tomato'
+  | 'cucumber'
+  | 'pumpkin';
 
 type FruitKey =
-  | "apple"
-  | "pear"
-  | "rhubarb"
-  | "strawberry"
-  | "cherry"
-  | "plum"
-  | "blueberry"
-  | "blackberry"
-  | "grape";
+  | 'apple'
+  | 'pear'
+  | 'rhubarb'
+  | 'strawberry'
+  | 'cherry'
+  | 'plum'
+  | 'blueberry'
+  | 'blackberry'
+  | 'grape';
 
 type Month = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12;
 
@@ -52,41 +52,41 @@ type SeasonalFruit = {
 };
 
 const SEASONAL_NL: SeasonalVeg[] = [
-  { key: "leek", label: "leek", months: [1, 2, 3, 10, 11, 12] },
-  { key: "kale", label: "kale", months: [1, 2, 3, 11, 12] },
-  { key: "sprouts", label: "sprouts", months: [1, 2, 3, 11, 12] },
-  { key: "cabbage", label: "cabbage", months: [1, 2, 3, 10, 11, 12] },
-  { key: "carrot", label: "carrot", months: [1, 2, 3, 4, 10, 11, 12] },
-  { key: "parsnip", label: "parsnip", months: [1, 2, 3, 10, 11, 12] },
-  { key: "celeriac", label: "celeriac", months: [1, 2, 3, 10, 11, 12] },
-  { key: "beet", label: "beet", months: [1, 2, 3, 9, 10, 11, 12] },
-  { key: "onion", label: "onion", months: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12] },
-  { key: "potato", label: "potato", months: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12] },
-  { key: "spinach", label: "spinach", months: [3, 4, 5, 9, 10] },
-  { key: "endive", label: "endive", months: [4, 5, 6, 9, 10] },
-  { key: "chicory", label: "chicory", months: [1, 2, 3, 10, 11, 12] },
-  { key: "asparagus", label: "asparagus", months: [4, 5, 6] },
-  { key: "cauliflower", label: "cauliflower", months: [4, 5, 6, 7, 8, 9, 10] },
-  { key: "broccoli", label: "broccoli", months: [5, 6, 7, 8, 9, 10] },
-  { key: "peas", label: "peas", months: [5, 6, 7] },
-  { key: "greenBeans", label: "green beans", months: [6, 7, 8, 9] },
-  { key: "zucchini", label: "zucchini", months: [6, 7, 8, 9] },
-  { key: "tomato", label: "tomato", months: [7, 8, 9] },
-  { key: "cucumber", label: "cucumber", months: [7, 8, 9] },
-  { key: "eggplant", label: "eggplant", months: [7, 8, 9] },
-  { key: "pumpkin", label: "pumpkin", months: [9, 10, 11] }
+  { key: 'leek', label: 'leek', months: [1, 2, 3, 10, 11, 12] },
+  { key: 'kale', label: 'kale', months: [1, 2, 3, 11, 12] },
+  { key: 'sprouts', label: 'sprouts', months: [1, 2, 3, 11, 12] },
+  { key: 'cabbage', label: 'cabbage', months: [1, 2, 3, 10, 11, 12] },
+  { key: 'carrot', label: 'carrot', months: [1, 2, 3, 4, 10, 11, 12] },
+  { key: 'parsnip', label: 'parsnip', months: [1, 2, 3, 10, 11, 12] },
+  { key: 'celeriac', label: 'celeriac', months: [1, 2, 3, 10, 11, 12] },
+  { key: 'beet', label: 'beet', months: [1, 2, 3, 9, 10, 11, 12] },
+  { key: 'onion', label: 'onion', months: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12] },
+  { key: 'potato', label: 'potato', months: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12] },
+  { key: 'spinach', label: 'spinach', months: [3, 4, 5, 9, 10] },
+  { key: 'endive', label: 'endive', months: [4, 5, 6, 9, 10] },
+  { key: 'chicory', label: 'chicory', months: [1, 2, 3, 10, 11, 12] },
+  { key: 'asparagus', label: 'asparagus', months: [4, 5, 6] },
+  { key: 'cauliflower', label: 'cauliflower', months: [4, 5, 6, 7, 8, 9, 10] },
+  { key: 'broccoli', label: 'broccoli', months: [5, 6, 7, 8, 9, 10] },
+  { key: 'peas', label: 'peas', months: [5, 6, 7] },
+  { key: 'greenBeans', label: 'green beans', months: [6, 7, 8, 9] },
+  { key: 'zucchini', label: 'zucchini', months: [6, 7, 8, 9] },
+  { key: 'tomato', label: 'tomato', months: [7, 8, 9] },
+  { key: 'cucumber', label: 'cucumber', months: [7, 8, 9] },
+  { key: 'eggplant', label: 'eggplant', months: [7, 8, 9] },
+  { key: 'pumpkin', label: 'pumpkin', months: [9, 10, 11] },
 ];
 
 const SEASONAL_NL_FRUIT: SeasonalFruit[] = [
-  { key: "apple", label: "apple", months: [9, 10, 11, 12, 1, 2, 3, 4], bakeWeight: 1.0 },
-  { key: "pear", label: "pear", months: [9, 10, 11, 12, 1, 2, 3], bakeWeight: 1.0 },
-  { key: "rhubarb", label: "rhubarb", months: [4, 5, 6], bakeWeight: 1.0 },
-  { key: "strawberry", label: "strawberry", months: [5, 6, 7], bakeWeight: 0.7 },
-  { key: "cherry", label: "cherry", months: [6, 7], bakeWeight: 0.8 },
-  { key: "plum", label: "plum", months: [7, 8, 9], bakeWeight: 1.0 },
-  { key: "blueberry", label: "blueberry", months: [7, 8], bakeWeight: 0.85 },
-  { key: "blackberry", label: "blackberry", months: [8, 9], bakeWeight: 0.85 },
-  { key: "grape", label: "grape", months: [9, 10], bakeWeight: 0.55 }
+  { key: 'apple', label: 'apple', months: [9, 10, 11, 12, 1, 2, 3, 4], bakeWeight: 1.0 },
+  { key: 'pear', label: 'pear', months: [9, 10, 11, 12, 1, 2, 3], bakeWeight: 1.0 },
+  { key: 'rhubarb', label: 'rhubarb', months: [4, 5, 6], bakeWeight: 1.0 },
+  { key: 'strawberry', label: 'strawberry', months: [5, 6, 7], bakeWeight: 0.7 },
+  { key: 'cherry', label: 'cherry', months: [6, 7], bakeWeight: 0.8 },
+  { key: 'plum', label: 'plum', months: [7, 8, 9], bakeWeight: 1.0 },
+  { key: 'blueberry', label: 'blueberry', months: [7, 8], bakeWeight: 0.85 },
+  { key: 'blackberry', label: 'blackberry', months: [8, 9], bakeWeight: 0.85 },
+  { key: 'grape', label: 'grape', months: [9, 10], bakeWeight: 0.55 },
 ];
 
 function clamp(value: number, min: number, max: number): number {
@@ -168,7 +168,7 @@ function weightedPick<T>(items: T[], weightOf: (item: T) => number, rnd: () => n
 }
 
 function formatListShort(items: { label: string }[]): string {
-  return items.map((item) => item.label).join(", ");
+  return items.map((item) => item.label).join(', ');
 }
 
 function isBadWeatherForOutdoors(day: DaySnapshot): boolean {
@@ -186,10 +186,10 @@ function isBadWeatherForOutdoors(day: DaySnapshot): boolean {
   return false;
 }
 
-type SavoryMode = "mealPrep" | "freshCook";
+type SavoryMode = 'mealPrep' | 'freshCook';
 
 function getSavoryMode(day: DaySnapshot): SavoryMode {
-  return isBadWeatherForOutdoors(day) ? "mealPrep" : "freshCook";
+  return isBadWeatherForOutdoors(day) ? 'mealPrep' : 'freshCook';
 }
 
 function savoryLine(mode: SavoryMode, vegs: SeasonalVeg[], rnd: () => number): string {
@@ -200,7 +200,7 @@ function savoryLine(mode: SavoryMode, vegs: SeasonalVeg[], rnd: () => number): s
     `Batch cook: ${vegText}`,
     `Prep & freeze: ${vegText}`,
     `Stock the fridge: ${vegText}`,
-    `Sunday prep: ${vegText}`
+    `Sunday prep: ${vegText}`,
   ];
 
   const freshCookTemplates = [
@@ -208,31 +208,24 @@ function savoryLine(mode: SavoryMode, vegs: SeasonalVeg[], rnd: () => number): s
     `Quick pasta: ${vegText}`,
     `Warm bowl: ${vegText}`,
     `Big salad: ${vegText}`,
-    `Roast veggies: ${vegText}`
+    `Roast veggies: ${vegText}`,
   ];
 
-  const templates = mode === "mealPrep" ? mealPrepTemplates : freshCookTemplates;
+  const templates = mode === 'mealPrep' ? mealPrepTemplates : freshCookTemplates;
   return templates[Math.floor(rnd() * templates.length)];
 }
 
-type BakeStyle =
-  | "crumble"
-  | "cake"
-  | "pie"
-  | "muffins"
-  | "galette"
-  | "bars"
-  | "compote";
+type BakeStyle = 'crumble' | 'cake' | 'pie' | 'muffins' | 'galette' | 'bars' | 'compote';
 
 function bakeLine(fruit: SeasonalFruit, bestDay: DaySnapshot, rnd: () => number): string {
   const indoor = isBadWeatherForOutdoors(bestDay);
-  const indoorStyles: BakeStyle[] = ["crumble", "cake", "pie", "galette", "bars"];
-  const outdoorStyles: BakeStyle[] = ["muffins", "compote", "cake", "crumble"];
+  const indoorStyles: BakeStyle[] = ['crumble', 'cake', 'pie', 'galette', 'bars'];
+  const outdoorStyles: BakeStyle[] = ['muffins', 'compote', 'cake', 'crumble'];
   const styles = indoor ? indoorStyles : outdoorStyles;
 
   const allowedStyles = styles.filter((style) => {
-    if (fruit.key === "rhubarb") return style !== "pie";
-    if (fruit.key === "grape") return style === "cake" || style === "compote";
+    if (fruit.key === 'rhubarb') return style !== 'pie';
+    if (fruit.key === 'grape') return style === 'cake' || style === 'compote';
     return true;
   });
 
@@ -244,14 +237,12 @@ function bakeLine(fruit: SeasonalFruit, bestDay: DaySnapshot, rnd: () => number)
     muffins: [`Bake: ${fruit.label} muffins`, `Bake: ${fruit.label} muffins (batch)`],
     galette: [`Bake: ${fruit.label} galette`, `Bake: rustic ${fruit.label} galette`],
     bars: [`Bake: ${fruit.label} bars`, `Bake: ${fruit.label} oat bars`],
-    compote: [`Bake: ${fruit.label} compote`, `Bake: oven ${fruit.label} compote`]
+    compote: [`Bake: ${fruit.label} compote`, `Bake: oven ${fruit.label} compote`],
   };
 
   const templates = templatesByStyle[style];
   const pickIndex =
-    indoor && templates.length > 1
-      ? (rnd() < 0.7 ? 1 : 0)
-      : Math.floor(rnd() * templates.length);
+    indoor && templates.length > 1 ? (rnd() < 0.7 ? 1 : 0) : Math.floor(rnd() * templates.length);
 
   return templates[Math.max(0, Math.min(pickIndex, templates.length - 1))];
 }
@@ -266,20 +257,20 @@ function bakeLine(fruit: SeasonalFruit, bestDay: DaySnapshot, rnd: () => number)
 export function getWeekendFoodPlan(
   date: Date,
   day1: DaySnapshot,
-  day2: DaySnapshot
+  day2: DaySnapshot,
 ): { savory: string; sweet: string } {
   const best = pickBestDay(day1, day2);
   const seasonalVeg = seasonalForDate(SEASONAL_NL, date);
   const seasonalFruit = seasonalForDate(SEASONAL_NL_FRUIT, date);
 
   const safeVegFallback: SeasonalVeg[] = [
-    { key: "onion", label: "onion", months: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12] },
-    { key: "carrot", label: "carrot", months: [1, 2, 3, 4, 10, 11, 12] },
-    { key: "potato", label: "potato", months: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12] }
+    { key: 'onion', label: 'onion', months: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12] },
+    { key: 'carrot', label: 'carrot', months: [1, 2, 3, 4, 10, 11, 12] },
+    { key: 'potato', label: 'potato', months: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12] },
   ];
   const safeFruitFallback: SeasonalFruit[] = [
-    { key: "apple", label: "apple", months: [1, 2, 3, 4, 9, 10, 11, 12], bakeWeight: 1.0 },
-    { key: "pear", label: "pear", months: [1, 2, 3, 9, 10, 11, 12], bakeWeight: 1.0 }
+    { key: 'apple', label: 'apple', months: [1, 2, 3, 4, 9, 10, 11, 12], bakeWeight: 1.0 },
+    { key: 'pear', label: 'pear', months: [1, 2, 3, 9, 10, 11, 12], bakeWeight: 1.0 },
   ];
 
   const seed = hashSeed(date, best);

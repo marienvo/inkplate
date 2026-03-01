@@ -1,5 +1,5 @@
 :root {
-  font-family: "Inter", "Segoe UI", sans-serif;
+  font-family: 'Inter', 'Segoe UI', sans-serif;
 }
 
 * {
@@ -58,7 +58,7 @@ strong {
   line-height: 1;
 }
 .status-time strong {
-  color: #fff
+  color: #fff;
 }
 
 .status-icons {

@@ -22,8 +22,8 @@ export type OutdoorFeel = {
     humidityFeel: string;
     visibilityFeel: string;
     windFeel: string;
-    condensationRisk: "Low" | "Medium" | "High";
-    frostOrSlipHint: "None" | "Possible" | "Likely";
+    condensationRisk: 'Low' | 'Medium' | 'High';
+    frostOrSlipHint: 'None' | 'Possible' | 'Likely';
   };
 };
 
@@ -88,57 +88,57 @@ function heatIndexC(tempC: number, relativeHumidity: number): number {
 }
 
 function humidityFeelFromDewPoint(dewPointC: number): string {
-  if (dewPointC < 0) return "Very dry";
-  if (dewPointC < 7) return "Dry";
-  if (dewPointC < 13) return "Comfortable";
-  if (dewPointC < 16) return "Slightly muggy";
-  if (dewPointC < 19) return "Muggy";
-  return "Sticky";
+  if (dewPointC < 0) return 'Very dry';
+  if (dewPointC < 7) return 'Dry';
+  if (dewPointC < 13) return 'Comfortable';
+  if (dewPointC < 16) return 'Slightly muggy';
+  if (dewPointC < 19) return 'Muggy';
+  return 'Sticky';
 }
 
 function windFeelFromMs(windMs: number): string {
-  if (windMs < 1.5) return "Calm";
-  if (windMs < 5) return "Light breeze";
-  if (windMs < 9) return "Breezy";
-  if (windMs < 14) return "Windy";
-  return "Very windy";
+  if (windMs < 1.5) return 'Calm';
+  if (windMs < 5) return 'Light breeze';
+  if (windMs < 9) return 'Breezy';
+  if (windMs < 14) return 'Windy';
+  return 'Very windy';
 }
 
 function visibilityFeelFromMeters(visibilityMeters: number, spreadC: number): string {
   // Base on visibility, then nudge worse if air near saturation (low spread).
-  let label: "Crystal clear" | "Clear" | "Hazy" | "Misty" | "Dense fog";
-  if (visibilityMeters < 500) label = "Dense fog";
-  else if (visibilityMeters < 2000) label = "Misty";
-  else if (visibilityMeters < 10000) label = "Hazy";
-  else if (visibilityMeters < 20000) label = "Clear";
-  else label = "Crystal clear";
+  let label: 'Crystal clear' | 'Clear' | 'Hazy' | 'Misty' | 'Dense fog';
+  if (visibilityMeters < 500) label = 'Dense fog';
+  else if (visibilityMeters < 2000) label = 'Misty';
+  else if (visibilityMeters < 10000) label = 'Hazy';
+  else if (visibilityMeters < 20000) label = 'Clear';
+  else label = 'Crystal clear';
 
   if (spreadC <= 2) {
-    if (label === "Crystal clear") label = "Clear";
-    else if (label === "Clear") label = "Hazy";
-    else if (label === "Hazy") label = "Misty";
+    if (label === 'Crystal clear') label = 'Clear';
+    else if (label === 'Clear') label = 'Hazy';
+    else if (label === 'Hazy') label = 'Misty';
   }
   return label;
 }
 
-function condensationRiskFromSpread(spreadC: number): "Low" | "Medium" | "High" {
-  if (spreadC <= 1) return "High";
-  if (spreadC <= 3) return "Medium";
-  return "Low";
+function condensationRiskFromSpread(spreadC: number): 'Low' | 'Medium' | 'High' {
+  if (spreadC <= 1) return 'High';
+  if (spreadC <= 3) return 'Medium';
+  return 'Low';
 }
 
 function frostOrSlipHint(
   tempC: number,
   groundTempC: number | undefined,
-  dewPointC: number
-): "None" | "Possible" | "Likely" {
+  dewPointC: number,
+): 'None' | 'Possible' | 'Likely' {
   // Ground temp helps a lot; otherwise use air temp and dew point.
   const gt = groundTempC ?? tempC;
   const spread = tempC - dewPointC;
 
-  if (gt <= 0 && spread <= 2) return "Likely";
-  if (gt <= 1 || (tempC <= 1 && spread <= 3)) return "Possible";
-  return "None";
+  if (gt <= 0 && spread <= 2) return 'Likely';
+  if (gt <= 1 || (tempC <= 1 && spread <= 3)) return 'Possible';
+  return 'None';
 }
 
 export function getOutdoorFeel(snapshot: WeatherApiSnapshot): OutdoorFeel {
@@ -169,27 +169,28 @@ export function getOutdoorFeel(snapshot: WeatherApiSnapshot): OutdoorFeel {
 
   // Thermal description based on feels-like
   let thermal: string;
-  if (feelsLike <= 0) thermal = "Freezing";
-  else if (feelsLike <= 5) thermal = "Cold";
-  else if (feelsLike <= 12) thermal = "Cool";
-  else if (feelsLike <= 18) thermal = "Mild";
-  else if (feelsLike <= 25) thermal = "Warm";
-  else if (feelsLike <= 30) thermal = "Hot";
-  else thermal = "Very hot";
+  if (feelsLike <= 0) thermal = 'Freezing';
+  else if (feelsLike <= 5) thermal = 'Cold';
+  else if (feelsLike <= 12) thermal = 'Cool';
+  else if (feelsLike <= 18) thermal = 'Mild';
+  else if (feelsLike <= 25) thermal = 'Warm';
+  else if (feelsLike <= 30) thermal = 'Hot';
+  else thermal = 'Very hot';
 
   chips.push(thermal);
   chips.push(humidityFeel);
   chips.push(windFeel);
   chips.push(visibilityFeel);
 
-  if (condensationRisk === "High") chips.push("Mist/condensation risk");
-  if (frostHint !== "None") chips.push(frostHint === "Likely" ? "Slip risk likely" : "Slip risk possible");
+  if (condensationRisk === 'High') chips.push('Mist/condensation risk');
+  if (frostHint !== 'None')
+    chips.push(frostHint === 'Likely' ? 'Slip risk likely' : 'Slip risk possible');
 
   // One-liner (keep it short for UI)
   const feelText =
     `${thermal}, ${humidityFeel.toLowerCase()}, ${windFeel.toLowerCase()}` +
-    (condensationRisk === "High" ? ". Air is near saturation." : "") +
-    (frostHint !== "None" ? " Watch for slippery spots." : "");
+    (condensationRisk === 'High' ? '. Air is near saturation.' : '') +
+    (frostHint !== 'None' ? ' Watch for slippery spots.' : '');
 
   // If you want to surface original Dutch summary as a secondary line:
   // snapshot.samenv could be shown separately.
@@ -203,7 +204,7 @@ export function getOutdoorFeel(snapshot: WeatherApiSnapshot): OutdoorFeel {
       visibilityFeel,
       windFeel,
       condensationRisk,
-      frostOrSlipHint: frostHint
-    }
+      frostOrSlipHint: frostHint,
+    },
   };
 }

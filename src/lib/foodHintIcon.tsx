@@ -1,5 +1,5 @@
-import type { ReactNode } from "react";
-import type { LucideIcon } from "lucide-react";
+import type { ReactNode } from 'react';
+import type { LucideIcon } from 'lucide-react';
 import {
   Apple,
   CakeSlice,
@@ -14,8 +14,8 @@ import {
   Refrigerator,
   Salad,
   Soup,
-  UtensilsCrossed
-} from "lucide-react";
+  UtensilsCrossed,
+} from 'lucide-react';
 
 type FoodHintParts = {
   label: string;
@@ -29,16 +29,16 @@ export type FoodHintItem = {
 };
 
 const FOOD_HINT_ICONS: Record<string, LucideIcon> = {
-  "Meal prep": CookingPot,
-  "Batch cook": ChefHat,
-  "Prep & freeze": Refrigerator,
-  "Stock the fridge": LeafyGreen,
-  "Sunday prep": Salad,
+  'Meal prep': CookingPot,
+  'Batch cook': ChefHat,
+  'Prep & freeze': Refrigerator,
+  'Stock the fridge': LeafyGreen,
+  'Sunday prep': Salad,
   Traybake: Microwave,
-  "Quick pasta": CookingPot,
-  "Warm bowl": Soup,
-  "Big salad": Salad,
-  "Roast veggies": Carrot,
+  'Quick pasta': CookingPot,
+  'Warm bowl': Soup,
+  'Big salad': Salad,
+  'Roast veggies': Carrot,
   Bake: CakeSlice,
   Sweet: Apple,
   crumble: Cookie,
@@ -47,21 +47,21 @@ const FOOD_HINT_ICONS: Record<string, LucideIcon> = {
   muffins: Croissant,
   galette: Cherry,
   bars: Cookie,
-  compote: Apple
+  compote: Apple,
 };
 
 function parseFoodHint(hint: string): FoodHintParts {
-  const [prefix, ...rest] = hint.split(": ");
+  const [prefix, ...rest] = hint.split(': ');
   if (!prefix || rest.length === 0) {
     return {
-      label: "Food",
-      value: hint
+      label: 'Food',
+      value: hint,
     };
   }
 
   return {
     label: prefix,
-    value: rest.join(": ")
+    value: rest.join(': '),
   };
 }
 
@@ -71,6 +71,6 @@ export function renderFoodHint(hint: string): FoodHintItem {
   return {
     icon: <Icon />,
     label: parsed.label,
-    value: parsed.value
+    value: parsed.value,
   };
 }
