@@ -12,14 +12,14 @@ body {
 }
 
 #root {
-  width: 1280px;
-  height: 720px;
+  width: 720px;
+  height: 1280px;
   margin: 0 auto;
 }
 
 .frame {
-  width: 1280px;
-  height: 720px;
+  width: 720px;
+  height: 1280px;
   padding: 48px;
   background: #fff;
   color: #000;
@@ -42,7 +42,7 @@ body {
 
 .grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr;
   gap: 20px;
 }
 

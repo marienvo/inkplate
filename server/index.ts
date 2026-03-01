@@ -68,8 +68,8 @@ async function captureDashboard(dashboardUrl: string) {
   try {
     const page = await browser.newPage();
     await page.setViewport({
-      width: 1280,
-      height: 720,
+      width: 720,
+      height: 1280,
       deviceScaleFactor: 1
     });
     await page.goto(dashboardUrl, { waitUntil: "networkidle0" });
@@ -81,7 +81,7 @@ async function captureDashboard(dashboardUrl: string) {
     await page.screenshot({
       path: outputPath,
       type: "png",
-      clip: { x: 0, y: 0, width: 1280, height: 720 }
+      clip: { x: 0, y: 0, width: 720, height: 1280 }
     });
   } finally {
     await browser.close();

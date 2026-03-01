@@ -27,7 +27,7 @@ export default function App() {
         </article>
         <article className="card">
           <h2>Resolutie</h2>
-          <p>1280 x 720</p>
+          <p>720 x 1280</p>
         </article>
         <article className="card">
           <h2>Update interval</h2>
