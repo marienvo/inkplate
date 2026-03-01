@@ -5,12 +5,14 @@ This project renders a React dashboard to a PNG and serves it to an Inkplate 5V2
 ## Requirements
 
 - Node.js 20+
-- Arduino CLI (optional, only for `npm run upload`)
+- Arduino CLI (not needed on CRON server, only for Inkplate device firmware)
 - Inkplate Arduino board support installed (`Inkplate_Boards:esp32`)
 
 ![img.png](img.png)
 
 ## 1) Install
+
+Install Arduino CLI (only for device firmware setup via `npm run upload`)
 
 ```bash
 curl -fsSL https://raw.githubusercontent.com/arduino/arduino-cli/master/install.sh | sh
@@ -19,6 +21,11 @@ mv ./bin/arduino-cli ~/.local/bin/
 arduino-cli config add board_manager.additional_urls https://github.com/SolderedElectronics/Inkplate-Board-Definitions-for-Arduino-IDE/raw/master/package_inkplate_index.json
 arduino-cli core update-index
 arduino-cli core install Inkplate_Boards:esp32
+```
+
+For both development as CRON server:
+
+```bash
 npm install
 ```
 
