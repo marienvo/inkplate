@@ -1,7 +1,8 @@
 import type { ReactNode } from "react";
+import { Thermometer, Sun, CloudRain, Wind, Droplets, Cloud, Calendar, Clock } from "lucide-react";
 
 type WeatherItem = {
-  icon: string;
+  icon: ReactNode;
   label: string;
   value: string;
 };
@@ -12,11 +13,11 @@ type Appointment = {
 };
 
 const weatherItems: WeatherItem[] = [
-  { icon: "🌡️", label: "Temperature", value: "57°F" },
-  { icon: "☀️", label: "Sun", value: "Partly cloudy" },
-  { icon: "🌧️", label: "Rain", value: "20% chance" },
-  { icon: "💨", label: "Wind", value: "15 km/h WSW" },
-  { icon: "💧", label: "Humidity", value: "78%" }
+  { icon: <Thermometer />, label: "Temperature", value: "57°F" },
+  { icon: <Sun />, label: "Sun", value: "Partly cloudy" },
+  { icon: <CloudRain />, label: "Rain", value: "20% chance" },
+  { icon: <Wind />, label: "Wind", value: "15 km/h WSW" },
+  { icon: <Droplets />, label: "Humidity", value: "78%" }
 ];
 
 const todayAppointments: Appointment[] = [
@@ -45,7 +46,7 @@ function formatRenderTime(): string {
 }
 
 type SectionProps = {
-  icon: string;
+  icon: ReactNode;
   title: string;
   children: ReactNode;
 };
@@ -68,7 +69,7 @@ export default function App() {
   return (
     <main className="frame">
       <div className="frame-content">
-        <Section icon="☁️" title="Weather - Rotterdam">
+        <Section icon={<Cloud />} title="Weather - Rotterdam">
           <ul className="list weather-list">
           {weatherItems.map((item) => (
             <li key={item.label} className="list-item">
@@ -84,13 +85,13 @@ export default function App() {
           </ul>
         </Section>
 
-        <Section icon="📅" title="Today">
+        <Section icon={<Calendar />} title="Sunday, March 1st">
           <ul className="list today-list">
           {todayAppointments.map((appointment) => (
             <li key={appointment.time} className="list-item">
               <span className="item-left">
                 <span className="emoji" aria-hidden="true">
-                  🕒
+                  <Clock />
                 </span>
                 <span className="item-label">{appointment.time}</span>
               </span>

@@ -69,6 +69,7 @@ strong {
 
 .section {
   padding: 24px 28px 0;
+  margin-bottom: 40px;
 }
 
 .section-header {
@@ -123,6 +124,14 @@ strong {
   text-align: center;
   font-size: 34px;
   line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.emoji svg {
+  width: 1em;
+  height: 1em;
 }
 
 .today-list .item-label {
