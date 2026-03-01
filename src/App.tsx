@@ -26,6 +26,7 @@ import calendarData from "./data/calendar.json";
 import weatherData from "./data/weather.json";
 import type { OutdoorFeel } from "./lib/outdoor-feel";
 import { renderActivityHint } from "./lib/activity-hint-icon";
+import { renderFoodHint } from "./lib/food-hint-icon";
 
 type WeatherItem = {
   icon: ReactNode;
@@ -230,6 +231,7 @@ export default function App() {
       value: warningParts.join(" · ")
     });
   }
+  const foodItem = weather.foodHint ? renderFoodHint(weather.foodHint) : null;
 
   return (
     <main className="frame">
@@ -275,8 +277,18 @@ export default function App() {
         </Section>
 
         <Section icon={<UtensilsCrossed />} title="Food">
-          {weather.foodHint ? (
-            <p className="food-hint">{weather.foodHint}</p>
+          {foodItem ? (
+            <ul className="list food-list">
+              <li className="list-item">
+                <span className="item-left">
+                  <span className="emoji" aria-hidden="true">
+                    {foodItem.icon}
+                  </span>
+                  <span className="item-label">{foodItem.label}</span>
+                </span>
+                <span className="item-value">{foodItem.value}</span>
+              </li>
+            </ul>
           ) : (
             <p className="empty-state">No meals planned</p>
           )}
