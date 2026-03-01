@@ -206,12 +206,24 @@ async function fetchWeekendData(): Promise<{
     throw new Error('OpenMeteo did not provide enough data for weekend one-liner');
   }
 
+  const time1 = daily.time?.[firstOffset];
+  const time2 = daily.time?.[secondOffset];
+  if (!time1 || !time2) {
+    throw new Error('OpenMeteo did not provide time data for weekend days');
+  }
+
+  const date1 = new Date(time1);
+  const date2 = new Date(time2);
+  if (Number.isNaN(date1.getTime()) || Number.isNaN(date2.getTime())) {
+    throw new Error('OpenMeteo returned invalid weekend dates');
+  }
+
   return {
     weekend: {
       label,
       value: getWeekendOneLiner(day1, day2),
     },
-    food: getWeekendFoodPlan(new Date(), day1, day2),
+    food: getWeekendFoodPlan(date1, day1, date2, day2),
   };
 }
 

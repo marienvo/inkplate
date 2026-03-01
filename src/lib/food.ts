@@ -107,10 +107,6 @@ function scoreNiceDay(day: DaySnapshot): number {
   return 55 + comfortBonus + visBonus - rainPenalty - windPenalty - muggyPenalty;
 }
 
-function pickBestDay(day1: DaySnapshot, day2: DaySnapshot): DaySnapshot {
-  return scoreNiceDay(day1) >= scoreNiceDay(day2) ? day1 : day2;
-}
-
 function mulberry32(seed: number): () => number {
   // Deterministic pseudo-random generator
   let t = seed >>> 0;
@@ -255,13 +251,18 @@ function bakeLine(fruit: SeasonalFruit, bestDay: DaySnapshot, rnd: () => number)
  * Output is deterministic but varied.
  */
 export function getWeekendFoodPlan(
-  date: Date,
+  date1: Date,
   day1: DaySnapshot,
+  date2: Date,
   day2: DaySnapshot,
 ): { savory: string; sweet: string } {
-  const best = pickBestDay(day1, day2);
-  const seasonalVeg = seasonalForDate(SEASONAL_NL, date);
-  const seasonalFruit = seasonalForDate(SEASONAL_NL_FRUIT, date);
+  const score1 = scoreNiceDay(day1);
+  const score2 = scoreNiceDay(day2);
+  const best = score1 >= score2 ? day1 : day2;
+  const bestDate = score1 >= score2 ? date1 : date2;
+
+  const seasonalVeg = seasonalForDate(SEASONAL_NL, bestDate);
+  const seasonalFruit = seasonalForDate(SEASONAL_NL_FRUIT, bestDate);
 
   const safeVegFallback: SeasonalVeg[] = [
     { key: 'onion', label: 'onion', months: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12] },
@@ -273,7 +274,7 @@ export function getWeekendFoodPlan(
     { key: 'pear', label: 'pear', months: [1, 2, 3, 9, 10, 11, 12], bakeWeight: 1.0 },
   ];
 
-  const seed = hashSeed(date, best);
+  const seed = hashSeed(bestDate, best);
   const rnd = mulberry32(seed);
   const vegPool = seasonalVeg.length >= 6 ? seasonalVeg : [...seasonalVeg, ...safeVegFallback];
   const fruitPool = seasonalFruit.length > 0 ? seasonalFruit : safeFruitFallback;

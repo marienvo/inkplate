@@ -14,19 +14,21 @@ function makeDay(overrides: Partial<DaySnapshot> = {}): DaySnapshot {
 }
 
 test('returns deterministic output for the same date and weather', () => {
-  const date = new Date('2026-03-01T12:00:00.000Z');
+  const date1 = new Date('2026-03-07T12:00:00.000Z');
+  const date2 = new Date('2026-03-08T12:00:00.000Z');
   const day1 = makeDay({ feelsLike: 13, rainChance: 15 });
   const day2 = makeDay({ feelsLike: 16, rainChance: 10 });
 
-  const first = getWeekendFoodPlan(date, day1, day2);
-  const second = getWeekendFoodPlan(date, day1, day2);
+  const first = getWeekendFoodPlan(date1, day1, date2, day2);
+  const second = getWeekendFoodPlan(date1, day1, date2, day2);
 
   expect(second).toEqual(first);
 });
 
 test('uses only seasonal vegetables in December output', () => {
-  const date = new Date('2026-12-14T12:00:00.000Z');
-  const plan = getWeekendFoodPlan(date, makeDay(), makeDay({ feelsLike: 10 }));
+  const date1 = new Date('2026-12-12T12:00:00.000Z');
+  const date2 = new Date('2026-12-13T12:00:00.000Z');
+  const plan = getWeekendFoodPlan(date1, makeDay(), date2, makeDay({ feelsLike: 10 }));
   const savoryVegText = plan.savory.split(': ')[1] ?? '';
   const pickedVeg = savoryVegText.split(', ').filter(Boolean);
 
@@ -59,7 +61,12 @@ test('switches to meal prep + baking in bad weather mode', () => {
   });
   const otherDay = makeDay({ rainChance: 95, windbft: 7, feelsLike: 5 });
 
-  const plan = getWeekendFoodPlan(new Date('2026-11-08T12:00:00.000Z'), badWeather, otherDay);
+  const plan = getWeekendFoodPlan(
+    new Date('2026-11-08T12:00:00.000Z'),
+    badWeather,
+    new Date('2026-11-09T12:00:00.000Z'),
+    otherDay,
+  );
 
   expect(plan.savory).toMatch(
     /^(Meal prep|Batch cook|Prep & freeze|Stock the fridge|Sunday prep): /,
