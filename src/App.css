@@ -139,6 +139,10 @@ strong {
   height: 1em;
 }
 
+.wind-direction-icon {
+  transform: rotate(var(--wind-rotation, 0deg));
+}
+
 .today-list .item-label {
   width: 180px;
 }

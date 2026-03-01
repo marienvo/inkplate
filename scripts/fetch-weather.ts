@@ -39,6 +39,7 @@ type WeatherData = {
   summary: string;
   humidity: number;
   windDirection: string;
+  windDirectionDegrees: number;
   windBft: number;
   rainChance: number;
   forecast: string;
@@ -235,6 +236,7 @@ function mapApiResponse(body: WeerLiveResponse): WeatherData {
     summary: requiredString(snapshot.samenv, "liveweer[0].samenv"),
     humidity: snapshot.lv,
     windDirection: requiredString(current.windr, "liveweer[0].windr"),
+    windDirectionDegrees: requiredNumber(current.windrgr, "liveweer[0].windrgr"),
     windBft: requiredNumber(current.windbft, "liveweer[0].windbft"),
     rainChance: requiredNumber(dayForecast?.neersl_perc_dag, "wk_verw[0].neersl_perc_dag"),
     forecast: requiredString(current.verw, "liveweer[0].verw"),

@@ -1,15 +1,14 @@
-import type { ReactNode } from "react";
+import type { CSSProperties, ReactNode } from "react";
 import {
   Thermometer,
   CloudRain,
-  Wind,
+  MousePointer2,
   Cloud,
   Calendar,
   CalendarDays,
   Clock,
-  Eye,
   AlertTriangle,
-  Smile
+  Smile, Wind
 } from "lucide-react";
 import calendarData from "./data/calendar.json";
 import weatherData from "./data/weather.json";
@@ -18,7 +17,7 @@ import type { OutdoorFeel } from "./lib/outdoor-feel";
 type WeatherItem = {
   icon: ReactNode;
   label: string;
-  value: string;
+  value: ReactNode;
 };
 
 type Appointment = {
@@ -33,6 +32,7 @@ type WeatherData = {
   summary: string;
   humidity: number;
   windDirection: string;
+  windDirectionDegrees: number;
   windBft: number;
   rainChance: number;
   forecast: string;
@@ -108,6 +108,9 @@ export default function App() {
 
   const visibleAppointments = todayAppointments.slice(0, 5);
   const hiddenAppointmentsCount = todayAppointments.length - visibleAppointments.length;
+  const windDirectionStyle = {
+    "--wind-rotation": `${weather.windDirectionDegrees - 315}deg`
+  } as CSSProperties;
   const warningParts: string[] = [];
   if (outdoorFeel) {
     if (outdoorFeel.details.condensationRisk !== "Low") {
@@ -127,7 +130,11 @@ export default function App() {
       value: `${Math.round(weather.temp)}°C (feels like ${Math.round(outdoorFeel?.feelsLikeC ?? weather.feelsLike)}°C)`
     },
     { icon: <CloudRain />, label: "Rain", value: `${Math.round(weather.rainChance)}% chance` },
-    { icon: <Wind />, label: "Wind", value: `${Math.round(weather.windBft)} bft ${weather.windDirection}` },
+    {
+      icon: <Wind/>,
+      label: "Wind",
+      value: <>{Math.round(weather.windBft)} bft <MousePointer2 className="wind-direction-icon" style={windDirectionStyle} /></>
+    },
   ];
 
   if (hasOutdoorFeel && outdoorFeel) {
