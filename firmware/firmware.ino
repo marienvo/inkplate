@@ -3,7 +3,7 @@
   - Connect to WiFi
   - Download rendered PNG from local server
   - Draw image full screen
-  - Go to deep sleep for configured hours
+  - Go to deep sleep for configured hours or WAKE button press
 */
 
 #ifndef ARDUINO_INKPLATE5V2
@@ -43,9 +43,13 @@ void setup() {
 
   display.display();
 
+  esp_sleep_wakeup_cause_t reason = esp_sleep_get_wakeup_cause();
+  Serial.printf("Wake reason: %d\n", reason);
+
   const uint64_t sleepSeconds = (uint64_t)SLEEP_HOURS * 3600ULL;
   Serial.printf("Sleeping for %llu hours\n", (unsigned long long)SLEEP_HOURS);
   esp_sleep_enable_timer_wakeup(sleepSeconds * US_TO_S_FACTOR);
+  esp_sleep_enable_ext0_wakeup(GPIO_NUM_36, LOW);
   esp_deep_sleep_start();
 }
 
