@@ -2,8 +2,8 @@ import express from 'express';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { execSync } from 'node:child_process';
-import { mkdirSync } from 'node:fs';
-import puppeteer from 'puppeteer';
+import { existsSync, mkdirSync } from 'node:fs';
+import puppeteer from 'puppeteer-core';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -22,18 +22,34 @@ function buildFrontend() {
   });
 }
 
-function installChromeForPuppeteer() {
-  console.log('Chrome not found. Installing browser for Puppeteer...');
-  execSync('npx puppeteer browsers install chrome', {
-    cwd: rootDir,
-    stdio: 'inherit',
-  });
+function findChromePath() {
+  if (process.env.CHROME_PATH) {
+    return process.env.CHROME_PATH;
+  }
+
+  const candidates = [
+    '/usr/bin/chromium-browser',
+    '/usr/bin/chromium',
+    '/usr/bin/google-chrome',
+    '/usr/bin/google-chrome-stable',
+  ];
+
+  for (const candidate of candidates) {
+    if (existsSync(candidate)) {
+      return candidate;
+    }
+  }
+
+  throw new Error(
+    'No Chrome/Chromium binary found. Install Chromium (e.g. sudo apt install chromium-browser) or set CHROME_PATH.',
+  );
 }
 
 async function captureDashboard(dashboardUrl: string) {
   mkdirSync(chromeStateDir, { recursive: true });
 
   const launchOptions = {
+    executablePath: findChromePath(),
     headless: true as const,
     env: {
       ...process.env,
@@ -52,18 +68,7 @@ async function captureDashboard(dashboardUrl: string) {
     ],
   };
 
-  let browser;
-  try {
-    browser = await puppeteer.launch(launchOptions);
-  } catch (error) {
-    const message = error instanceof Error ? error.message : String(error);
-    if (!message.includes('Could not find Chrome')) {
-      throw error;
-    }
-
-    installChromeForPuppeteer();
-    browser = await puppeteer.launch(launchOptions);
-  }
+  const browser = await puppeteer.launch(launchOptions);
 
   try {
     const page = await browser.newPage();
