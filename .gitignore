@@ -9,8 +9,9 @@ firmware/config.h
 # Local JS config (API keys, etc.)
 config.js
 
-# Build-time generated weather snapshot
+# Build-time generated data
 src/data/weather.json
+src/data/calendar.json
 
 # Cron runtime logs
 cron/deploy.log
