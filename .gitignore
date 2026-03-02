@@ -11,3 +11,6 @@ config.js
 
 # Build-time generated weather snapshot
 src/data/weather.json
+
+# Cron runtime logs
+cron/deploy.log
