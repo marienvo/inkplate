@@ -2,6 +2,11 @@
 
 This folder contains `deploy.sh`, intended to run periodically via Linux CRON.
 
+```bash
+sudo apt update
+sudo apt install -y chromium
+```
+
 ## 1) Set up CRON job
 
 Open your personal crontab:
