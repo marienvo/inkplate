@@ -68,8 +68,8 @@ function ordinal(n: number): string {
 }
 
 function formatDateForTitle(d: Date): string {
-  const weekday = new Intl.DateTimeFormat('en-US', { weekday: 'long' }).format(d);
-  const month = new Intl.DateTimeFormat('en-US', { month: 'long' }).format(d);
+  const weekday = new Intl.DateTimeFormat('en-US', { weekday: 'short' }).format(d);
+  const month = new Intl.DateTimeFormat('en-US', { month: 'short' }).format(d);
   return `${weekday}, ${month} ${ordinal(d.getDate())}`;
 }
 
@@ -248,7 +248,7 @@ export default function App() {
   return (
     <main className="frame">
       <div className="frame-content" ref={contentRef}>
-        <Section icon={<Cloud />} title="Weather - Rotterdam">
+        <Section icon={<Cloud />} title="Weather — Rotterdam">
           <ul className="list weather-list">
             {weatherItems.map((item) => (
               <li key={item.label} className="list-item">
