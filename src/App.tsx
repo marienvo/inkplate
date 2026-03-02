@@ -29,17 +29,12 @@ import { useSmartAgendaLimit } from './hooks/useSmartAgendaLimit';
 import type { OutdoorFeel } from './lib/outdoorFeel';
 import { renderActivityHint } from './lib/activityHintIcon';
 import { renderFoodHint } from './lib/foodHintIcon';
+import { selectAgendaView, type Appointment } from './lib/agenda';
 
 type WeatherItem = {
   icon: ReactNode;
   label: string;
   value: ReactNode;
-};
-
-type Appointment = {
-  date: string;
-  startTime: string;
-  title: string;
 };
 
 type WeatherData = {
@@ -76,19 +71,6 @@ function formatDateForTitle(d: Date): string {
   const weekday = new Intl.DateTimeFormat('en-US', { weekday: 'long' }).format(d);
   const month = new Intl.DateTimeFormat('en-US', { month: 'long' }).format(d);
   return `${weekday}, ${month} ${ordinal(d.getDate())}`;
-}
-
-function formatIsoDate(d: Date): string {
-  const year = d.getFullYear();
-  const month = String(d.getMonth() + 1).padStart(2, '0');
-  const day = String(d.getDate()).padStart(2, '0');
-  return `${year}-${month}-${day}`;
-}
-
-function format24HourTime(d: Date): string {
-  const hours = String(d.getHours()).padStart(2, '0');
-  const minutes = String(d.getMinutes()).padStart(2, '0');
-  return `${hours}:${minutes}`;
 }
 
 function formatRenderTime(): string {
@@ -185,31 +167,17 @@ export default function App() {
   const outdoorFeel = weather.outdoorFeel;
   const hasOutdoorFeel = Boolean(outdoorFeel);
   const now = new Date();
-  const todayIsoDate = formatIsoDate(now);
   const todayTitle = formatDateForTitle(now);
-  const todayAppointments = (calendarData as Appointment[])
-    .filter((appointment) => appointment.date === todayIsoDate)
-    .sort((a, b) => a.startTime.localeCompare(b.startTime));
-
+  const tomorrowDate = new Date(now);
+  tomorrowDate.setDate(tomorrowDate.getDate() + 1);
+  const tomorrowTitle = formatDateForTitle(tomorrowDate);
   const maxVisibleAppointments = useSmartAgendaLimit(contentRef, 3, 2);
-  const currentTime = format24HourTime(now);
-  const firstUpcomingIndex = todayAppointments.findIndex(
-    (appointment) => appointment.startTime >= currentTime,
+  const { showTomorrow, visibleAppointments, hiddenAppointmentsCount } = selectAgendaView(
+    calendarData as Appointment[],
+    now,
+    maxVisibleAppointments,
   );
-  const upcomingAnchorIndex =
-    firstUpcomingIndex === -1 ? todayAppointments.length : firstUpcomingIndex;
-  const startIndex = Math.max(
-    0,
-    Math.min(upcomingAnchorIndex, todayAppointments.length - maxVisibleAppointments),
-  );
-  const visibleAppointments = todayAppointments.slice(
-    startIndex,
-    startIndex + maxVisibleAppointments,
-  );
-  const hiddenAppointmentsCount = Math.max(
-    0,
-    todayAppointments.length - (startIndex + visibleAppointments.length),
-  );
+  const calendarTitle = showTomorrow ? `Tomorrow — ${tomorrowTitle}` : `Today — ${todayTitle}`;
   const windDirectionStyle = {
     '--wind-rotation': `${
       weather.windDirectionDegrees +
@@ -296,9 +264,9 @@ export default function App() {
           </ul>
         </Section>
 
-        <Section icon={<Calendar />} title={todayTitle}>
+        <Section icon={<Calendar />} title={calendarTitle}>
           {visibleAppointments.length === 0 ? (
-            <p className="empty-state">No events today</p>
+            <p className="empty-state">{showTomorrow ? 'No events tomorrow' : 'No events today'}</p>
           ) : (
             <ul className="list today-list">
               {visibleAppointments.map((appointment) => (
