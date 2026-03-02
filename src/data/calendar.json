@@ -1,9 +1,0 @@
-[
-  { "date": "2026-03-01", "startTime": "09:00", "title": "Team standup" },
-  { "date": "2026-03-01", "startTime": "12:30", "title": "Lunch with Alex" },
-  { "date": "2026-03-01", "startTime": "15:00", "title": "Dentist appointment" },
-  { "date": "2026-03-01", "startTime": "21:00", "title": "Call with supplier" },
-  { "date": "2026-03-01", "startTime": "21:30", "title": "Design review" },
-  { "date": "2026-03-01", "startTime": "22:00", "title": "Dinner with family" },
-  { "date": "2026-03-02", "startTime": "10:00", "title": "Sprint planning" }
-]
