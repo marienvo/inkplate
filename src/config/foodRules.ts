@@ -16,15 +16,6 @@ export type SeasonalFruit = {
   bakeWeight: number;
 };
 
-export type Dish = {
-  template: string;
-  months: Month[];
-  vibe: WeatherVibe | 'any';
-  weight: number;
-  excludeFruits?: string[];
-  onlyFruits?: string[];
-};
-
 export type Recipe = {
   title: string;
   ingredient: string;
@@ -32,9 +23,11 @@ export type Recipe = {
   weight: number;
 };
 
-export const GENERIC_FALLBACK_WEIGHT = 2;
-
 export const ALL_MONTHS: Month[] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+
+// ---------------------------------------------------------------------------
+// Seasonal produce
+// ---------------------------------------------------------------------------
 
 export const SEASONAL_NL: SeasonalVeg[] = [
   { key: 'leek', label: 'leek', months: [1, 2, 3, 10, 11, 12] },
@@ -62,12 +55,6 @@ export const SEASONAL_NL: SeasonalVeg[] = [
   { key: 'pumpkin', label: 'pumpkin', months: [9, 10, 11] },
 ];
 
-export const SAFE_VEG_FALLBACK: SeasonalVeg[] = [
-  { key: 'onion', label: 'onion', months: ALL_MONTHS },
-  { key: 'carrot', label: 'carrot', months: [1, 2, 3, 4, 10, 11, 12] },
-  { key: 'potato', label: 'potato', months: ALL_MONTHS },
-];
-
 export const SEASONAL_NL_FRUIT: SeasonalFruit[] = [
   { key: 'apple', label: 'apple', months: [9, 10, 11, 12, 1, 2, 3, 4], bakeWeight: 1.0 },
   { key: 'pear', label: 'pear', months: [9, 10, 11, 12, 1, 2, 3], bakeWeight: 1.0 },
@@ -80,10 +67,9 @@ export const SEASONAL_NL_FRUIT: SeasonalFruit[] = [
   { key: 'grape', label: 'grape', months: [9, 10], bakeWeight: 0.55 },
 ];
 
-export const SAFE_FRUIT_FALLBACK: SeasonalFruit[] = [
-  { key: 'apple', label: 'apple', months: [1, 2, 3, 4, 9, 10, 11, 12], bakeWeight: 1.0 },
-  { key: 'pear', label: 'pear', months: [1, 2, 3, 9, 10, 11, 12], bakeWeight: 1.0 },
-];
+// ---------------------------------------------------------------------------
+// Weather vibe
+// ---------------------------------------------------------------------------
 
 export function isBadWeatherForOutdoors(day: DaySnapshot): boolean {
   const veryWet = day.rainChance >= 80;
@@ -103,112 +89,11 @@ export function getWeatherVibe(day: DaySnapshot): WeatherVibe {
   return isBadWeatherForOutdoors(day) ? 'indoor' : 'outdoor';
 }
 
-export const SAVORY_DISHES: Dish[] = [
-  // === INDOOR / MEAL PREP ===
-  { template: 'Meal prep: {veg}', months: ALL_MONTHS, vibe: 'indoor', weight: 1 },
-  { template: 'Batch cook: {veg}', months: ALL_MONTHS, vibe: 'indoor', weight: 1 },
-  { template: 'Prep & freeze: {veg}', months: ALL_MONTHS, vibe: 'indoor', weight: 1 },
-  { template: 'Stock the fridge: {veg}', months: ALL_MONTHS, vibe: 'indoor', weight: 1 },
-  { template: 'Sunday prep: {veg}', months: ALL_MONTHS, vibe: 'indoor', weight: 1 },
-
-  // === OUTDOOR / FRESH COOK ===
-  { template: 'Traybake: {veg}', months: ALL_MONTHS, vibe: 'outdoor', weight: 1 },
-  { template: 'Quick pasta: {veg}', months: ALL_MONTHS, vibe: 'outdoor', weight: 1 },
-  { template: 'Warm bowl: {veg}', months: ALL_MONTHS, vibe: 'outdoor', weight: 1 },
-  { template: 'Big salad: {veg}', months: ALL_MONTHS, vibe: 'outdoor', weight: 1 },
-  { template: 'Roast veggies: {veg}', months: ALL_MONTHS, vibe: 'outdoor', weight: 1 },
-];
-
-export const SWEET_DISHES: Dish[] = [
-  // Both indoor and outdoor
-  {
-    template: 'Bake: {fruit} crumble',
-    months: ALL_MONTHS,
-    vibe: 'any',
-    weight: 1,
-    excludeFruits: ['grape'],
-  },
-  { template: 'Bake: {fruit} cake', months: ALL_MONTHS, vibe: 'any', weight: 1 },
-
-  // Indoor specific
-  {
-    template: 'Bake: warm {fruit} crumble',
-    months: ALL_MONTHS,
-    vibe: 'indoor',
-    weight: 0.7,
-    excludeFruits: ['grape'],
-  },
-  { template: 'Bake: {fruit} loaf', months: ALL_MONTHS, vibe: 'indoor', weight: 0.7 }, // treating loaf as cake, grape allowed
-  {
-    template: 'Bake: {fruit} pie',
-    months: ALL_MONTHS,
-    vibe: 'indoor',
-    weight: 1,
-    excludeFruits: ['rhubarb', 'grape'],
-  },
-  {
-    template: 'Bake: rustic {fruit} pie',
-    months: ALL_MONTHS,
-    vibe: 'indoor',
-    weight: 0.7,
-    excludeFruits: ['rhubarb', 'grape'],
-  },
-  {
-    template: 'Bake: {fruit} galette',
-    months: ALL_MONTHS,
-    vibe: 'indoor',
-    weight: 1,
-    excludeFruits: ['grape'],
-  },
-  {
-    template: 'Bake: rustic {fruit} galette',
-    months: ALL_MONTHS,
-    vibe: 'indoor',
-    weight: 0.7,
-    excludeFruits: ['grape'],
-  },
-  {
-    template: 'Bake: {fruit} bars',
-    months: ALL_MONTHS,
-    vibe: 'indoor',
-    weight: 1,
-    excludeFruits: ['grape'],
-  },
-  {
-    template: 'Bake: {fruit} oat bars',
-    months: ALL_MONTHS,
-    vibe: 'indoor',
-    weight: 0.7,
-    excludeFruits: ['grape'],
-  },
-
-  // Outdoor specific
-  {
-    template: 'Bake: {fruit} muffins',
-    months: ALL_MONTHS,
-    vibe: 'outdoor',
-    weight: 1,
-    excludeFruits: ['grape'],
-  },
-  {
-    template: 'Bake: {fruit} muffins (batch)',
-    months: ALL_MONTHS,
-    vibe: 'outdoor',
-    weight: 0.7,
-    excludeFruits: ['grape'],
-  },
-  { template: 'Bake: {fruit} compote', months: ALL_MONTHS, vibe: 'outdoor', weight: 1 },
-  { template: 'Bake: oven {fruit} compote', months: ALL_MONTHS, vibe: 'outdoor', weight: 0.7 },
-
-  // Non-bake option (only outdoors, ~45% probability relative to bakes)
-  { template: 'Sweet: {fruit}', months: ALL_MONTHS, vibe: 'outdoor', weight: 4.5 },
-];
-
 // ---------------------------------------------------------------------------
-// Ingredient-based recipes
-// When the engine picks a seasonal ingredient, it checks this list for a
-// matching recipe. If one is found, it competes (by weight) with the generic
-// template pool above. Recipes inherit their season from the ingredient.
+// Savory recipes
+//
+// Every seasonal vegetable needs at least one recipe with vibe 'any' so
+// there is always a match regardless of weather.
 // ---------------------------------------------------------------------------
 
 export const SAVORY_RECIPES: Recipe[] = [
@@ -227,6 +112,21 @@ export const SAVORY_RECIPES: Recipe[] = [
   { title: 'Kale Walnut Pesto Pasta', ingredient: 'kale', vibe: 'any', weight: 1 },
   { title: 'Crispy Roasted Kale with Potatoes', ingredient: 'kale', vibe: 'any', weight: 1 },
 
+  // Sprouts
+  { title: 'Roasted Sprouts with Balsamic Glaze', ingredient: 'sprouts', vibe: 'any', weight: 1 },
+  { title: 'Sprouts and Chestnut Stir-Fry', ingredient: 'sprouts', vibe: 'indoor', weight: 1 },
+  { title: 'Crispy Sprouts with Mustard Dressing', ingredient: 'sprouts', vibe: 'any', weight: 1 },
+
+  // Cabbage
+  {
+    title: 'Braised Cabbage with Apple and Caraway',
+    ingredient: 'cabbage',
+    vibe: 'indoor',
+    weight: 1,
+  },
+  { title: 'Cabbage and Potato Colcannon', ingredient: 'cabbage', vibe: 'indoor', weight: 1 },
+  { title: 'Roasted Cabbage Steaks with Tahini', ingredient: 'cabbage', vibe: 'any', weight: 1 },
+
   // Carrot
   {
     title: 'Roasted Carrots with Tahini Lemon Sauce',
@@ -236,6 +136,26 @@ export const SAVORY_RECIPES: Recipe[] = [
   },
   { title: 'Carrot and Lentil Stew', ingredient: 'carrot', vibe: 'indoor', weight: 1 },
   { title: 'Carrot and Thyme Traybake', ingredient: 'carrot', vibe: 'any', weight: 1 },
+
+  // Parsnip
+  { title: 'Honey-Roasted Parsnips with Thyme', ingredient: 'parsnip', vibe: 'any', weight: 1 },
+  { title: 'Parsnip and Apple Soup', ingredient: 'parsnip', vibe: 'indoor', weight: 1 },
+  { title: 'Parsnip and Potato Mash Gratin', ingredient: 'parsnip', vibe: 'indoor', weight: 1 },
+
+  // Celeriac
+  { title: 'Celeriac and Potato Gratin', ingredient: 'celeriac', vibe: 'indoor', weight: 1 },
+  { title: 'Roasted Celeriac with Walnut Pesto', ingredient: 'celeriac', vibe: 'any', weight: 1 },
+  { title: 'Celeriac Remoulade with Mustard', ingredient: 'celeriac', vibe: 'any', weight: 1 },
+
+  // Beet
+  { title: 'Roasted Beet and Lentil Salad', ingredient: 'beet', vibe: 'any', weight: 1 },
+  { title: 'Beet and White Bean Stew', ingredient: 'beet', vibe: 'indoor', weight: 1 },
+  { title: 'Beet and Walnut Dip with Flatbread', ingredient: 'beet', vibe: 'any', weight: 1 },
+
+  // Onion
+  { title: 'French Onion Soup', ingredient: 'onion', vibe: 'indoor', weight: 1 },
+  { title: 'Caramelized Onion Tart', ingredient: 'onion', vibe: 'any', weight: 1 },
+  { title: 'Onion and Thyme Focaccia', ingredient: 'onion', vibe: 'any', weight: 1 },
 
   // Potato
   { title: 'Crispy Smashed Potatoes', ingredient: 'potato', vibe: 'any', weight: 1 },
@@ -247,24 +167,82 @@ export const SAVORY_RECIPES: Recipe[] = [
   { title: 'Spinach and White Bean Stew', ingredient: 'spinach', vibe: 'indoor', weight: 1 },
   { title: 'Savory Spinach Pie', ingredient: 'spinach', vibe: 'indoor', weight: 1 },
 
+  // Endive
+  { title: 'Braised Endive with Mustard Sauce', ingredient: 'endive', vibe: 'indoor', weight: 1 },
+  { title: 'Endive and Walnut Salad', ingredient: 'endive', vibe: 'any', weight: 1 },
+  { title: 'Gratin of Endive with Béchamel', ingredient: 'endive', vibe: 'indoor', weight: 1 },
+
+  // Chicory
+  { title: 'Caramelized Chicory with Orange', ingredient: 'chicory', vibe: 'any', weight: 1 },
+  { title: 'Chicory and Potato Gratin', ingredient: 'chicory', vibe: 'indoor', weight: 1 },
+  { title: 'Braised Chicory with White Wine', ingredient: 'chicory', vibe: 'indoor', weight: 1 },
+
+  // Asparagus
+  { title: 'Asparagus Risotto', ingredient: 'asparagus', vibe: 'any', weight: 1 },
+  { title: 'Roasted Asparagus with Lemon Zest', ingredient: 'asparagus', vibe: 'any', weight: 1 },
+  { title: 'Asparagus and Pea Pasta', ingredient: 'asparagus', vibe: 'any', weight: 1 },
+
+  // Cauliflower
+  {
+    title: 'Whole Roasted Cauliflower with Tahini',
+    ingredient: 'cauliflower',
+    vibe: 'any',
+    weight: 1,
+  },
+  { title: 'Cauliflower and Potato Curry', ingredient: 'cauliflower', vibe: 'indoor', weight: 1 },
+  { title: 'Cauliflower Cheese Bake', ingredient: 'cauliflower', vibe: 'indoor', weight: 1 },
+
   // Broccoli
   { title: 'Broccoli Lemon Garlic Pasta', ingredient: 'broccoli', vibe: 'any', weight: 1 },
   { title: 'Roasted Broccoli with Tahini', ingredient: 'broccoli', vibe: 'any', weight: 1 },
   { title: 'Broccoli and Potato Soup', ingredient: 'broccoli', vibe: 'indoor', weight: 1 },
+
+  // Peas
+  { title: 'Pea and Mint Risotto', ingredient: 'peas', vibe: 'any', weight: 1 },
+  { title: 'Pea and Potato Samosa Bake', ingredient: 'peas', vibe: 'indoor', weight: 1 },
+  { title: 'Spring Pea Pasta with Lemon', ingredient: 'peas', vibe: 'any', weight: 1 },
+
+  // Green Beans
+  {
+    title: 'Green Bean and Potato Salad with Mustard',
+    ingredient: 'greenBeans',
+    vibe: 'any',
+    weight: 1,
+  },
+  { title: 'Braised Green Beans with Tomato', ingredient: 'greenBeans', vibe: 'any', weight: 1 },
+  { title: 'Green Bean and Coconut Stir-Fry', ingredient: 'greenBeans', vibe: 'indoor', weight: 1 },
+
+  // Zucchini
+  { title: 'Zucchini and Ricotta Pasta', ingredient: 'zucchini', vibe: 'any', weight: 1 },
+  { title: 'Stuffed Zucchini Boats', ingredient: 'zucchini', vibe: 'any', weight: 1 },
+  { title: 'Zucchini Fritters with Yogurt Dip', ingredient: 'zucchini', vibe: 'any', weight: 1 },
 
   // Tomato
   { title: 'Slow-Roasted Tomato Pasta', ingredient: 'tomato', vibe: 'any', weight: 1 },
   { title: 'Tomato and Lentil Stew', ingredient: 'tomato', vibe: 'indoor', weight: 1 },
   { title: 'Tomato and Zucchini Traybake', ingredient: 'tomato', vibe: 'outdoor', weight: 1 },
 
+  // Cucumber
+  { title: 'Chilled Cucumber and Dill Soup', ingredient: 'cucumber', vibe: 'outdoor', weight: 1 },
+  { title: 'Cucumber and Chickpea Bowl', ingredient: 'cucumber', vibe: 'any', weight: 1 },
+  { title: 'Smashed Cucumber Salad with Sesame', ingredient: 'cucumber', vibe: 'any', weight: 1 },
+
+  // Eggplant
+  { title: 'Roasted Eggplant with Miso Glaze', ingredient: 'eggplant', vibe: 'any', weight: 1 },
+  { title: 'Eggplant and Chickpea Stew', ingredient: 'eggplant', vibe: 'indoor', weight: 1 },
+  { title: 'Stuffed Eggplant with Couscous', ingredient: 'eggplant', vibe: 'any', weight: 1 },
+
   // Pumpkin
   { title: 'Roasted Pumpkin with Sage', ingredient: 'pumpkin', vibe: 'any', weight: 1 },
   { title: 'Pumpkin and White Bean Stew', ingredient: 'pumpkin', vibe: 'indoor', weight: 1 },
   { title: 'Creamy Pumpkin Pasta', ingredient: 'pumpkin', vibe: 'indoor', weight: 1 },
-
-  // Asparagus
-  { title: 'Asparagus Risotto', ingredient: 'asparagus', vibe: 'any', weight: 1 },
 ];
+
+// ---------------------------------------------------------------------------
+// Sweet recipes
+//
+// Every seasonal fruit needs at least one recipe with vibe 'any'.
+// ---------------------------------------------------------------------------
 
 export const SWEET_RECIPES: Recipe[] = [
   // Apple
@@ -276,4 +254,39 @@ export const SWEET_RECIPES: Recipe[] = [
   { title: 'Pear Almond Cake', ingredient: 'pear', vibe: 'any', weight: 1 },
   { title: 'Poached Pears', ingredient: 'pear', vibe: 'indoor', weight: 1 },
   { title: 'Pear Crumble', ingredient: 'pear', vibe: 'indoor', weight: 1 },
+
+  // Rhubarb
+  { title: 'Rhubarb Crumble', ingredient: 'rhubarb', vibe: 'indoor', weight: 1 },
+  { title: 'Rhubarb and Custard Cake', ingredient: 'rhubarb', vibe: 'any', weight: 1 },
+  { title: 'Rhubarb Compote with Yogurt', ingredient: 'rhubarb', vibe: 'any', weight: 1 },
+
+  // Strawberry
+  { title: 'Strawberry Galette', ingredient: 'strawberry', vibe: 'any', weight: 1 },
+  { title: 'Strawberry Oat Bars', ingredient: 'strawberry', vibe: 'any', weight: 1 },
+  { title: 'Strawberry Fool', ingredient: 'strawberry', vibe: 'outdoor', weight: 1 },
+
+  // Cherry
+  { title: 'Cherry Clafoutis', ingredient: 'cherry', vibe: 'any', weight: 1 },
+  { title: 'Cherry Almond Cake', ingredient: 'cherry', vibe: 'any', weight: 1 },
+  { title: 'Cherry Compote with Vanilla', ingredient: 'cherry', vibe: 'indoor', weight: 1 },
+
+  // Plum
+  { title: 'Plum Crumble', ingredient: 'plum', vibe: 'indoor', weight: 1 },
+  { title: 'Plum and Almond Tart', ingredient: 'plum', vibe: 'any', weight: 1 },
+  { title: 'Roasted Plums with Cinnamon', ingredient: 'plum', vibe: 'any', weight: 1 },
+
+  // Blueberry
+  { title: 'Blueberry Muffins', ingredient: 'blueberry', vibe: 'any', weight: 1 },
+  { title: 'Blueberry Lemon Cake', ingredient: 'blueberry', vibe: 'any', weight: 1 },
+  { title: 'Blueberry Oat Crumble', ingredient: 'blueberry', vibe: 'indoor', weight: 1 },
+
+  // Blackberry
+  { title: 'Blackberry and Apple Crumble', ingredient: 'blackberry', vibe: 'indoor', weight: 1 },
+  { title: 'Blackberry Fool', ingredient: 'blackberry', vibe: 'any', weight: 1 },
+  { title: 'Blackberry Oat Bars', ingredient: 'blackberry', vibe: 'any', weight: 1 },
+
+  // Grape
+  { title: 'Grape Focaccia', ingredient: 'grape', vibe: 'any', weight: 1 },
+  { title: 'Roasted Grapes with Walnut Cake', ingredient: 'grape', vibe: 'any', weight: 1 },
+  { title: 'Grape and Almond Tart', ingredient: 'grape', vibe: 'indoor', weight: 1 },
 ];

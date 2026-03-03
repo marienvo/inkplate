@@ -3,8 +3,8 @@ import { getWeekendFoodPlan } from './food';
 import type { DaySnapshot } from './weekend';
 import { SAVORY_RECIPES, SWEET_RECIPES } from '../config/foodRules';
 
-const SAVORY_RECIPE_TITLES = new Set(SAVORY_RECIPES.map((r) => r.title));
-const SWEET_RECIPE_TITLES = new Set(SWEET_RECIPES.map((r) => r.title));
+const SAVORY_TITLES = new Set(SAVORY_RECIPES.map((r) => r.title));
+const SWEET_TITLES = new Set(SWEET_RECIPES.map((r) => r.title));
 
 function makeDay(overrides: Partial<DaySnapshot> = {}): DaySnapshot {
   return {
@@ -29,44 +29,24 @@ test('returns deterministic output for the same date and weather', () => {
   expect(second).toEqual(first);
 });
 
-test('uses only seasonal vegetables in December generic output', () => {
-  const date1 = new Date('2026-12-12T12:00:00.000Z');
-  const date2 = new Date('2026-12-13T12:00:00.000Z');
-  const plan = getWeekendFoodPlan(date1, makeDay(), date2, makeDay({ feelsLike: 10 }));
+test('always produces a known recipe title for savory and sweet', () => {
+  const dates = [
+    ['2026-01-10', '2026-01-11'],
+    ['2026-04-18', '2026-04-19'],
+    ['2026-07-11', '2026-07-12'],
+    ['2026-10-10', '2026-10-11'],
+  ] as const;
 
-  const isRecipe = SAVORY_RECIPE_TITLES.has(plan.savory);
-  if (!isRecipe) {
-    const savoryVegText = plan.savory.split(': ')[1] ?? '';
-    const pickedVeg = savoryVegText.split(', ').filter(Boolean);
+  for (const [d1, d2] of dates) {
+    const plan = getWeekendFoodPlan(new Date(d1), makeDay(), new Date(d2), makeDay());
 
-    const allowedInDecember = new Set([
-      'leek',
-      'kale',
-      'sprouts',
-      'cabbage',
-      'carrot',
-      'parsnip',
-      'celeriac',
-      'beet',
-      'onion',
-      'potato',
-      'chicory',
-      'pumpkin',
-    ]);
-
-    expect(pickedVeg.length).toBeGreaterThanOrEqual(2);
-    for (const veg of pickedVeg) {
-      expect(allowedInDecember.has(veg)).toBe(true);
-    }
+    expect(SAVORY_TITLES.has(plan.savory)).toBe(true);
+    expect(SWEET_TITLES.has(plan.sweet)).toBe(true);
   }
 });
 
-test('does not produce outdoor-only output in bad weather', () => {
-  const badWeather = makeDay({
-    rainChance: 85,
-    windbft: 8,
-    feelsLike: 3,
-  });
+test('does not produce outdoor-only recipes in bad weather', () => {
+  const badWeather = makeDay({ rainChance: 85, windbft: 8, feelsLike: 3 });
   const otherDay = makeDay({ rainChance: 95, windbft: 7, feelsLike: 5 });
 
   const plan = getWeekendFoodPlan(
@@ -76,40 +56,22 @@ test('does not produce outdoor-only output in bad weather', () => {
     otherDay,
   );
 
-  const outdoorOnlySavory = /^(Traybake|Quick pasta|Warm bowl|Big salad|Roast veggies): /;
-  expect(plan.savory).not.toMatch(outdoorOnlySavory);
-
-  expect(plan.sweet).not.toMatch(/^Sweet: /);
-});
-
-test('produces non-empty savory and sweet strings', () => {
-  const date1 = new Date('2026-06-06T12:00:00.000Z');
-  const date2 = new Date('2026-06-07T12:00:00.000Z');
-  const plan = getWeekendFoodPlan(date1, makeDay(), date2, makeDay());
-
-  expect(plan.savory.length).toBeGreaterThan(0);
-  expect(plan.sweet.length).toBeGreaterThan(0);
-});
-
-test('recipe titles are recognized as valid savory or sweet output', () => {
-  const dates = [
-    ['2026-01-10', '2026-01-11'],
-    ['2026-04-18', '2026-04-19'],
-    ['2026-07-11', '2026-07-12'],
-    ['2026-10-10', '2026-10-11'],
-  ] as const;
-
-  const results = dates.map(([d1, d2]) =>
-    getWeekendFoodPlan(new Date(d1), makeDay(), new Date(d2), makeDay()),
+  const outdoorOnly = new Set(
+    [...SAVORY_RECIPES, ...SWEET_RECIPES].filter((r) => r.vibe === 'outdoor').map((r) => r.title),
   );
 
-  for (const plan of results) {
-    const savoryIsRecipe = SAVORY_RECIPE_TITLES.has(plan.savory);
-    const savoryIsGeneric = plan.savory.includes(': ');
-    expect(savoryIsRecipe || savoryIsGeneric).toBe(true);
+  expect(outdoorOnly.has(plan.savory)).toBe(false);
+  expect(outdoorOnly.has(plan.sweet)).toBe(false);
+});
 
-    const sweetIsRecipe = SWEET_RECIPE_TITLES.has(plan.sweet);
-    const sweetIsGeneric = plan.sweet.includes(': ');
-    expect(sweetIsRecipe || sweetIsGeneric).toBe(true);
+test('produces non-empty output for every season', () => {
+  const months = [1, 3, 5, 7, 9, 11];
+  for (const m of months) {
+    const d1 = new Date(2026, m - 1, 10);
+    const d2 = new Date(2026, m - 1, 11);
+    const plan = getWeekendFoodPlan(d1, makeDay(), d2, makeDay());
+
+    expect(plan.savory.length).toBeGreaterThan(0);
+    expect(plan.sweet.length).toBeGreaterThan(0);
   }
 });
