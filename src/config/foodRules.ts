@@ -53,18 +53,11 @@ export const SEASONAL_NL: SeasonalVeg[] = [
   { key: 'cucumber', label: 'cucumber', months: [7, 8, 9] },
   { key: 'eggplant', label: 'eggplant', months: [7, 8, 9] },
   { key: 'pumpkin', label: 'pumpkin', months: [9, 10, 11] },
-
-  // todo: new, no recipes yet
   { key: 'pointedCabbage', label: 'pointed cabbage', months: ALL_MONTHS },
   { key: 'shallot', label: 'shallot', months: ALL_MONTHS },
-  { key: 'springOnion', label: 'spring onion', months: ALL_MONTHS },
   { key: 'bellPepper', label: 'bell pepper', months: ALL_MONTHS },
-  { key: 'lettuce', label: 'lettuce', months: ALL_MONTHS },
   { key: 'radish', label: 'radish', months: ALL_MONTHS },
   { key: 'bokChoy', label: 'bok choy', months: ALL_MONTHS },
-  { key: 'cherryTomato', label: 'cherry tomato', months: ALL_MONTHS },
-  { key: 'romaine', label: 'romaine lettuce', months: ALL_MONTHS },
-  { key: 'icebergLettuce', label: 'iceberg lettuce', months: ALL_MONTHS },
 ];
 
 export const SEASONAL_NL_FRUIT: SeasonalFruit[] = [
@@ -142,6 +135,20 @@ export const SAVORY_RECIPES: Recipe[] = [
   { title: 'Krautsalat', ingredient: 'cabbage', vibe: 'outdoor', weight: 5 },
   { title: 'Pasta con Crema di Verza', ingredient: 'cabbage', vibe: 'indoor', weight: 5 },
 
+  // Pointed Cabbage
+  {
+    title: 'Stir-Fried Pointed Cabbage with Garlic',
+    ingredient: 'pointedCabbage',
+    vibe: 'any',
+    weight: 1,
+  },
+  {
+    title: 'Pointed Cabbage and Noodle Bowl',
+    ingredient: 'pointedCabbage',
+    vibe: 'any',
+    weight: 1,
+  },
+
   // Carrot
   {
     title: 'Roasted Carrots with Tahini Lemon Sauce',
@@ -173,6 +180,15 @@ export const SAVORY_RECIPES: Recipe[] = [
   { title: 'Onion and Thyme Focaccia', ingredient: 'onion', vibe: 'any', weight: 1 },
   { title: 'Pasta e Ceci', ingredient: 'onion', vibe: 'indoor', weight: 5 },
   { title: 'Sedanini Carbonara', ingredient: 'onion', vibe: 'indoor', weight: 3 },
+
+  // Shallot
+  { title: 'Caramelized Shallot Tarte Tatin', ingredient: 'shallot', vibe: 'any', weight: 1 },
+  {
+    title: 'Roasted Shallots with Balsamic and Thyme',
+    ingredient: 'shallot',
+    vibe: 'any',
+    weight: 1,
+  },
 
   // Potato
   { title: 'Crispy Smashed Potatoes', ingredient: 'potato', vibe: 'any', weight: 1 },
@@ -254,6 +270,18 @@ export const SAVORY_RECIPES: Recipe[] = [
   { title: "Penne all'Arrabbiata", ingredient: 'tomato', vibe: 'any', weight: 5 },
   { title: 'Piatto di Pollo Messicano', ingredient: 'tomato', vibe: 'indoor', weight: 5 },
   { title: 'Ragu di Lenticchie', ingredient: 'tomato', vibe: 'indoor', weight: 5 },
+
+  // Bell Pepper
+  { title: 'Stuffed Bell Peppers with Rice', ingredient: 'bellPepper', vibe: 'any', weight: 1 },
+  { title: 'Roasted Bell Pepper Pasta', ingredient: 'bellPepper', vibe: 'any', weight: 1 },
+
+  // Radish
+  { title: 'Roasted Radishes with Butter and Herbs', ingredient: 'radish', vibe: 'any', weight: 1 },
+  { title: 'Radish and Cucumber Salad', ingredient: 'radish', vibe: 'outdoor', weight: 1 },
+
+  // Bok Choy
+  { title: 'Bok Choy and Mushroom Stir-Fry', ingredient: 'bokChoy', vibe: 'any', weight: 1 },
+  { title: 'Braised Bok Choy with Ginger', ingredient: 'bokChoy', vibe: 'indoor', weight: 1 },
 
   // Cucumber
   { title: 'Chilled Cucumber and Dill Soup', ingredient: 'cucumber', vibe: 'outdoor', weight: 1 },

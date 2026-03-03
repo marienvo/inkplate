@@ -104,6 +104,7 @@ const TITLE_KEYWORDS: { pattern: RegExp; label: string }[] = [
   { pattern: /fresco/i, label: 'Frozen' },
   { pattern: /parmigiano/i, label: 'Topping' },
   { pattern: /spice/i, label: 'Prep' },
+  { pattern: /stuffed/i, label: 'Roast' },
   { pattern: /roast|crispy|smashed|baked/i, label: 'Roast' },
   { pattern: /dip/i, label: 'Snack' },
 ];
