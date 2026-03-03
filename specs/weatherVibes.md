@@ -67,6 +67,12 @@ These invariants must remain true:
    - `any` match.
 4. New vibe values must be reflected in tests (`src/lib/food.test.ts`).
 
+## Recipe Months
+
+- Recipes have a `months` field: `Month[]` (1–12), same format as seasonal produce.
+- Use `ALL_MONTHS` for year-round recipes.
+- Use specific months (e.g. `[4, 5, 6]`) for seasonal recipes; they are filtered by date before matching.
+
 ## Weight Guidance
 
 - Keep `weight` as a relative preference within the same ingredient + vibe candidate set.
@@ -78,6 +84,7 @@ These invariants must remain true:
 Before finalizing recipe updates:
 
 1. Confirm vibe labels use only canonical values.
-2. Confirm `any` coverage invariants are still satisfied.
-3. Confirm at least one test path covers the updated vibe behavior.
-4. Run format, lint, typecheck, and tests.
+2. Confirm `months` is set (use `ALL_MONTHS` or specific months).
+3. Confirm `any` coverage invariants are still satisfied.
+4. Confirm at least one test path covers the updated vibe behavior.
+5. Run format, lint, typecheck, and tests.

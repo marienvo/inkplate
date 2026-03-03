@@ -11,6 +11,7 @@ alwaysApply: true
 
 - Treat `specs/weatherVibes.md` as the source of truth for weather vibe behavior.
 - Read `specs/weatherVibes.md` before adding or changing recipe entries.
+- Use `months: Month[]` on recipes (same format as seasonal produce; use `ALL_MONTHS` for year-round).
 - Only use canonical vibe values: `cozy`, `hearty`, `fresh`, `any`.
 - Preserve the `any` fallback invariants defined in `specs/weatherVibes.md`.
 - Keep weather-to-vibe mapping and tests aligned with the spec.

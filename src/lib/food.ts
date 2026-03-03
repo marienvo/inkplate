@@ -56,7 +56,7 @@ function hashSeed(date: Date, day: DaySnapshot): number {
   );
 }
 
-function seasonalForDate<T extends { months: Month[] }>(items: T[], date: Date): T[] {
+export function seasonalForDate<T extends { months: Month[] }>(items: T[], date: Date): T[] {
   const month = (date.getMonth() + 1) as Month;
   return items.filter((item) => item.months.includes(month));
 }
@@ -110,13 +110,15 @@ export function getWeekendFoodPlan(
   const vegCount = rnd() < 0.65 ? 2 : 3;
   const pickedVeg = pickUnique(seasonalVeg, vegCount, rnd);
   const vegKeys = new Set(pickedVeg.map((v) => v.key));
-  const savoryHits = matchingRecipes(SAVORY_RECIPES, vegKeys, vibe);
+  const seasonalSavory = seasonalForDate(SAVORY_RECIPES, bestDate);
+  const savoryHits = matchingRecipes(seasonalSavory, vegKeys, vibe);
   const savory = weightedPick(savoryHits, (r) => r.weight, rnd).title;
 
   // --- Sweet ---
   const seasonalFruit = seasonalForDate(SEASONAL_NL_FRUIT, bestDate);
   const pickedFruit = weightedPick(seasonalFruit, (f) => f.bakeWeight, rnd);
-  const sweetHits = matchingRecipes(EXTRA_RECIPES, new Set([pickedFruit.key]), vibe);
+  const seasonalExtra = seasonalForDate(EXTRA_RECIPES, bestDate);
+  const sweetHits = matchingRecipes(seasonalExtra, new Set([pickedFruit.key]), vibe);
   const sweet = weightedPick(sweetHits, (r) => r.weight, rnd).title;
 
   return { savory, sweet };

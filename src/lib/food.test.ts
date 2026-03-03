@@ -1,7 +1,8 @@
 import { expect, test } from 'vitest';
-import { getWeekendFoodPlan } from './food';
+import { getWeekendFoodPlan, seasonalForDate } from './food';
 import type { DaySnapshot } from './weekend';
-import { EXTRA_RECIPES, SAVORY_RECIPES } from '../config/foodRules';
+import type { Month } from '../config/foodRules';
+import { ALL_MONTHS, EXTRA_RECIPES, SAVORY_RECIPES } from '../config/foodRules';
 import { renderFoodHint } from './foodHintIcon';
 
 const SAVORY_TITLES = new Set(SAVORY_RECIPES.map((r) => r.title));
@@ -102,4 +103,19 @@ test('produces non-empty output for every season', () => {
     expect(plan.savory.length).toBeGreaterThan(0);
     expect(plan.sweet.length).toBeGreaterThan(0);
   }
+});
+
+test('seasonalForDate filters recipes by month', () => {
+  const janOnly = { title: 'Jan Only', months: [1] as Month[] };
+  const allYear = { title: 'All Year', months: ALL_MONTHS };
+
+  const janDate = new Date(2026, 0, 15);
+  const julDate = new Date(2026, 6, 15);
+
+  const janResults = seasonalForDate([janOnly, allYear], janDate);
+  expect(janResults).toHaveLength(2);
+
+  const julResults = seasonalForDate([janOnly, allYear], julDate);
+  expect(julResults).toHaveLength(1);
+  expect(julResults[0]).toEqual(allYear);
 });
