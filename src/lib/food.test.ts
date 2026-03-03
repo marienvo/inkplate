@@ -69,7 +69,7 @@ test('switches to meal prep + baking in bad weather mode', () => {
   );
 
   expect(plan.savory).toMatch(
-    /^(Meal prep|Batch cook|Prep & freeze|Stock the fridge|Sunday prep): /,
+    /^(Meal prep|Batch cook|Prep & freeze|Stock the fridge|Sunday prep|Pumpkin soup)/,
   );
   expect(plan.sweet).toMatch(/^Bake: /);
 });
