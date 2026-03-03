@@ -91,6 +91,59 @@ const TITLE_KEYWORDS: { pattern: RegExp; label: string }[] = [
   { pattern: /dip/i, label: 'Snack' },
 ];
 
+function firstAsciiLetter(word: string): string | null {
+  const match = /[A-Za-z]/.exec(word);
+  return match ? match[0] : null;
+}
+
+function startsWithLowercase(word: string): boolean {
+  const letter = firstAsciiLetter(word);
+  return letter !== null && letter >= 'a' && letter <= 'z';
+}
+
+function startsWithUppercase(word: string): boolean {
+  const letter = firstAsciiLetter(word);
+  return letter !== null && letter >= 'A' && letter <= 'Z';
+}
+
+// Keep connector-led chunks together while still allowing natural line wraps between chunks.
+export function splitFoodValueWrapGroups(value: string): string[] {
+  const words = value.trim().split(/\s+/).filter(Boolean);
+  if (words.length <= 1) return words;
+
+  const groups: string[] = [];
+  let currentCapitalizedRun: string[] = [];
+
+  for (let i = 0; i < words.length; i += 1) {
+    const word = words[i];
+
+    if (startsWithLowercase(word)) {
+      if (currentCapitalizedRun.length > 0) {
+        groups.push(currentCapitalizedRun.join(' '));
+        currentCapitalizedRun = [];
+      }
+
+      const connectorGroup = [word];
+      let cursor = i + 1;
+      while (cursor < words.length && startsWithUppercase(words[cursor])) {
+        connectorGroup.push(words[cursor]);
+        cursor += 1;
+      }
+      groups.push(connectorGroup.join(' '));
+      i = cursor - 1;
+      continue;
+    }
+
+    currentCapitalizedRun.push(word);
+  }
+
+  if (currentCapitalizedRun.length > 0) {
+    groups.push(currentCapitalizedRun.join(' '));
+  }
+
+  return groups.length > 0 ? groups : [value];
+}
+
 function labelFromTitle(title: string): string {
   for (const { pattern, label } of TITLE_KEYWORDS) {
     if (pattern.test(title)) return label;

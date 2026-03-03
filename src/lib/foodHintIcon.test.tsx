@@ -1,7 +1,7 @@
 import { isValidElement } from 'react';
 import { expect, test } from 'vitest';
 import { Cookie, CookingPot, Soup, UtensilsCrossed } from 'lucide-react';
-import { renderFoodHint } from './foodHintIcon';
+import { renderFoodHint, splitFoodValueWrapGroups } from './foodHintIcon';
 
 test('detects Crumble keyword with Cookie icon', () => {
   const item = renderFoodHint('Apple Crumble');
@@ -52,4 +52,14 @@ test('uses fallback utensil icon for unknown colon-prefixed hints', () => {
   if (isValidElement(item.icon)) {
     expect(item.icon.type).toBe(UtensilsCrossed);
   }
+});
+
+test('groups connector phrase with following capitalized words', () => {
+  const groups = splitFoodValueWrapGroups('Beet and Walnut Dip with Flatbread');
+  expect(groups).toEqual(['Beet', 'and Walnut Dip', 'with Flatbread']);
+});
+
+test('keeps fully capitalized run together as one group', () => {
+  const groups = splitFoodValueWrapGroups('Simple Apple Cake');
+  expect(groups).toEqual(['Simple Apple Cake']);
 });

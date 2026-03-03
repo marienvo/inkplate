@@ -28,7 +28,7 @@ import weatherData from './data/weather.json';
 import { useSmartAgendaLimit } from './hooks/useSmartAgendaLimit';
 import type { OutdoorFeel } from './lib/outdoorFeel';
 import { renderActivityHint } from './lib/activityHintIcon';
-import { renderFoodHint } from './lib/foodHintIcon';
+import { renderFoodHint, splitFoodValueWrapGroups } from './lib/foodHintIcon';
 import { selectAgendaView, type Appointment } from './lib/agenda';
 
 type WeatherItem = {
@@ -159,6 +159,18 @@ function Section({ icon, title, children }: SectionProps) {
       {children}
     </section>
   );
+}
+
+function renderGroupedFoodValue(value: string): ReactNode {
+  const groups = splitFoodValueWrapGroups(value);
+  if (groups.length <= 1) return value;
+
+  return groups.map((group, index) => (
+    <span key={`${group}-${index}`}>
+      <span className="food-value-group">{group}</span>
+      {index < groups.length - 1 ? ' ' : null}
+    </span>
+  ));
 }
 
 export default function App() {
@@ -303,7 +315,7 @@ export default function App() {
                     </span>
                     <span className="item-label">{foodItem.label}</span>
                   </span>
-                  <span className="item-value">{foodItem.value}</span>
+                  <span className="item-value">{renderGroupedFoodValue(foodItem.value)}</span>
                 </li>
               ))}
             </ul>

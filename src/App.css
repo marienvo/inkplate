@@ -176,6 +176,10 @@ strong {
   font-size: 30px;
 }
 
+.food-list .food-value-group {
+  white-space: nowrap;
+}
+
 .more-indicator {
   margin: 6px 0 0;
   font-size: 22px;
