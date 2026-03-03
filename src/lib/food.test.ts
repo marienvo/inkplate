@@ -54,7 +54,7 @@ test('savory recipes are always meal-like labels for line 1', () => {
   }
 });
 
-test('does not produce outdoor-only recipes in bad weather', () => {
+test('does not produce fresh-only recipes in cozy weather', () => {
   const badWeather = makeDay({ rainChance: 85, windbft: 8, feelsLike: 3 });
   const otherDay = makeDay({ rainChance: 95, windbft: 7, feelsLike: 5 });
 
@@ -65,12 +65,31 @@ test('does not produce outdoor-only recipes in bad weather', () => {
     otherDay,
   );
 
-  const outdoorOnly = new Set(
-    [...SAVORY_RECIPES, ...EXTRA_RECIPES].filter((r) => r.vibe === 'outdoor').map((r) => r.title),
+  const freshOnly = new Set(
+    [...SAVORY_RECIPES, ...EXTRA_RECIPES].filter((r) => r.vibe === 'fresh').map((r) => r.title),
   );
 
-  expect(outdoorOnly.has(plan.savory)).toBe(false);
-  expect(outdoorOnly.has(plan.sweet)).toBe(false);
+  expect(freshOnly.has(plan.savory)).toBe(false);
+  expect(freshOnly.has(plan.sweet)).toBe(false);
+});
+
+test('does not produce cozy-only recipes in fresh weather', () => {
+  const freshWeather = makeDay({ rainChance: 5, windbft: 2, feelsLike: 21 });
+  const otherDay = makeDay({ rainChance: 10, windbft: 3, feelsLike: 19 });
+
+  const plan = getWeekendFoodPlan(
+    new Date('2026-07-11T12:00:00.000Z'),
+    freshWeather,
+    new Date('2026-07-12T12:00:00.000Z'),
+    otherDay,
+  );
+
+  const cozyOnly = new Set(
+    [...SAVORY_RECIPES, ...EXTRA_RECIPES].filter((r) => r.vibe === 'cozy').map((r) => r.title),
+  );
+
+  expect(cozyOnly.has(plan.savory)).toBe(false);
+  expect(cozyOnly.has(plan.sweet)).toBe(false);
 });
 
 test('produces non-empty output for every season', () => {

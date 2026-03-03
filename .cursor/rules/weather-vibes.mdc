@@ -1,0 +1,16 @@
+---
+description: Enforce weather vibe spec for recipes
+globs:
+  - src/config/foodRules.ts
+  - src/lib/food.ts
+  - src/lib/food.test.ts
+alwaysApply: true
+---
+
+# Weather Vibes Spec Rule
+
+- Treat `specs/weatherVibes.md` as the source of truth for weather vibe behavior.
+- Read `specs/weatherVibes.md` before adding or changing recipe entries.
+- Only use canonical vibe values: `cozy`, `hearty`, `fresh`, `any`.
+- Preserve the `any` fallback invariants defined in `specs/weatherVibes.md`.
+- Keep weather-to-vibe mapping and tests aligned with the spec.
