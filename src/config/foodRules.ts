@@ -96,7 +96,7 @@ export function getWeatherVibe(day: DaySnapshot): WeatherVibe {
 
 export const SAVORY_DISHES: Dish[] = [
   // === Specific seasonal dishes (example of how to add them) ===
-  { template: 'Spinazietaart', months: [3, 4, 5, 9, 10], vibe: 'any', weight: 0.5 },
+  { template: 'Spinach pie', months: [3, 4, 5, 9, 10], vibe: 'any', weight: 0.5 },
   { template: 'Pumpkin soup', months: [9, 10, 11], vibe: 'indoor', weight: 0.5 },
   { template: 'Asparagus risotto', months: [4, 5, 6], vibe: 'any', weight: 0.5 },
 
