@@ -292,7 +292,7 @@ export default function App() {
           )}
         </Section>
 
-        <Section icon={<UtensilsCrossed />} title="Food">
+        <Section icon={<UtensilsCrossed />} title="This Week’s Kitchen">
           {foodItems.length > 0 ? (
             <ul className="list food-list">
               {foodItems.map((foodItem, index) => (
