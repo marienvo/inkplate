@@ -119,25 +119,30 @@ export const SAVORY_RECIPES: Recipe[] = [
   { title: 'Crispy Roasted Kale with Potatoes', ingredient: 'kale', vibe: 'any', weight: 1 },
 
   // Sprouts
-  { title: 'Roasted Sprouts with Balsamic Glaze', ingredient: 'sprouts', vibe: 'any', weight: 1 },
+  {
+    title: 'Roasted Sprouts with Potatoes and Lentils',
+    ingredient: 'sprouts',
+    vibe: 'any',
+    weight: 1,
+  },
   { title: 'Sprouts and Chestnut Stir-Fry', ingredient: 'sprouts', vibe: 'indoor', weight: 1 },
-  { title: 'Crispy Sprouts with Mustard Dressing', ingredient: 'sprouts', vibe: 'any', weight: 1 },
+  { title: 'Crispy Sprouts with Mustard Potatoes', ingredient: 'sprouts', vibe: 'any', weight: 1 },
 
   // Cabbage
   {
-    title: 'Braised Cabbage with Apple and Caraway',
+    title: 'Braised Cabbage with Apple, Beans, and Potato Mash',
     ingredient: 'cabbage',
     vibe: 'indoor',
     weight: 1,
   },
   { title: 'Cabbage and Potato Colcannon', ingredient: 'cabbage', vibe: 'indoor', weight: 1 },
   { title: 'Roasted Cabbage Steaks with Tahini', ingredient: 'cabbage', vibe: 'any', weight: 1 },
-  { title: 'Krautsalat', ingredient: 'cabbage', vibe: 'outdoor', weight: 5 },
+  { title: 'Warm Cabbage and Potato Skillet', ingredient: 'cabbage', vibe: 'outdoor', weight: 5 },
   { title: 'Pasta con Crema di Verza', ingredient: 'cabbage', vibe: 'indoor', weight: 5 },
 
   // Pointed Cabbage
   {
-    title: 'Stir-Fried Pointed Cabbage with Garlic',
+    title: 'Stir-Fried Pointed Cabbage with Noodles and Tofu',
     ingredient: 'pointedCabbage',
     vibe: 'any',
     weight: 1,
@@ -151,47 +156,67 @@ export const SAVORY_RECIPES: Recipe[] = [
 
   // Carrot
   {
-    title: 'Roasted Carrots with Tahini Lemon Sauce',
+    title: 'Roasted Carrots with Couscous and Chickpeas',
     ingredient: 'carrot',
     vibe: 'any',
     weight: 1,
   },
   { title: 'Carrot and Lentil Stew', ingredient: 'carrot', vibe: 'indoor', weight: 1 },
-  { title: 'Carrot and Thyme Traybake', ingredient: 'carrot', vibe: 'any', weight: 1 },
+  { title: 'Carrot and Thyme Lentil Traybake', ingredient: 'carrot', vibe: 'any', weight: 1 },
 
   // Parsnip
-  { title: 'Honey-Roasted Parsnips with Thyme', ingredient: 'parsnip', vibe: 'any', weight: 1 },
+  {
+    title: 'Honey-Roasted Parsnips with Barley and Kale',
+    ingredient: 'parsnip',
+    vibe: 'any',
+    weight: 1,
+  },
   { title: 'Parsnip and Apple Soup', ingredient: 'parsnip', vibe: 'indoor', weight: 1 },
   { title: 'Parsnip and Potato Mash Gratin', ingredient: 'parsnip', vibe: 'indoor', weight: 1 },
 
   // Celeriac
   { title: 'Celeriac and Potato Gratin', ingredient: 'celeriac', vibe: 'indoor', weight: 1 },
-  { title: 'Roasted Celeriac with Walnut Pesto', ingredient: 'celeriac', vibe: 'any', weight: 1 },
-  { title: 'Celeriac Remoulade with Mustard', ingredient: 'celeriac', vibe: 'any', weight: 1 },
+  {
+    title: 'Roasted Celeriac with Lentils and Walnut Pesto',
+    ingredient: 'celeriac',
+    vibe: 'any',
+    weight: 1,
+  },
+  { title: 'Celeriac and Lentil Mustard Bowl', ingredient: 'celeriac', vibe: 'any', weight: 1 },
 
   // Beet
-  { title: 'Roasted Beet and Lentil Salad', ingredient: 'beet', vibe: 'any', weight: 1 },
+  { title: 'Roasted Beet and Lentil Grain Bowl', ingredient: 'beet', vibe: 'any', weight: 1 },
   { title: 'Beet and White Bean Stew', ingredient: 'beet', vibe: 'indoor', weight: 1 },
-  { title: 'Beet and Walnut Dip with Flatbread', ingredient: 'beet', vibe: 'any', weight: 1 },
+  { title: 'Beet and Walnut Flatbread with Chickpeas', ingredient: 'beet', vibe: 'any', weight: 1 },
 
   // Onion
   { title: 'French Onion Soup', ingredient: 'onion', vibe: 'indoor', weight: 1 },
   { title: 'Caramelized Onion Tart', ingredient: 'onion', vibe: 'any', weight: 1 },
-  { title: 'Onion and Thyme Focaccia', ingredient: 'onion', vibe: 'any', weight: 1 },
+  { title: 'Onion and Thyme Bean Stew', ingredient: 'onion', vibe: 'any', weight: 1 },
   { title: 'Pasta e Ceci', ingredient: 'onion', vibe: 'indoor', weight: 5 },
   { title: 'Sedanini Carbonara', ingredient: 'onion', vibe: 'indoor', weight: 3 },
 
   // Shallot
-  { title: 'Caramelized Shallot Tarte Tatin', ingredient: 'shallot', vibe: 'any', weight: 1 },
   {
-    title: 'Roasted Shallots with Balsamic and Thyme',
+    title: 'Caramelized Shallot and White Bean Tart',
+    ingredient: 'shallot',
+    vibe: 'any',
+    weight: 1,
+  },
+  {
+    title: 'Roasted Shallots with Orzo and White Beans',
     ingredient: 'shallot',
     vibe: 'any',
     weight: 1,
   },
 
   // Potato
-  { title: 'Crispy Smashed Potatoes', ingredient: 'potato', vibe: 'any', weight: 1 },
+  {
+    title: 'Crispy Smashed Potatoes with Broccoli and Beans',
+    ingredient: 'potato',
+    vibe: 'any',
+    weight: 1,
+  },
   { title: 'Potato and Leek Gratin', ingredient: 'potato', vibe: 'indoor', weight: 1 },
   { title: 'Spanish Tortilla with Potato and Onion', ingredient: 'potato', vibe: 'any', weight: 1 },
   { title: "Mezze Maniche alla Valle d'Aosta", ingredient: 'potato', vibe: 'indoor', weight: 3 },
@@ -206,19 +231,39 @@ export const SAVORY_RECIPES: Recipe[] = [
   { title: 'Rigatoni al Pesto di Avocado', ingredient: 'spinach', vibe: 'any', weight: 5 },
 
   // Endive
-  { title: 'Braised Endive with Mustard Sauce', ingredient: 'endive', vibe: 'indoor', weight: 1 },
-  { title: 'Endive and Walnut Salad', ingredient: 'endive', vibe: 'any', weight: 1 },
+  {
+    title: 'Braised Endive with Mustard and Cannellini Beans',
+    ingredient: 'endive',
+    vibe: 'indoor',
+    weight: 1,
+  },
+  { title: 'Endive and Walnut Pasta', ingredient: 'endive', vibe: 'any', weight: 1 },
   { title: 'Gratin of Endive with Béchamel', ingredient: 'endive', vibe: 'indoor', weight: 1 },
   { title: 'Endive and Potato Mash', ingredient: 'endive', vibe: 'indoor', weight: 5 },
 
   // Chicory
-  { title: 'Caramelized Chicory with Orange', ingredient: 'chicory', vibe: 'any', weight: 1 },
+  {
+    title: 'Caramelized Chicory with Lentils and Orange',
+    ingredient: 'chicory',
+    vibe: 'any',
+    weight: 1,
+  },
   { title: 'Chicory and Potato Gratin', ingredient: 'chicory', vibe: 'indoor', weight: 1 },
-  { title: 'Braised Chicory with White Wine', ingredient: 'chicory', vibe: 'indoor', weight: 1 },
+  {
+    title: 'Braised Chicory with White Beans and Polenta',
+    ingredient: 'chicory',
+    vibe: 'indoor',
+    weight: 1,
+  },
 
   // Asparagus
   { title: 'Asparagus Risotto', ingredient: 'asparagus', vibe: 'any', weight: 1 },
-  { title: 'Roasted Asparagus with Lemon Zest', ingredient: 'asparagus', vibe: 'any', weight: 1 },
+  {
+    title: 'Roasted Asparagus with Lemon Orzo and Peas',
+    ingredient: 'asparagus',
+    vibe: 'any',
+    weight: 1,
+  },
   { title: 'Asparagus and Pea Pasta', ingredient: 'asparagus', vibe: 'any', weight: 1 },
 
   // Cauliflower
@@ -233,7 +278,12 @@ export const SAVORY_RECIPES: Recipe[] = [
 
   // Broccoli
   { title: 'Broccoli Lemon Garlic Pasta', ingredient: 'broccoli', vibe: 'any', weight: 1 },
-  { title: 'Roasted Broccoli with Tahini', ingredient: 'broccoli', vibe: 'any', weight: 1 },
+  {
+    title: 'Roasted Broccoli with Tahini Rice and Chickpeas',
+    ingredient: 'broccoli',
+    vibe: 'any',
+    weight: 1,
+  },
   { title: 'Broccoli and Potato Soup', ingredient: 'broccoli', vibe: 'indoor', weight: 1 },
 
   // Peas
@@ -244,12 +294,17 @@ export const SAVORY_RECIPES: Recipe[] = [
 
   // Green Beans
   {
-    title: 'Green Bean and Potato Salad with Mustard',
+    title: 'Green Bean and Potato Mustard Skillet',
     ingredient: 'greenBeans',
     vibe: 'any',
     weight: 1,
   },
-  { title: 'Braised Green Beans with Tomato', ingredient: 'greenBeans', vibe: 'any', weight: 1 },
+  {
+    title: 'Braised Green Beans with Tomato and Butter Beans',
+    ingredient: 'greenBeans',
+    vibe: 'any',
+    weight: 1,
+  },
   { title: 'Green Bean and Coconut Stir-Fry', ingredient: 'greenBeans', vibe: 'indoor', weight: 1 },
   { title: 'Green Bean Peanut Pasta', ingredient: 'greenBeans', vibe: 'any', weight: 5 },
   { title: 'Trofie al Pesto', ingredient: 'greenBeans', vibe: 'any', weight: 5 },
@@ -257,13 +312,18 @@ export const SAVORY_RECIPES: Recipe[] = [
   // Zucchini
   { title: 'Zucchini and Ricotta Pasta', ingredient: 'zucchini', vibe: 'any', weight: 1 },
   { title: 'Stuffed Zucchini Boats', ingredient: 'zucchini', vibe: 'any', weight: 1 },
-  { title: 'Zucchini Fritters with Yogurt Dip', ingredient: 'zucchini', vibe: 'any', weight: 1 },
+  { title: 'Zucchini and Chickpea Rice Bowl', ingredient: 'zucchini', vibe: 'any', weight: 1 },
   { title: 'Radiatori da Philadelphia', ingredient: 'zucchini', vibe: 'any', weight: 5 },
 
   // Tomato
   { title: 'Slow-Roasted Tomato Pasta', ingredient: 'tomato', vibe: 'any', weight: 1 },
   { title: 'Tomato and Lentil Stew', ingredient: 'tomato', vibe: 'indoor', weight: 1 },
-  { title: 'Tomato and Zucchini Traybake', ingredient: 'tomato', vibe: 'outdoor', weight: 1 },
+  {
+    title: 'Tomato and Zucchini Traybake with Chickpeas and Orzo',
+    ingredient: 'tomato',
+    vibe: 'outdoor',
+    weight: 1,
+  },
   { title: 'Paccheri al Pomodoro', ingredient: 'tomato', vibe: 'any', weight: 5 },
   { title: 'Paccheri al Pomodoro e Fontina', ingredient: 'tomato', vibe: 'any', weight: 5 },
   { title: 'Fusilli Pollo Vegano', ingredient: 'tomato', vibe: 'any', weight: 5 },
@@ -276,17 +336,27 @@ export const SAVORY_RECIPES: Recipe[] = [
   { title: 'Roasted Bell Pepper Pasta', ingredient: 'bellPepper', vibe: 'any', weight: 1 },
 
   // Radish
-  { title: 'Roasted Radishes with Butter and Herbs', ingredient: 'radish', vibe: 'any', weight: 1 },
-  { title: 'Radish and Cucumber Salad', ingredient: 'radish', vibe: 'outdoor', weight: 1 },
+  {
+    title: 'Roasted Radishes with Herby Potatoes and Peas',
+    ingredient: 'radish',
+    vibe: 'any',
+    weight: 1,
+  },
+  { title: 'Radish and Cucumber Grain Bowl', ingredient: 'radish', vibe: 'outdoor', weight: 1 },
 
   // Bok Choy
   { title: 'Bok Choy and Mushroom Stir-Fry', ingredient: 'bokChoy', vibe: 'any', weight: 1 },
-  { title: 'Braised Bok Choy with Ginger', ingredient: 'bokChoy', vibe: 'indoor', weight: 1 },
+  {
+    title: 'Braised Bok Choy with Ginger Rice and Tofu',
+    ingredient: 'bokChoy',
+    vibe: 'indoor',
+    weight: 1,
+  },
 
   // Cucumber
   { title: 'Chilled Cucumber and Dill Soup', ingredient: 'cucumber', vibe: 'outdoor', weight: 1 },
   { title: 'Cucumber and Chickpea Bowl', ingredient: 'cucumber', vibe: 'any', weight: 1 },
-  { title: 'Smashed Cucumber Salad with Sesame', ingredient: 'cucumber', vibe: 'any', weight: 1 },
+  { title: 'Smashed Cucumber Sesame Noodle Bowl', ingredient: 'cucumber', vibe: 'any', weight: 1 },
 
   // Eggplant
   { title: 'Roasted Eggplant with Miso Glaze', ingredient: 'eggplant', vibe: 'any', weight: 1 },
@@ -294,7 +364,12 @@ export const SAVORY_RECIPES: Recipe[] = [
   { title: 'Stuffed Eggplant with Couscous', ingredient: 'eggplant', vibe: 'any', weight: 1 },
 
   // Pumpkin
-  { title: 'Roasted Pumpkin with Sage', ingredient: 'pumpkin', vibe: 'any', weight: 1 },
+  {
+    title: 'Roasted Pumpkin with Sage and Lentil Orzo',
+    ingredient: 'pumpkin',
+    vibe: 'any',
+    weight: 1,
+  },
   { title: 'Pumpkin and White Bean Stew', ingredient: 'pumpkin', vibe: 'indoor', weight: 1 },
   { title: 'Creamy Pumpkin Pasta', ingredient: 'pumpkin', vibe: 'indoor', weight: 1 },
   { title: 'Pumpkin Pasta', ingredient: 'pumpkin', vibe: 'indoor', weight: 5 },

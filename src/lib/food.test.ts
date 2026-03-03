@@ -2,6 +2,7 @@ import { expect, test } from 'vitest';
 import { getWeekendFoodPlan } from './food';
 import type { DaySnapshot } from './weekend';
 import { EXTRA_RECIPES, SAVORY_RECIPES } from '../config/foodRules';
+import { renderFoodHint } from './foodHintIcon';
 
 const SAVORY_TITLES = new Set(SAVORY_RECIPES.map((r) => r.title));
 const EXTRA_TITLES = new Set(EXTRA_RECIPES.map((r) => r.title));
@@ -42,6 +43,14 @@ test('always produces a known recipe title for savory and extra', () => {
 
     expect(SAVORY_TITLES.has(plan.savory)).toBe(true);
     expect(EXTRA_TITLES.has(plan.sweet)).toBe(true);
+  }
+});
+
+test('savory recipes are always meal-like labels for line 1', () => {
+  const disallowedLabels = new Set(['Snack', 'Prep', 'Topping', 'Frozen']);
+  for (const recipe of SAVORY_RECIPES) {
+    const parsed = renderFoodHint(recipe.title);
+    expect(disallowedLabels.has(parsed.label)).toBe(false);
   }
 });
 
