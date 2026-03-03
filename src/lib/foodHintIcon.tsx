@@ -41,6 +41,7 @@ export const FOOD_HINT_ICONS: Record<string, LucideIcon> = {
   'Roast veggies': Carrot,
   Bake: CakeSlice,
   Sweet: Apple,
+  Recipe: ChefHat,
   crumble: Cookie,
   cake: CakeSlice,
   pie: Cherry,
@@ -50,13 +51,19 @@ export const FOOD_HINT_ICONS: Record<string, LucideIcon> = {
   compote: Apple,
 };
 
+import { SAVORY_RECIPES, SWEET_RECIPES } from '../config/foodRules';
+
+const RECIPE_TITLES = new Set([
+  ...SAVORY_RECIPES.map((r) => r.title),
+  ...SWEET_RECIPES.map((r) => r.title),
+]);
+
 function parseFoodHint(hint: string): FoodHintParts {
   const [prefix, ...rest] = hint.split(': ');
   if (!prefix || rest.length === 0) {
-    return {
-      label: 'Food',
-      value: hint,
-    };
+    return RECIPE_TITLES.has(hint)
+      ? { label: 'Recipe', value: hint }
+      : { label: 'Food', value: hint };
   }
 
   return {

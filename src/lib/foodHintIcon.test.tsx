@@ -1,6 +1,6 @@
 import { isValidElement } from 'react';
 import { expect, test } from 'vitest';
-import { CookingPot, UtensilsCrossed } from 'lucide-react';
+import { ChefHat, CookingPot, UtensilsCrossed } from 'lucide-react';
 import { renderFoodHint } from './foodHintIcon';
 
 test('parses prefixed food hint into label and value', () => {
@@ -27,5 +27,16 @@ test('uses fallback utensil icon for unknown prefixes', () => {
   expect(isValidElement(item.icon)).toBe(true);
   if (isValidElement(item.icon)) {
     expect(item.icon.type).toBe(UtensilsCrossed);
+  }
+});
+
+test('recognizes recipe titles with Recipe label and ChefHat icon', () => {
+  const item = renderFoodHint('Apple Crumble');
+
+  expect(item.label).toBe('Recipe');
+  expect(item.value).toBe('Apple Crumble');
+  expect(isValidElement(item.icon)).toBe(true);
+  if (isValidElement(item.icon)) {
+    expect(item.icon.type).toBe(ChefHat);
   }
 });

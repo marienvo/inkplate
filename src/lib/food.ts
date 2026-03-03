@@ -1,12 +1,17 @@
 import type { DaySnapshot } from './weekend';
 import {
   type Month,
+  type Recipe,
+  type WeatherVibe,
   SEASONAL_NL,
   SEASONAL_NL_FRUIT,
   SAFE_VEG_FALLBACK,
   SAFE_FRUIT_FALLBACK,
   SAVORY_DISHES,
   SWEET_DISHES,
+  SAVORY_RECIPES,
+  SWEET_RECIPES,
+  GENERIC_FALLBACK_WEIGHT,
   getWeatherVibe,
 } from '../config/foodRules';
 
@@ -85,6 +90,30 @@ function formatListShort(items: { label: string }[]): string {
   return items.map((item) => item.label).join(', ');
 }
 
+function matchingRecipes(
+  recipes: Recipe[],
+  ingredientKeys: Set<string>,
+  vibe: WeatherVibe,
+): Recipe[] {
+  return recipes.filter(
+    (r) => ingredientKeys.has(r.ingredient) && (r.vibe === 'any' || r.vibe === vibe),
+  );
+}
+
+function pickRecipeOrGeneric(
+  recipes: Recipe[],
+  genericFn: () => string,
+  rnd: () => number,
+): string {
+  if (recipes.length === 0) return genericFn();
+
+  const recipeWeight = recipes.reduce((sum, r) => sum + r.weight, 0);
+  const total = recipeWeight + GENERIC_FALLBACK_WEIGHT;
+
+  if (rnd() * total >= recipeWeight) return genericFn();
+  return weightedPick(recipes, (r) => r.weight, rnd).title;
+}
+
 export function getWeekendFoodPlan(
   date1: Date,
   day1: DaySnapshot,
@@ -100,39 +129,48 @@ export function getWeekendFoodPlan(
   const seed = hashSeed(bestDate, best);
   const rnd = mulberry32(seed);
 
-  // Pick Savory Dish
-  const savoryCandidates = SAVORY_DISHES.filter(
-    (d) => d.months.includes(month) && (d.vibe === 'any' || d.vibe === vibe),
+  // --- Savory ---
+  const seasonalVeg = seasonalForDate(SEASONAL_NL, bestDate);
+  const vegPool = seasonalVeg.length >= 6 ? seasonalVeg : [...seasonalVeg, ...SAFE_VEG_FALLBACK];
+  const vegCount = rnd() < 0.65 ? 2 : 3;
+  const pickedVeg = pickUnique(vegPool, vegCount, rnd);
+  const vegKeys = new Set(pickedVeg.map((v) => v.key));
+
+  const savoryHits = matchingRecipes(SAVORY_RECIPES, vegKeys, vibe);
+  const savory = pickRecipeOrGeneric(
+    savoryHits,
+    () => {
+      const candidates = SAVORY_DISHES.filter(
+        (d) => d.months.includes(month) && (d.vibe === 'any' || d.vibe === vibe),
+      );
+      const dish = weightedPick(candidates, (d) => d.weight, rnd);
+      return dish.template.replace('{veg}', formatListShort(pickedVeg));
+    },
+    rnd,
   );
-  const pickedSavoryDish = weightedPick(savoryCandidates, (d) => d.weight, rnd);
 
-  let savory = pickedSavoryDish.template;
-  if (savory.includes('{veg}')) {
-    const seasonalVeg = seasonalForDate(SEASONAL_NL, bestDate);
-    const vegPool = seasonalVeg.length >= 6 ? seasonalVeg : [...seasonalVeg, ...SAFE_VEG_FALLBACK];
-    const vegCount = rnd() < 0.65 ? 2 : 3;
-    const pickedVeg = pickUnique(vegPool, vegCount, rnd);
-    savory = savory.replace('{veg}', formatListShort(pickedVeg));
-  }
-
-  // Pick Sweet Dish
+  // --- Sweet ---
   const seasonalFruit = seasonalForDate(SEASONAL_NL_FRUIT, bestDate);
   const fruitPool = seasonalFruit.length > 0 ? seasonalFruit : SAFE_FRUIT_FALLBACK;
   const pickedFruit = weightedPick(fruitPool, (f) => f.bakeWeight, rnd);
+  const fruitKeys = new Set([pickedFruit.key]);
 
-  const sweetCandidates = SWEET_DISHES.filter((d) => {
-    if (!d.months.includes(month)) return false;
-    if (d.vibe !== 'any' && d.vibe !== vibe) return false;
-    if (d.excludeFruits && d.excludeFruits.includes(pickedFruit.key)) return false;
-    if (d.onlyFruits && !d.onlyFruits.includes(pickedFruit.key)) return false;
-    return true;
-  });
-
-  const pickedSweetDish = weightedPick(sweetCandidates, (d) => d.weight, rnd);
-  let sweet = pickedSweetDish.template;
-  if (sweet.includes('{fruit}')) {
-    sweet = sweet.replace('{fruit}', pickedFruit.label);
-  }
+  const sweetHits = matchingRecipes(SWEET_RECIPES, fruitKeys, vibe);
+  const sweet = pickRecipeOrGeneric(
+    sweetHits,
+    () => {
+      const candidates = SWEET_DISHES.filter((d) => {
+        if (!d.months.includes(month)) return false;
+        if (d.vibe !== 'any' && d.vibe !== vibe) return false;
+        if (d.excludeFruits?.includes(pickedFruit.key)) return false;
+        if (d.onlyFruits && !d.onlyFruits.includes(pickedFruit.key)) return false;
+        return true;
+      });
+      const dish = weightedPick(candidates, (d) => d.weight, rnd);
+      return dish.template.replace('{fruit}', pickedFruit.label);
+    },
+    rnd,
+  );
 
   return { savory, sweet };
 }

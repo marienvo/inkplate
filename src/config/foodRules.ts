@@ -25,6 +25,15 @@ export type Dish = {
   onlyFruits?: string[];
 };
 
+export type Recipe = {
+  title: string;
+  ingredient: string;
+  vibe: WeatherVibe;
+  weight: number;
+};
+
+export const GENERIC_FALLBACK_WEIGHT = 2;
+
 export const ALL_MONTHS: Month[] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
 
 export const SEASONAL_NL: SeasonalVeg[] = [
@@ -95,11 +104,6 @@ export function getWeatherVibe(day: DaySnapshot): WeatherVibe {
 }
 
 export const SAVORY_DISHES: Dish[] = [
-  // === Specific seasonal dishes (example of how to add them) ===
-  { template: 'Spinach pie', months: [3, 4, 5, 9, 10], vibe: 'any', weight: 0.5 },
-  { template: 'Pumpkin soup', months: [9, 10, 11], vibe: 'indoor', weight: 0.5 },
-  { template: 'Asparagus risotto', months: [4, 5, 6], vibe: 'any', weight: 0.5 },
-
   // === INDOOR / MEAL PREP ===
   { template: 'Meal prep: {veg}', months: ALL_MONTHS, vibe: 'indoor', weight: 1 },
   { template: 'Batch cook: {veg}', months: ALL_MONTHS, vibe: 'indoor', weight: 1 },
@@ -198,4 +202,78 @@ export const SWEET_DISHES: Dish[] = [
 
   // Non-bake option (only outdoors, ~45% probability relative to bakes)
   { template: 'Sweet: {fruit}', months: ALL_MONTHS, vibe: 'outdoor', weight: 4.5 },
+];
+
+// ---------------------------------------------------------------------------
+// Ingredient-based recipes
+// When the engine picks a seasonal ingredient, it checks this list for a
+// matching recipe. If one is found, it competes (by weight) with the generic
+// template pool above. Recipes inherit their season from the ingredient.
+// ---------------------------------------------------------------------------
+
+export const SAVORY_RECIPES: Recipe[] = [
+  // Leek
+  { title: 'Leek and Potato Mustard Pie', ingredient: 'leek', vibe: 'indoor', weight: 1 },
+  {
+    title: 'Braised Leeks with White Beans and Lemon',
+    ingredient: 'leek',
+    vibe: 'indoor',
+    weight: 1,
+  },
+  { title: 'Creamy Leek Pasta with Nutritional Yeast', ingredient: 'leek', vibe: 'any', weight: 1 },
+
+  // Kale
+  { title: 'Kale and Cannellini Skillet', ingredient: 'kale', vibe: 'any', weight: 1 },
+  { title: 'Kale Walnut Pesto Pasta', ingredient: 'kale', vibe: 'any', weight: 1 },
+  { title: 'Crispy Roasted Kale with Potatoes', ingredient: 'kale', vibe: 'any', weight: 1 },
+
+  // Carrot
+  {
+    title: 'Roasted Carrots with Tahini Lemon Sauce',
+    ingredient: 'carrot',
+    vibe: 'any',
+    weight: 1,
+  },
+  { title: 'Carrot and Lentil Stew', ingredient: 'carrot', vibe: 'indoor', weight: 1 },
+  { title: 'Carrot and Thyme Traybake', ingredient: 'carrot', vibe: 'any', weight: 1 },
+
+  // Potato
+  { title: 'Crispy Smashed Potatoes', ingredient: 'potato', vibe: 'any', weight: 1 },
+  { title: 'Potato and Leek Gratin', ingredient: 'potato', vibe: 'indoor', weight: 1 },
+  { title: 'Spanish Tortilla with Potato and Onion', ingredient: 'potato', vibe: 'any', weight: 1 },
+
+  // Spinach
+  { title: 'Lemon Spinach Pasta', ingredient: 'spinach', vibe: 'any', weight: 1 },
+  { title: 'Spinach and White Bean Stew', ingredient: 'spinach', vibe: 'indoor', weight: 1 },
+  { title: 'Savory Spinach Pie', ingredient: 'spinach', vibe: 'indoor', weight: 1 },
+
+  // Broccoli
+  { title: 'Broccoli Lemon Garlic Pasta', ingredient: 'broccoli', vibe: 'any', weight: 1 },
+  { title: 'Roasted Broccoli with Tahini', ingredient: 'broccoli', vibe: 'any', weight: 1 },
+  { title: 'Broccoli and Potato Soup', ingredient: 'broccoli', vibe: 'indoor', weight: 1 },
+
+  // Tomato
+  { title: 'Slow-Roasted Tomato Pasta', ingredient: 'tomato', vibe: 'any', weight: 1 },
+  { title: 'Tomato and Lentil Stew', ingredient: 'tomato', vibe: 'indoor', weight: 1 },
+  { title: 'Tomato and Zucchini Traybake', ingredient: 'tomato', vibe: 'outdoor', weight: 1 },
+
+  // Pumpkin
+  { title: 'Roasted Pumpkin with Sage', ingredient: 'pumpkin', vibe: 'any', weight: 1 },
+  { title: 'Pumpkin and White Bean Stew', ingredient: 'pumpkin', vibe: 'indoor', weight: 1 },
+  { title: 'Creamy Pumpkin Pasta', ingredient: 'pumpkin', vibe: 'indoor', weight: 1 },
+
+  // Asparagus
+  { title: 'Asparagus Risotto', ingredient: 'asparagus', vibe: 'any', weight: 1 },
+];
+
+export const SWEET_RECIPES: Recipe[] = [
+  // Apple
+  { title: 'Apple Crumble', ingredient: 'apple', vibe: 'indoor', weight: 1 },
+  { title: 'Simple Apple Cake', ingredient: 'apple', vibe: 'any', weight: 1 },
+  { title: 'Baked Apples with Oats', ingredient: 'apple', vibe: 'indoor', weight: 1 },
+
+  // Pear
+  { title: 'Pear Almond Cake', ingredient: 'pear', vibe: 'any', weight: 1 },
+  { title: 'Poached Pears', ingredient: 'pear', vibe: 'indoor', weight: 1 },
+  { title: 'Pear Crumble', ingredient: 'pear', vibe: 'indoor', weight: 1 },
 ];
