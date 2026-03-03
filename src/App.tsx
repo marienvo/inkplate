@@ -183,11 +183,11 @@ export default function App() {
   const tomorrowDate = new Date(now);
   tomorrowDate.setDate(tomorrowDate.getDate() + 1);
   const tomorrowTitle = formatDateForTitle(tomorrowDate);
-  const maxVisibleAppointments = useSmartAgendaLimit(contentRef, 3, 2);
+  const { maxEvents, showSecondFoodLine } = useSmartAgendaLimit(contentRef);
   const { showTomorrow, visibleAppointments, hiddenAppointmentsCount } = selectAgendaView(
     calendarData as Appointment[],
     now,
-    maxVisibleAppointments,
+    maxEvents,
   );
   const calendarTitle = showTomorrow ? `Tomorrow — ${tomorrowTitle}` : `Today — ${todayTitle}`;
   const windDirectionStyle = {
@@ -251,7 +251,9 @@ export default function App() {
     });
   }
   const foodEntries = weather.food
-    ? [weather.food.savory, weather.food.sweet]
+    ? showSecondFoodLine
+      ? [weather.food.savory, weather.food.sweet]
+      : [weather.food.savory]
     : weather.foodHint
       ? [weather.foodHint]
       : [];
@@ -276,33 +278,37 @@ export default function App() {
           </ul>
         </Section>
 
-        <Section icon={<Calendar />} title={calendarTitle}>
-          {visibleAppointments.length === 0 ? (
-            <p className="empty-state">{showTomorrow ? 'No events tomorrow' : 'No events today'}</p>
-          ) : (
-            <ul className="list today-list">
-              {visibleAppointments.map((appointment) => (
-                <li
-                  key={`${appointment.date}-${appointment.startTime}-${appointment.title}`}
-                  className="list-item"
-                >
-                  <span className="item-left">
-                    <span className="emoji" aria-hidden="true">
-                      {getAppointmentClockIcon(appointment.startTime)}
+        {maxEvents > 0 && (
+          <Section icon={<Calendar />} title={calendarTitle}>
+            {visibleAppointments.length === 0 ? (
+              <p className="empty-state">
+                {showTomorrow ? 'No events tomorrow' : 'No events today'}
+              </p>
+            ) : (
+              <ul className="list today-list">
+                {visibleAppointments.map((appointment) => (
+                  <li
+                    key={`${appointment.date}-${appointment.startTime}-${appointment.title}`}
+                    className="list-item"
+                  >
+                    <span className="item-left">
+                      <span className="emoji" aria-hidden="true">
+                        {getAppointmentClockIcon(appointment.startTime)}
+                      </span>
+                      <span className="item-label">
+                        {formatAppointmentTime(appointment.startTime)}
+                      </span>
                     </span>
-                    <span className="item-label">
-                      {formatAppointmentTime(appointment.startTime)}
-                    </span>
-                  </span>
-                  <span className="item-value">{appointment.title}</span>
-                </li>
-              ))}
-            </ul>
-          )}
-          {hiddenAppointmentsCount > 0 && (
-            <p className="more-indicator">{hiddenAppointmentsCount} more</p>
-          )}
-        </Section>
+                    <span className="item-value">{appointment.title}</span>
+                  </li>
+                ))}
+              </ul>
+            )}
+            {hiddenAppointmentsCount > 0 && (
+              <p className="more-indicator">{hiddenAppointmentsCount} more</p>
+            )}
+          </Section>
+        )}
 
         <Section icon={<UtensilsCrossed />} title="This Week’s Kitchen">
           {foodItems.length > 0 ? (

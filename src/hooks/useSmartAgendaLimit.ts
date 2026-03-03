@@ -1,11 +1,20 @@
 import { useLayoutEffect, useState, type RefObject } from 'react';
 
-export function useSmartAgendaLimit(
-  ref: RefObject<HTMLElement | null>,
-  defaultMax: number = 3,
-  reducedMax: number = 2,
-): number {
-  const [limit, setLimit] = useState(defaultMax);
+export type LayoutConstraints = {
+  maxEvents: number;
+  showSecondFoodLine: boolean;
+};
+
+export const AGENDA_REDUCTION_STEPS: readonly LayoutConstraints[] = [
+  { maxEvents: 3, showSecondFoodLine: true },
+  { maxEvents: 2, showSecondFoodLine: true },
+  { maxEvents: 1, showSecondFoodLine: true },
+  { maxEvents: 1, showSecondFoodLine: false },
+  { maxEvents: 0, showSecondFoodLine: false },
+];
+
+export function useSmartAgendaLimit(ref: RefObject<HTMLElement | null>): LayoutConstraints {
+  const [stepIndex, setStepIndex] = useState(0);
 
   useLayoutEffect(() => {
     const element = ref.current;
@@ -16,17 +25,11 @@ export function useSmartAgendaLimit(
 
     const updateLimit = () => {
       const isOverflowing = element.scrollHeight > element.clientHeight;
-      setLimit((currentLimit) => {
-        // Keep the reduced limit sticky to avoid 3↔2 oscillation.
-        if (currentLimit === reducedMax) {
-          return currentLimit;
+      setStepIndex((currentStepIndex) => {
+        if (isOverflowing && currentStepIndex < AGENDA_REDUCTION_STEPS.length - 1) {
+          return currentStepIndex + 1;
         }
-
-        if (isOverflowing) {
-          return reducedMax;
-        }
-
-        return defaultMax;
+        return currentStepIndex;
       });
     };
 
@@ -43,7 +46,7 @@ export function useSmartAgendaLimit(
       resizeObserver.disconnect();
       window.removeEventListener('resize', updateLimit);
     };
-  }, [defaultMax, reducedMax, ref]);
+  }, [ref]);
 
-  return limit;
+  return AGENDA_REDUCTION_STEPS[Math.min(stepIndex, AGENDA_REDUCTION_STEPS.length - 1)];
 }
