@@ -1,6 +1,6 @@
-import { mkdir, writeFile } from 'node:fs/promises';
+import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import { dirname, resolve } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 
 import { API_KEY } from '../config.js';
 import {
@@ -59,6 +59,14 @@ type WeatherData = {
   };
 };
 
+type FoodData = NonNullable<WeatherData['food']>;
+
+type FoodCache = {
+  weekKey: string;
+  savory: string;
+  sweet: string;
+};
+
 type OpenMeteoDaily = {
   time?: string[];
   apparent_temperature_max?: Array<number | null>;
@@ -74,6 +82,7 @@ type OpenMeteoResponse = {
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const WEATHER_FILE_PATH = resolve(__dirname, '../src/data/weather.json');
+const FOOD_CACHE_FILE_PATH = resolve(__dirname, '../.tmp/food-cache.json');
 const LOCATION = 'Rotterdam';
 
 function requiredNumber(value: number | undefined, name: string): number {
@@ -160,9 +169,63 @@ function weekendTargetFromDay(day: number): {
   };
 }
 
-async function fetchWeekendData(): Promise<{
+function dateToKey(date: Date): string {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+}
+
+export function getFoodWeekKey(now: Date): string {
+  const currentDay = now.getDay();
+  const daysUntilSaturday = currentDay === 0 ? 6 : 6 - currentDay;
+  const targetSaturday = new Date(now);
+  targetSaturday.setDate(now.getDate() + daysUntilSaturday);
+  return dateToKey(targetSaturday);
+}
+
+function asFoodCache(value: unknown): FoodCache | null {
+  if (!value || typeof value !== 'object') return null;
+  const record = value as Partial<FoodCache>;
+  if (
+    typeof record.weekKey !== 'string' ||
+    typeof record.savory !== 'string' ||
+    typeof record.sweet !== 'string'
+  ) {
+    return null;
+  }
+  return record as FoodCache;
+}
+
+async function readFoodCache(): Promise<FoodCache | null> {
+  try {
+    const raw = await readFile(FOOD_CACHE_FILE_PATH, 'utf8');
+    return asFoodCache(JSON.parse(raw));
+  } catch (error) {
+    if ((error as NodeJS.ErrnoException).code === 'ENOENT') {
+      return null;
+    }
+    if (error instanceof SyntaxError) {
+      console.warn('Food cache is invalid JSON; recalculating food plan.');
+      return null;
+    }
+    throw error;
+  }
+}
+
+async function writeFoodCache(weekKey: string, food: FoodData): Promise<void> {
+  const cache: FoodCache = {
+    weekKey,
+    savory: food.savory,
+    sweet: food.sweet,
+  };
+  await mkdir(dirname(FOOD_CACHE_FILE_PATH), { recursive: true });
+  await writeFile(FOOD_CACHE_FILE_PATH, `${JSON.stringify(cache, null, 2)}\n`, 'utf8');
+}
+
+async function fetchWeekendData(cachedFood?: FoodData): Promise<{
   weekend: NonNullable<WeatherData['weekend']>;
-  food: NonNullable<WeatherData['food']>;
+  food: FoodData;
 }> {
   const endpoint = new URL('https://api.open-meteo.com/v1/forecast');
   endpoint.searchParams.set('latitude', '51.9225');
@@ -223,7 +286,7 @@ async function fetchWeekendData(): Promise<{
       label,
       value: getWeekendOneLiner(day1, day2),
     },
-    food: getWeekendFoodPlan(date1, day1, date2, day2),
+    food: cachedFood ?? getWeekendFoodPlan(date1, day1, date2, day2),
   };
 }
 
@@ -287,11 +350,20 @@ async function fetchWeather(): Promise<WeatherData> {
 
   const body = (await response.json()) as WeerLiveResponse;
   const weather = mapApiResponse(body);
+  const foodWeekKey = getFoodWeekKey(new Date());
+  const cachedFoodRecord = await readFoodCache();
+  const cachedFood =
+    cachedFoodRecord && cachedFoodRecord.weekKey === foodWeekKey
+      ? { savory: cachedFoodRecord.savory, sweet: cachedFoodRecord.sweet }
+      : undefined;
 
   try {
-    const weekendData = await fetchWeekendData();
+    const weekendData = await fetchWeekendData(cachedFood);
     weather.weekend = weekendData.weekend;
     weather.food = weekendData.food;
+    if (!cachedFood) {
+      await writeFoodCache(foodWeekKey, weekendData.food);
+    }
   } catch (error) {
     const message = error instanceof Error ? error.message : String(error);
     console.warn(`Skipping weekend extras: ${message}`);
@@ -307,8 +379,14 @@ async function main(): Promise<void> {
   console.log(`Weather data written to ${WEATHER_FILE_PATH}`);
 }
 
-main().catch((error: unknown) => {
-  const message = error instanceof Error ? error.message : String(error);
-  console.error(`Failed to fetch weather: ${message}`);
-  process.exit(1);
-});
+if (
+  process.argv[1] &&
+  !process.env.VITEST &&
+  import.meta.url === pathToFileURL(process.argv[1]).href
+) {
+  main().catch((error: unknown) => {
+    const message = error instanceof Error ? error.message : String(error);
+    console.error(`Failed to fetch weather: ${message}`);
+    process.exit(1);
+  });
+}
