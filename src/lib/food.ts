@@ -6,7 +6,7 @@ import {
   SEASONAL_NL,
   SEASONAL_NL_FRUIT,
   SAVORY_RECIPES,
-  SWEET_RECIPES,
+  EXTRA_RECIPES,
   getWeatherVibe,
 } from '../config/foodRules';
 
@@ -116,7 +116,7 @@ export function getWeekendFoodPlan(
   // --- Sweet ---
   const seasonalFruit = seasonalForDate(SEASONAL_NL_FRUIT, bestDate);
   const pickedFruit = weightedPick(seasonalFruit, (f) => f.bakeWeight, rnd);
-  const sweetHits = matchingRecipes(SWEET_RECIPES, new Set([pickedFruit.key]), vibe);
+  const sweetHits = matchingRecipes(EXTRA_RECIPES, new Set([pickedFruit.key]), vibe);
   const sweet = weightedPick(sweetHits, (r) => r.weight, rnd).title;
 
   return { savory, sweet };

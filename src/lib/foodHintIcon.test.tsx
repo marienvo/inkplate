@@ -1,6 +1,6 @@
 import { isValidElement } from 'react';
 import { expect, test } from 'vitest';
-import { Cookie, CookingPot, Soup, UtensilsCrossed } from 'lucide-react';
+import { Cookie, CookingPot, IceCreamCone, Soup, UtensilsCrossed } from 'lucide-react';
 import { renderFoodHint, splitFoodValueWrapGroups } from './foodHintIcon';
 
 test('detects Crumble keyword with Cookie icon', () => {
@@ -33,6 +33,28 @@ test('detects Pasta keyword with CookingPot icon', () => {
   expect(isValidElement(item.icon)).toBe(true);
   if (isValidElement(item.icon)) {
     expect(item.icon.type).toBe(CookingPot);
+  }
+});
+
+test('detects Italian pasta names with CookingPot icon', () => {
+  const item = renderFoodHint("Penne all'Arrabbiata");
+
+  expect(item.label).toBe('Pasta');
+  expect(item.value).toBe("Penne all'Arrabbiata");
+  expect(isValidElement(item.icon)).toBe(true);
+  if (isValidElement(item.icon)) {
+    expect(item.icon.type).toBe(CookingPot);
+  }
+});
+
+test('detects Fresco keyword as Frozen with IceCream icon', () => {
+  const item = renderFoodHint('Caju Fresco');
+
+  expect(item.label).toBe('Frozen');
+  expect(item.value).toBe('Caju Fresco');
+  expect(isValidElement(item.icon)).toBe(true);
+  if (isValidElement(item.icon)) {
+    expect(item.icon.type).toBe(IceCreamCone);
   }
 });
 

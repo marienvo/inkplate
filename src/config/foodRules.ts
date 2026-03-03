@@ -40,31 +40,44 @@ export const SEASONAL_NL: SeasonalVeg[] = [
   { key: 'beet', label: 'beet', months: [1, 2, 3, 9, 10, 11, 12] },
   { key: 'onion', label: 'onion', months: ALL_MONTHS },
   { key: 'potato', label: 'potato', months: ALL_MONTHS },
-  { key: 'spinach', label: 'spinach', months: [3, 4, 5, 9, 10] },
+  { key: 'spinach', label: 'spinach', months: ALL_MONTHS },
   { key: 'endive', label: 'endive', months: [4, 5, 6, 9, 10] },
   { key: 'chicory', label: 'chicory', months: [1, 2, 3, 10, 11, 12] },
   { key: 'asparagus', label: 'asparagus', months: [4, 5, 6] },
   { key: 'cauliflower', label: 'cauliflower', months: [4, 5, 6, 7, 8, 9, 10] },
-  { key: 'broccoli', label: 'broccoli', months: [5, 6, 7, 8, 9, 10] },
-  { key: 'peas', label: 'peas', months: [5, 6, 7] },
+  { key: 'broccoli', label: 'broccoli', months: ALL_MONTHS },
+  { key: 'peas', label: 'peas', months: ALL_MONTHS },
   { key: 'greenBeans', label: 'green beans', months: [6, 7, 8, 9] },
   { key: 'zucchini', label: 'zucchini', months: [6, 7, 8, 9] },
-  { key: 'tomato', label: 'tomato', months: [7, 8, 9] },
+  { key: 'tomato', label: 'tomato', months: [5, 6, 7, 8, 9, 10] },
   { key: 'cucumber', label: 'cucumber', months: [7, 8, 9] },
   { key: 'eggplant', label: 'eggplant', months: [7, 8, 9] },
   { key: 'pumpkin', label: 'pumpkin', months: [9, 10, 11] },
+
+  // todo: new, no recipes yet
+  { key: 'pointedCabbage', label: 'pointed cabbage', months: ALL_MONTHS },
+  { key: 'shallot', label: 'shallot', months: ALL_MONTHS },
+  { key: 'springOnion', label: 'spring onion', months: ALL_MONTHS },
+  { key: 'bellPepper', label: 'bell pepper', months: ALL_MONTHS },
+  { key: 'lettuce', label: 'lettuce', months: ALL_MONTHS },
+  { key: 'radish', label: 'radish', months: ALL_MONTHS },
+  { key: 'bokChoy', label: 'bok choy', months: ALL_MONTHS },
+  { key: 'cherryTomato', label: 'cherry tomato', months: ALL_MONTHS },
+  { key: 'romaine', label: 'romaine lettuce', months: ALL_MONTHS },
+  { key: 'icebergLettuce', label: 'iceberg lettuce', months: ALL_MONTHS },
 ];
 
 export const SEASONAL_NL_FRUIT: SeasonalFruit[] = [
   { key: 'apple', label: 'apple', months: [9, 10, 11, 12, 1, 2, 3, 4], bakeWeight: 1.0 },
   { key: 'pear', label: 'pear', months: [9, 10, 11, 12, 1, 2, 3], bakeWeight: 1.0 },
   { key: 'rhubarb', label: 'rhubarb', months: [4, 5, 6], bakeWeight: 1.0 },
-  { key: 'strawberry', label: 'strawberry', months: [5, 6, 7], bakeWeight: 0.7 },
+  { key: 'strawberry', label: 'strawberry', months: [5, 6, 7], bakeWeight: 2 },
   { key: 'cherry', label: 'cherry', months: [6, 7], bakeWeight: 0.8 },
   { key: 'plum', label: 'plum', months: [7, 8, 9], bakeWeight: 1.0 },
   { key: 'blueberry', label: 'blueberry', months: [7, 8], bakeWeight: 0.85 },
   { key: 'blackberry', label: 'blackberry', months: [8, 9], bakeWeight: 0.85 },
   { key: 'grape', label: 'grape', months: [9, 10], bakeWeight: 0.55 },
+  { key: 'pantry', label: 'pantry', months: ALL_MONTHS, bakeWeight: 0.3 },
 ];
 
 // ---------------------------------------------------------------------------
@@ -126,6 +139,8 @@ export const SAVORY_RECIPES: Recipe[] = [
   },
   { title: 'Cabbage and Potato Colcannon', ingredient: 'cabbage', vibe: 'indoor', weight: 1 },
   { title: 'Roasted Cabbage Steaks with Tahini', ingredient: 'cabbage', vibe: 'any', weight: 1 },
+  { title: 'Krautsalat', ingredient: 'cabbage', vibe: 'outdoor', weight: 5 },
+  { title: 'Pasta con Crema di Verza', ingredient: 'cabbage', vibe: 'indoor', weight: 5 },
 
   // Carrot
   {
@@ -156,21 +171,29 @@ export const SAVORY_RECIPES: Recipe[] = [
   { title: 'French Onion Soup', ingredient: 'onion', vibe: 'indoor', weight: 1 },
   { title: 'Caramelized Onion Tart', ingredient: 'onion', vibe: 'any', weight: 1 },
   { title: 'Onion and Thyme Focaccia', ingredient: 'onion', vibe: 'any', weight: 1 },
+  { title: 'Pasta e Ceci', ingredient: 'onion', vibe: 'indoor', weight: 5 },
+  { title: 'Sedanini Carbonara', ingredient: 'onion', vibe: 'indoor', weight: 3 },
 
   // Potato
   { title: 'Crispy Smashed Potatoes', ingredient: 'potato', vibe: 'any', weight: 1 },
   { title: 'Potato and Leek Gratin', ingredient: 'potato', vibe: 'indoor', weight: 1 },
   { title: 'Spanish Tortilla with Potato and Onion', ingredient: 'potato', vibe: 'any', weight: 1 },
+  { title: "Mezze Maniche alla Valle d'Aosta", ingredient: 'potato', vibe: 'indoor', weight: 3 },
 
   // Spinach
   { title: 'Lemon Spinach Pasta', ingredient: 'spinach', vibe: 'any', weight: 1 },
   { title: 'Spinach and White Bean Stew', ingredient: 'spinach', vibe: 'indoor', weight: 1 },
   { title: 'Savory Spinach Pie', ingredient: 'spinach', vibe: 'indoor', weight: 1 },
+  { title: 'Almkase Pasta', ingredient: 'spinach', vibe: 'any', weight: 5 },
+  { title: 'Linguine Spinaci e Ricotta', ingredient: 'spinach', vibe: 'any', weight: 5 },
+  { title: 'Radiatori Spinaci Gorgonzola', ingredient: 'spinach', vibe: 'any', weight: 5 },
+  { title: 'Rigatoni al Pesto di Avocado', ingredient: 'spinach', vibe: 'any', weight: 5 },
 
   // Endive
   { title: 'Braised Endive with Mustard Sauce', ingredient: 'endive', vibe: 'indoor', weight: 1 },
   { title: 'Endive and Walnut Salad', ingredient: 'endive', vibe: 'any', weight: 1 },
   { title: 'Gratin of Endive with Béchamel', ingredient: 'endive', vibe: 'indoor', weight: 1 },
+  { title: 'Endive and Potato Mash', ingredient: 'endive', vibe: 'indoor', weight: 5 },
 
   // Chicory
   { title: 'Caramelized Chicory with Orange', ingredient: 'chicory', vibe: 'any', weight: 1 },
@@ -201,6 +224,7 @@ export const SAVORY_RECIPES: Recipe[] = [
   { title: 'Pea and Mint Risotto', ingredient: 'peas', vibe: 'any', weight: 1 },
   { title: 'Pea and Potato Samosa Bake', ingredient: 'peas', vibe: 'indoor', weight: 1 },
   { title: 'Spring Pea Pasta with Lemon', ingredient: 'peas', vibe: 'any', weight: 1 },
+  { title: 'Pasta Piselli Porri', ingredient: 'peas', vibe: 'any', weight: 5 },
 
   // Green Beans
   {
@@ -211,16 +235,25 @@ export const SAVORY_RECIPES: Recipe[] = [
   },
   { title: 'Braised Green Beans with Tomato', ingredient: 'greenBeans', vibe: 'any', weight: 1 },
   { title: 'Green Bean and Coconut Stir-Fry', ingredient: 'greenBeans', vibe: 'indoor', weight: 1 },
+  { title: 'Green Bean Peanut Pasta', ingredient: 'greenBeans', vibe: 'any', weight: 5 },
+  { title: 'Trofie al Pesto', ingredient: 'greenBeans', vibe: 'any', weight: 5 },
 
   // Zucchini
   { title: 'Zucchini and Ricotta Pasta', ingredient: 'zucchini', vibe: 'any', weight: 1 },
   { title: 'Stuffed Zucchini Boats', ingredient: 'zucchini', vibe: 'any', weight: 1 },
   { title: 'Zucchini Fritters with Yogurt Dip', ingredient: 'zucchini', vibe: 'any', weight: 1 },
+  { title: 'Radiatori da Philadelphia', ingredient: 'zucchini', vibe: 'any', weight: 5 },
 
   // Tomato
   { title: 'Slow-Roasted Tomato Pasta', ingredient: 'tomato', vibe: 'any', weight: 1 },
   { title: 'Tomato and Lentil Stew', ingredient: 'tomato', vibe: 'indoor', weight: 1 },
   { title: 'Tomato and Zucchini Traybake', ingredient: 'tomato', vibe: 'outdoor', weight: 1 },
+  { title: 'Paccheri al Pomodoro', ingredient: 'tomato', vibe: 'any', weight: 5 },
+  { title: 'Paccheri al Pomodoro e Fontina', ingredient: 'tomato', vibe: 'any', weight: 5 },
+  { title: 'Fusilli Pollo Vegano', ingredient: 'tomato', vibe: 'any', weight: 5 },
+  { title: "Penne all'Arrabbiata", ingredient: 'tomato', vibe: 'any', weight: 5 },
+  { title: 'Piatto di Pollo Messicano', ingredient: 'tomato', vibe: 'indoor', weight: 5 },
+  { title: 'Ragu di Lenticchie', ingredient: 'tomato', vibe: 'indoor', weight: 5 },
 
   // Cucumber
   { title: 'Chilled Cucumber and Dill Soup', ingredient: 'cucumber', vibe: 'outdoor', weight: 1 },
@@ -236,15 +269,17 @@ export const SAVORY_RECIPES: Recipe[] = [
   { title: 'Roasted Pumpkin with Sage', ingredient: 'pumpkin', vibe: 'any', weight: 1 },
   { title: 'Pumpkin and White Bean Stew', ingredient: 'pumpkin', vibe: 'indoor', weight: 1 },
   { title: 'Creamy Pumpkin Pasta', ingredient: 'pumpkin', vibe: 'indoor', weight: 1 },
+  { title: 'Pumpkin Pasta', ingredient: 'pumpkin', vibe: 'indoor', weight: 5 },
 ];
 
 // ---------------------------------------------------------------------------
-// Sweet recipes
+// Extra recipes (sweet + non-meal)
 //
-// Every seasonal fruit needs at least one recipe with vibe 'any'.
+// Every seasonal fruit needs at least one recipe with vibe 'any', plus optional
+// pantry picks for condiments and prep items.
 // ---------------------------------------------------------------------------
 
-export const SWEET_RECIPES: Recipe[] = [
+export const EXTRA_RECIPES: Recipe[] = [
   // Apple
   { title: 'Apple Crumble', ingredient: 'apple', vibe: 'indoor', weight: 1 },
   { title: 'Simple Apple Cake', ingredient: 'apple', vibe: 'any', weight: 1 },
@@ -289,4 +324,9 @@ export const SWEET_RECIPES: Recipe[] = [
   { title: 'Grape Focaccia', ingredient: 'grape', vibe: 'any', weight: 1 },
   { title: 'Roasted Grapes with Walnut Cake', ingredient: 'grape', vibe: 'any', weight: 1 },
   { title: 'Grape and Almond Tart', ingredient: 'grape', vibe: 'indoor', weight: 1 },
+
+  // Pantry
+  { title: 'Caju Fresco', ingredient: 'pantry', vibe: 'outdoor', weight: 5 },
+  { title: 'Cashew Parmigiano', ingredient: 'pantry', vibe: 'any', weight: 5 },
+  { title: 'Spice Blend', ingredient: 'pantry', vibe: 'any', weight: 5 },
 ];

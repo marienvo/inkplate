@@ -1,10 +1,10 @@
 import { expect, test } from 'vitest';
 import { getWeekendFoodPlan } from './food';
 import type { DaySnapshot } from './weekend';
-import { SAVORY_RECIPES, SWEET_RECIPES } from '../config/foodRules';
+import { EXTRA_RECIPES, SAVORY_RECIPES } from '../config/foodRules';
 
 const SAVORY_TITLES = new Set(SAVORY_RECIPES.map((r) => r.title));
-const SWEET_TITLES = new Set(SWEET_RECIPES.map((r) => r.title));
+const EXTRA_TITLES = new Set(EXTRA_RECIPES.map((r) => r.title));
 
 function makeDay(overrides: Partial<DaySnapshot> = {}): DaySnapshot {
   return {
@@ -29,7 +29,7 @@ test('returns deterministic output for the same date and weather', () => {
   expect(second).toEqual(first);
 });
 
-test('always produces a known recipe title for savory and sweet', () => {
+test('always produces a known recipe title for savory and extra', () => {
   const dates = [
     ['2026-01-10', '2026-01-11'],
     ['2026-04-18', '2026-04-19'],
@@ -41,7 +41,7 @@ test('always produces a known recipe title for savory and sweet', () => {
     const plan = getWeekendFoodPlan(new Date(d1), makeDay(), new Date(d2), makeDay());
 
     expect(SAVORY_TITLES.has(plan.savory)).toBe(true);
-    expect(SWEET_TITLES.has(plan.sweet)).toBe(true);
+    expect(EXTRA_TITLES.has(plan.sweet)).toBe(true);
   }
 });
 
@@ -57,7 +57,7 @@ test('does not produce outdoor-only recipes in bad weather', () => {
   );
 
   const outdoorOnly = new Set(
-    [...SAVORY_RECIPES, ...SWEET_RECIPES].filter((r) => r.vibe === 'outdoor').map((r) => r.title),
+    [...SAVORY_RECIPES, ...EXTRA_RECIPES].filter((r) => r.vibe === 'outdoor').map((r) => r.title),
   );
 
   expect(outdoorOnly.has(plan.savory)).toBe(false);
