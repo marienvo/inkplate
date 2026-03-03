@@ -2,7 +2,13 @@ import { expect, test } from 'vitest';
 import { getWeekendFoodPlan, seasonalForDate } from './food';
 import type { DaySnapshot } from './weekend';
 import type { Month } from '../config/foodRules';
-import { ALL_MONTHS, EXTRA_RECIPES, SAVORY_RECIPES } from '../config/foodRules';
+import {
+  ALL_MONTHS,
+  EXTRA_RECIPES,
+  SAVORY_RECIPES,
+  SEASONAL_NL,
+  SEASONAL_NL_FRUIT,
+} from '../config/foodRules';
 import { renderFoodHint } from './foodHintIcon';
 
 const SAVORY_TITLES = new Set(SAVORY_RECIPES.map((r) => r.title));
@@ -17,6 +23,10 @@ function makeDay(overrides: Partial<DaySnapshot> = {}): DaySnapshot {
     zicht: 22000,
     ...overrides,
   };
+}
+
+function monthsCover(availableMonths: Month[], requiredMonths: Month[]): boolean {
+  return requiredMonths.every((month) => availableMonths.includes(month));
 }
 
 test('returns deterministic output for the same date and weather', () => {
@@ -118,4 +128,23 @@ test('seasonalForDate filters recipes by month', () => {
   const julResults = seasonalForDate([janOnly, allYear], julDate);
   expect(julResults).toHaveLength(1);
   expect(julResults[0]).toEqual(allYear);
+});
+
+test('every seasonal ingredient has an any-vibe recipe that covers its full season', () => {
+  const anyRecipes = [...SAVORY_RECIPES, ...EXTRA_RECIPES].filter(
+    (recipe) => recipe.vibe === 'any',
+  );
+  const anyRecipesByIngredient = new Map<string, typeof anyRecipes>();
+
+  for (const recipe of anyRecipes) {
+    const existing = anyRecipesByIngredient.get(recipe.ingredient) ?? [];
+    existing.push(recipe);
+    anyRecipesByIngredient.set(recipe.ingredient, existing);
+  }
+
+  for (const produce of [...SEASONAL_NL, ...SEASONAL_NL_FRUIT]) {
+    const matches = anyRecipesByIngredient.get(produce.key) ?? [];
+    expect(matches.length).toBeGreaterThan(0);
+    expect(matches.some((recipe) => monthsCover(recipe.months, produce.months))).toBe(true);
+  }
 });

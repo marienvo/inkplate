@@ -25,6 +25,9 @@ export type Recipe = {
 };
 
 export const ALL_MONTHS: Month[] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+export const COLD_MONTHS: Month[] = [1, 2, 3, 10, 11, 12];
+export const COOL_MONTHS: Month[] = [1, 2, 3, 4, 9, 10, 11, 12];
+export const WARM_MONTHS: Month[] = [4, 5, 6, 7, 8, 9];
 
 // ---------------------------------------------------------------------------
 // Seasonal produce
@@ -129,21 +132,21 @@ export const SAVORY_RECIPES: Recipe[] = [
     ingredient: 'leek',
     vibe: 'cozy',
     weight: 1,
-    months: ALL_MONTHS,
+    months: [1, 2, 3, 10, 11, 12],
   },
   {
     title: 'Braised Leeks with White Beans and Lemon',
     ingredient: 'leek',
     vibe: 'cozy',
     weight: 1,
-    months: ALL_MONTHS,
+    months: [1, 2, 3, 10, 11, 12],
   },
   {
     title: 'Creamy Leek Pasta with Nutritional Yeast',
     ingredient: 'leek',
     vibe: 'any',
     weight: 1,
-    months: ALL_MONTHS,
+    months: [1, 2, 3, 10, 11, 12],
   },
 
   // Kale
@@ -152,21 +155,21 @@ export const SAVORY_RECIPES: Recipe[] = [
     ingredient: 'kale',
     vibe: 'any',
     weight: 1,
-    months: ALL_MONTHS,
+    months: [1, 2, 3, 11, 12],
   },
   {
     title: 'Kale Walnut Pesto Pasta',
     ingredient: 'kale',
     vibe: 'any',
     weight: 1,
-    months: ALL_MONTHS,
+    months: [1, 2, 3, 11, 12],
   },
   {
     title: 'Crispy Roasted Kale with Potatoes',
     ingredient: 'kale',
     vibe: 'any',
     weight: 1,
-    months: ALL_MONTHS,
+    months: [1, 2, 3, 11, 12],
   },
 
   // Sprouts
@@ -175,21 +178,21 @@ export const SAVORY_RECIPES: Recipe[] = [
     ingredient: 'sprouts',
     vibe: 'any',
     weight: 1,
-    months: ALL_MONTHS,
+    months: [1, 2, 3, 11, 12],
   },
   {
     title: 'Sprouts and Chestnut Stir-Fry',
     ingredient: 'sprouts',
     vibe: 'hearty',
     weight: 1,
-    months: ALL_MONTHS,
+    months: [1, 2, 3, 11, 12],
   },
   {
     title: 'Crispy Sprouts with Mustard Potatoes',
     ingredient: 'sprouts',
     vibe: 'any',
     weight: 1,
-    months: ALL_MONTHS,
+    months: [1, 2, 3, 11, 12],
   },
 
   // Cabbage
@@ -198,35 +201,35 @@ export const SAVORY_RECIPES: Recipe[] = [
     ingredient: 'cabbage',
     vibe: 'cozy',
     weight: 1,
-    months: ALL_MONTHS,
+    months: [1, 2, 3, 10, 11, 12],
   },
   {
     title: 'Cabbage and Potato Colcannon',
     ingredient: 'cabbage',
     vibe: 'hearty',
     weight: 1,
-    months: ALL_MONTHS,
+    months: [1, 2, 3, 10, 11, 12],
   },
   {
     title: 'Roasted Cabbage Steaks with Tahini',
     ingredient: 'cabbage',
     vibe: 'any',
     weight: 1,
-    months: ALL_MONTHS,
+    months: [1, 2, 3, 10, 11, 12],
   },
   {
     title: 'Warm Cabbage and Potato Skillet',
     ingredient: 'cabbage',
     vibe: 'fresh',
     weight: 5,
-    months: ALL_MONTHS,
+    months: [1, 2, 3, 10, 11, 12],
   },
   {
     title: 'Pasta con Crema di Verza',
     ingredient: 'cabbage',
     vibe: 'hearty',
     weight: 5,
-    months: ALL_MONTHS,
+    months: [1, 2, 3, 10, 11, 12],
   },
 
   // Pointed Cabbage
@@ -251,21 +254,21 @@ export const SAVORY_RECIPES: Recipe[] = [
     ingredient: 'carrot',
     vibe: 'any',
     weight: 1,
-    months: ALL_MONTHS,
+    months: [1, 2, 3, 4, 10, 11, 12],
   },
   {
     title: 'Carrot and Lentil Stew',
     ingredient: 'carrot',
     vibe: 'cozy',
     weight: 1,
-    months: ALL_MONTHS,
+    months: COLD_MONTHS,
   },
   {
     title: 'Carrot and Thyme Lentil Traybake',
     ingredient: 'carrot',
     vibe: 'any',
     weight: 1,
-    months: ALL_MONTHS,
+    months: [1, 2, 3, 4, 10, 11, 12],
   },
 
   // Parsnip
@@ -274,21 +277,21 @@ export const SAVORY_RECIPES: Recipe[] = [
     ingredient: 'parsnip',
     vibe: 'any',
     weight: 1,
-    months: ALL_MONTHS,
+    months: [1, 2, 3, 10, 11, 12],
   },
   {
     title: 'Parsnip and Apple Soup',
     ingredient: 'parsnip',
     vibe: 'cozy',
     weight: 1,
-    months: ALL_MONTHS,
+    months: [1, 2, 3, 10, 11, 12],
   },
   {
     title: 'Parsnip and Potato Mash Gratin',
     ingredient: 'parsnip',
     vibe: 'cozy',
     weight: 1,
-    months: ALL_MONTHS,
+    months: [1, 2, 3, 10, 11, 12],
   },
 
   // Celeriac
@@ -297,21 +300,21 @@ export const SAVORY_RECIPES: Recipe[] = [
     ingredient: 'celeriac',
     vibe: 'cozy',
     weight: 1,
-    months: ALL_MONTHS,
+    months: [1, 2, 3, 10, 11, 12],
   },
   {
     title: 'Roasted Celeriac with Lentils and Walnut Pesto',
     ingredient: 'celeriac',
     vibe: 'any',
     weight: 1,
-    months: ALL_MONTHS,
+    months: [1, 2, 3, 10, 11, 12],
   },
   {
     title: 'Celeriac and Lentil Mustard Bowl',
     ingredient: 'celeriac',
     vibe: 'any',
     weight: 1,
-    months: ALL_MONTHS,
+    months: [1, 2, 3, 10, 11, 12],
   },
 
   // Beet
@@ -320,25 +323,25 @@ export const SAVORY_RECIPES: Recipe[] = [
     ingredient: 'beet',
     vibe: 'any',
     weight: 1,
-    months: ALL_MONTHS,
+    months: [1, 2, 3, 9, 10, 11, 12],
   },
   {
     title: 'Beet and White Bean Stew',
     ingredient: 'beet',
     vibe: 'cozy',
     weight: 1,
-    months: ALL_MONTHS,
+    months: COLD_MONTHS,
   },
   {
     title: 'Beet and Walnut Flatbread with Chickpeas',
     ingredient: 'beet',
     vibe: 'any',
     weight: 1,
-    months: ALL_MONTHS,
+    months: [1, 2, 3, 9, 10, 11, 12],
   },
 
   // Onion
-  { title: 'French Onion Soup', ingredient: 'onion', vibe: 'cozy', weight: 1, months: ALL_MONTHS },
+  { title: 'French Onion Soup', ingredient: 'onion', vibe: 'cozy', weight: 1, months: COLD_MONTHS },
   {
     title: 'Caramelized Onion Tart',
     ingredient: 'onion',
@@ -353,7 +356,7 @@ export const SAVORY_RECIPES: Recipe[] = [
     weight: 1,
     months: ALL_MONTHS,
   },
-  { title: 'Pasta e Ceci', ingredient: 'onion', vibe: 'hearty', weight: 5, months: ALL_MONTHS },
+  { title: 'Pasta e Ceci', ingredient: 'onion', vibe: 'hearty', weight: 5, months: COOL_MONTHS },
   {
     title: 'Sedanini Carbonara',
     ingredient: 'onion',
@@ -391,7 +394,7 @@ export const SAVORY_RECIPES: Recipe[] = [
     ingredient: 'potato',
     vibe: 'cozy',
     weight: 1,
-    months: ALL_MONTHS,
+    months: COLD_MONTHS,
   },
   {
     title: 'Spanish Tortilla with Potato and Onion',
@@ -405,7 +408,7 @@ export const SAVORY_RECIPES: Recipe[] = [
     ingredient: 'potato',
     vibe: 'hearty',
     weight: 3,
-    months: ALL_MONTHS,
+    months: COLD_MONTHS,
   },
 
   // Spinach
@@ -421,16 +424,16 @@ export const SAVORY_RECIPES: Recipe[] = [
     ingredient: 'spinach',
     vibe: 'cozy',
     weight: 1,
-    months: ALL_MONTHS,
+    months: COLD_MONTHS,
   },
   {
     title: 'Savory Spinach Pie',
     ingredient: 'spinach',
     vibe: 'cozy',
     weight: 1,
-    months: ALL_MONTHS,
+    months: COLD_MONTHS,
   },
-  { title: 'Almkase Pasta', ingredient: 'spinach', vibe: 'any', weight: 5, months: ALL_MONTHS },
+  { title: 'Almkase Pasta', ingredient: 'spinach', vibe: 'hearty', weight: 5, months: COLD_MONTHS },
   {
     title: 'Linguine Spinaci e Ricotta',
     ingredient: 'spinach',
@@ -443,14 +446,14 @@ export const SAVORY_RECIPES: Recipe[] = [
     ingredient: 'spinach',
     vibe: 'any',
     weight: 5,
-    months: ALL_MONTHS,
+    months: COOL_MONTHS,
   },
   {
     title: 'Rigatoni al Pesto di Avocado',
     ingredient: 'spinach',
     vibe: 'any',
     weight: 5,
-    months: ALL_MONTHS,
+    months: WARM_MONTHS,
   },
 
   // Endive
@@ -459,28 +462,28 @@ export const SAVORY_RECIPES: Recipe[] = [
     ingredient: 'endive',
     vibe: 'hearty',
     weight: 1,
-    months: ALL_MONTHS,
+    months: [4, 5, 6, 9, 10],
   },
   {
     title: 'Endive and Walnut Pasta',
     ingredient: 'endive',
     vibe: 'any',
     weight: 1,
-    months: ALL_MONTHS,
+    months: [4, 5, 6, 9, 10],
   },
   {
     title: 'Gratin of Endive with Béchamel',
     ingredient: 'endive',
     vibe: 'cozy',
     weight: 1,
-    months: ALL_MONTHS,
+    months: [4, 5, 6, 9, 10],
   },
   {
     title: 'Endive and Potato Mash',
     ingredient: 'endive',
     vibe: 'hearty',
     weight: 5,
-    months: ALL_MONTHS,
+    months: [4, 5, 6, 9, 10],
   },
 
   // Chicory
@@ -489,21 +492,21 @@ export const SAVORY_RECIPES: Recipe[] = [
     ingredient: 'chicory',
     vibe: 'any',
     weight: 1,
-    months: ALL_MONTHS,
+    months: [1, 2, 3, 10, 11, 12],
   },
   {
     title: 'Chicory and Potato Gratin',
     ingredient: 'chicory',
     vibe: 'cozy',
     weight: 1,
-    months: ALL_MONTHS,
+    months: [1, 2, 3, 10, 11, 12],
   },
   {
     title: 'Braised Chicory with White Beans and Polenta',
     ingredient: 'chicory',
     vibe: 'hearty',
     weight: 1,
-    months: ALL_MONTHS,
+    months: [1, 2, 3, 10, 11, 12],
   },
 
   // Asparagus
@@ -512,21 +515,21 @@ export const SAVORY_RECIPES: Recipe[] = [
     ingredient: 'asparagus',
     vibe: 'any',
     weight: 1,
-    months: ALL_MONTHS,
+    months: [4, 5, 6],
   },
   {
     title: 'Roasted Asparagus with Lemon Orzo and Peas',
     ingredient: 'asparagus',
     vibe: 'any',
     weight: 1,
-    months: ALL_MONTHS,
+    months: [4, 5, 6],
   },
   {
     title: 'Asparagus and Pea Pasta',
     ingredient: 'asparagus',
     vibe: 'any',
     weight: 1,
-    months: ALL_MONTHS,
+    months: [4, 5, 6],
   },
 
   // Cauliflower
@@ -535,21 +538,21 @@ export const SAVORY_RECIPES: Recipe[] = [
     ingredient: 'cauliflower',
     vibe: 'any',
     weight: 1,
-    months: ALL_MONTHS,
+    months: [4, 5, 6, 7, 8, 9, 10],
   },
   {
     title: 'Cauliflower and Potato Curry',
     ingredient: 'cauliflower',
     vibe: 'hearty',
     weight: 1,
-    months: ALL_MONTHS,
+    months: [4, 5, 6, 9, 10],
   },
   {
     title: 'Cauliflower Cheese Bake',
     ingredient: 'cauliflower',
     vibe: 'cozy',
     weight: 1,
-    months: ALL_MONTHS,
+    months: [4, 5, 9, 10],
   },
 
   // Broccoli
@@ -572,11 +575,17 @@ export const SAVORY_RECIPES: Recipe[] = [
     ingredient: 'broccoli',
     vibe: 'cozy',
     weight: 1,
-    months: ALL_MONTHS,
+    months: COLD_MONTHS,
   },
 
   // Peas
-  { title: 'Pea and Mint Risotto', ingredient: 'peas', vibe: 'any', weight: 1, months: ALL_MONTHS },
+  {
+    title: 'Pea and Mint Risotto',
+    ingredient: 'peas',
+    vibe: 'any',
+    weight: 1,
+    months: [3, 4, 5, 6, 7],
+  },
   {
     title: 'Pea and Potato Samosa Bake',
     ingredient: 'peas',
@@ -589,7 +598,7 @@ export const SAVORY_RECIPES: Recipe[] = [
     ingredient: 'peas',
     vibe: 'any',
     weight: 1,
-    months: ALL_MONTHS,
+    months: [3, 4, 5, 6],
   },
   { title: 'Pasta Piselli Porri', ingredient: 'peas', vibe: 'any', weight: 5, months: ALL_MONTHS },
 
@@ -599,35 +608,35 @@ export const SAVORY_RECIPES: Recipe[] = [
     ingredient: 'greenBeans',
     vibe: 'any',
     weight: 1,
-    months: ALL_MONTHS,
+    months: [6, 7, 8, 9],
   },
   {
     title: 'Braised Green Beans with Tomato and Butter Beans',
     ingredient: 'greenBeans',
     vibe: 'any',
     weight: 1,
-    months: ALL_MONTHS,
+    months: [6, 7, 8, 9],
   },
   {
     title: 'Green Bean and Coconut Stir-Fry',
     ingredient: 'greenBeans',
     vibe: 'hearty',
     weight: 1,
-    months: ALL_MONTHS,
+    months: [6, 7, 8, 9],
   },
   {
     title: 'Green Bean Peanut Pasta',
     ingredient: 'greenBeans',
     vibe: 'any',
     weight: 5,
-    months: ALL_MONTHS,
+    months: [6, 7, 8, 9],
   },
   {
     title: 'Trofie al Pesto',
     ingredient: 'greenBeans',
     vibe: 'any',
     weight: 5,
-    months: ALL_MONTHS,
+    months: [6, 7, 8, 9],
   },
 
   // Zucchini
@@ -636,28 +645,28 @@ export const SAVORY_RECIPES: Recipe[] = [
     ingredient: 'zucchini',
     vibe: 'any',
     weight: 1,
-    months: ALL_MONTHS,
+    months: [6, 7, 8, 9],
   },
   {
     title: 'Stuffed Zucchini Boats',
     ingredient: 'zucchini',
     vibe: 'any',
     weight: 1,
-    months: ALL_MONTHS,
+    months: [6, 7, 8, 9],
   },
   {
     title: 'Zucchini and Chickpea Rice Bowl',
     ingredient: 'zucchini',
     vibe: 'any',
     weight: 1,
-    months: ALL_MONTHS,
+    months: [6, 7, 8, 9],
   },
   {
     title: 'Radiatori da Philadelphia',
     ingredient: 'zucchini',
     vibe: 'any',
     weight: 5,
-    months: ALL_MONTHS,
+    months: [6, 7, 8, 9],
   },
 
   // Tomato
@@ -666,63 +675,63 @@ export const SAVORY_RECIPES: Recipe[] = [
     ingredient: 'tomato',
     vibe: 'any',
     weight: 1,
-    months: ALL_MONTHS,
+    months: [5, 6, 7, 8, 9, 10],
   },
   {
     title: 'Tomato and Lentil Stew',
     ingredient: 'tomato',
     vibe: 'cozy',
     weight: 1,
-    months: ALL_MONTHS,
+    months: [9, 10],
   },
   {
     title: 'Tomato and Zucchini Traybake with Chickpeas and Orzo',
     ingredient: 'tomato',
     vibe: 'fresh',
     weight: 1,
-    months: ALL_MONTHS,
+    months: [6, 7, 8, 9],
   },
   {
     title: 'Paccheri al Pomodoro',
     ingredient: 'tomato',
     vibe: 'any',
     weight: 5,
-    months: ALL_MONTHS,
+    months: [5, 6, 7, 8, 9, 10],
   },
   {
     title: 'Paccheri al Pomodoro e Fontina',
     ingredient: 'tomato',
     vibe: 'any',
     weight: 5,
-    months: ALL_MONTHS,
+    months: [5, 6, 7, 8, 9, 10],
   },
   {
     title: 'Fusilli Pollo Vegano',
     ingredient: 'tomato',
     vibe: 'any',
     weight: 5,
-    months: ALL_MONTHS,
+    months: [5, 6, 7, 8, 9, 10],
   },
   {
     title: "Penne all'Arrabbiata",
     ingredient: 'tomato',
     vibe: 'any',
     weight: 5,
-    months: ALL_MONTHS,
+    months: [5, 6, 7, 8, 9, 10],
   },
   {
     title: 'Piatto di Pollo Messicano',
     ingredient: 'tomato',
     vibe: 'hearty',
     weight: 5,
-    months: ALL_MONTHS,
+    months: [5, 6, 7, 8, 9, 10],
   },
   {
     title: 'Ragu di Lenticchie',
     ingredient: 'tomato',
     vibe: 'cozy',
     weight: 5,
-    months: ALL_MONTHS,
+    months: [9, 10],
   },
 
   // Bell Pepper
@@ -754,7 +763,7 @@ export const SAVORY_RECIPES: Recipe[] = [
     ingredient: 'radish',
     vibe: 'fresh',
     weight: 1,
-    months: ALL_MONTHS,
+    months: [5, 6, 7, 8, 9],
   },
 
   // Bok Choy
@@ -779,21 +788,21 @@ export const SAVORY_RECIPES: Recipe[] = [
     ingredient: 'cucumber',
     vibe: 'fresh',
     weight: 1,
-    months: ALL_MONTHS,
+    months: [7, 8, 9],
   },
   {
     title: 'Cucumber and Chickpea Bowl',
     ingredient: 'cucumber',
     vibe: 'any',
     weight: 1,
-    months: ALL_MONTHS,
+    months: [7, 8, 9],
   },
   {
     title: 'Smashed Cucumber Sesame Noodle Bowl',
     ingredient: 'cucumber',
     vibe: 'any',
     weight: 1,
-    months: ALL_MONTHS,
+    months: [7, 8, 9],
   },
 
   // Eggplant
@@ -802,21 +811,21 @@ export const SAVORY_RECIPES: Recipe[] = [
     ingredient: 'eggplant',
     vibe: 'any',
     weight: 1,
-    months: ALL_MONTHS,
+    months: [7, 8, 9],
   },
   {
     title: 'Eggplant and Chickpea Stew',
     ingredient: 'eggplant',
     vibe: 'cozy',
     weight: 1,
-    months: ALL_MONTHS,
+    months: [7, 8, 9],
   },
   {
     title: 'Stuffed Eggplant with Couscous',
     ingredient: 'eggplant',
     vibe: 'any',
     weight: 1,
-    months: ALL_MONTHS,
+    months: [7, 8, 9],
   },
 
   // Pumpkin
@@ -825,23 +834,23 @@ export const SAVORY_RECIPES: Recipe[] = [
     ingredient: 'pumpkin',
     vibe: 'any',
     weight: 1,
-    months: ALL_MONTHS,
+    months: [9, 10, 11],
   },
   {
     title: 'Pumpkin and White Bean Stew',
     ingredient: 'pumpkin',
     vibe: 'cozy',
     weight: 1,
-    months: ALL_MONTHS,
+    months: [9, 10, 11],
   },
   {
     title: 'Creamy Pumpkin Pasta',
     ingredient: 'pumpkin',
     vibe: 'hearty',
     weight: 1,
-    months: ALL_MONTHS,
+    months: [9, 10, 11],
   },
-  { title: 'Pumpkin Pasta', ingredient: 'pumpkin', vibe: 'hearty', weight: 5, months: ALL_MONTHS },
+  { title: 'Pumpkin Pasta', ingredient: 'pumpkin', vibe: 'hearty', weight: 5, months: [9, 10, 11] },
 ];
 
 // ---------------------------------------------------------------------------
@@ -853,36 +862,66 @@ export const SAVORY_RECIPES: Recipe[] = [
 
 export const EXTRA_RECIPES: Recipe[] = [
   // Apple
-  { title: 'Apple Crumble', ingredient: 'apple', vibe: 'cozy', weight: 1, months: ALL_MONTHS },
-  { title: 'Simple Apple Cake', ingredient: 'apple', vibe: 'any', weight: 1, months: ALL_MONTHS },
+  {
+    title: 'Apple Crumble',
+    ingredient: 'apple',
+    vibe: 'cozy',
+    weight: 1,
+    months: [1, 2, 3, 10, 11, 12],
+  },
+  {
+    title: 'Simple Apple Cake',
+    ingredient: 'apple',
+    vibe: 'any',
+    weight: 1,
+    months: [9, 10, 11, 12, 1, 2, 3, 4],
+  },
   {
     title: 'Baked Apples with Oats',
     ingredient: 'apple',
     vibe: 'cozy',
     weight: 1,
-    months: ALL_MONTHS,
+    months: [1, 2, 3, 10, 11, 12],
   },
 
   // Pear
-  { title: 'Pear Almond Cake', ingredient: 'pear', vibe: 'any', weight: 1, months: ALL_MONTHS },
-  { title: 'Poached Pears', ingredient: 'pear', vibe: 'cozy', weight: 1, months: ALL_MONTHS },
-  { title: 'Pear Crumble', ingredient: 'pear', vibe: 'cozy', weight: 1, months: ALL_MONTHS },
+  {
+    title: 'Pear Almond Cake',
+    ingredient: 'pear',
+    vibe: 'any',
+    weight: 1,
+    months: [9, 10, 11, 12, 1, 2, 3],
+  },
+  {
+    title: 'Poached Pears',
+    ingredient: 'pear',
+    vibe: 'cozy',
+    weight: 1,
+    months: [1, 2, 3, 10, 11, 12],
+  },
+  {
+    title: 'Pear Crumble',
+    ingredient: 'pear',
+    vibe: 'cozy',
+    weight: 1,
+    months: [1, 2, 3, 10, 11, 12],
+  },
 
   // Rhubarb
-  { title: 'Rhubarb Crumble', ingredient: 'rhubarb', vibe: 'cozy', weight: 1, months: ALL_MONTHS },
+  { title: 'Rhubarb Crumble', ingredient: 'rhubarb', vibe: 'cozy', weight: 1, months: [4, 5, 6] },
   {
     title: 'Rhubarb and Custard Cake',
     ingredient: 'rhubarb',
     vibe: 'any',
     weight: 1,
-    months: ALL_MONTHS,
+    months: [4, 5, 6],
   },
   {
     title: 'Rhubarb Compote with Yogurt',
     ingredient: 'rhubarb',
     vibe: 'any',
     weight: 1,
-    months: ALL_MONTHS,
+    months: [4, 5, 6],
   },
 
   // Strawberry
@@ -891,43 +930,43 @@ export const EXTRA_RECIPES: Recipe[] = [
     ingredient: 'strawberry',
     vibe: 'any',
     weight: 1,
-    months: ALL_MONTHS,
+    months: [5, 6, 7],
   },
   {
     title: 'Strawberry Oat Bars',
     ingredient: 'strawberry',
     vibe: 'any',
     weight: 1,
-    months: ALL_MONTHS,
+    months: [5, 6, 7],
   },
   {
     title: 'Strawberry Fool',
     ingredient: 'strawberry',
     vibe: 'fresh',
     weight: 1,
-    months: ALL_MONTHS,
+    months: [5, 6, 7],
   },
 
   // Cherry
-  { title: 'Cherry Clafoutis', ingredient: 'cherry', vibe: 'any', weight: 1, months: ALL_MONTHS },
-  { title: 'Cherry Almond Cake', ingredient: 'cherry', vibe: 'any', weight: 1, months: ALL_MONTHS },
+  { title: 'Cherry Clafoutis', ingredient: 'cherry', vibe: 'any', weight: 1, months: [6, 7] },
+  { title: 'Cherry Almond Cake', ingredient: 'cherry', vibe: 'any', weight: 1, months: [6, 7] },
   {
     title: 'Cherry Compote with Vanilla',
     ingredient: 'cherry',
     vibe: 'cozy',
     weight: 1,
-    months: ALL_MONTHS,
+    months: [6, 7],
   },
 
   // Plum
-  { title: 'Plum Crumble', ingredient: 'plum', vibe: 'cozy', weight: 1, months: ALL_MONTHS },
-  { title: 'Plum and Almond Tart', ingredient: 'plum', vibe: 'any', weight: 1, months: ALL_MONTHS },
+  { title: 'Plum Crumble', ingredient: 'plum', vibe: 'cozy', weight: 1, months: [7, 8, 9] },
+  { title: 'Plum and Almond Tart', ingredient: 'plum', vibe: 'any', weight: 1, months: [7, 8, 9] },
   {
     title: 'Roasted Plums with Cinnamon',
     ingredient: 'plum',
     vibe: 'any',
     weight: 1,
-    months: ALL_MONTHS,
+    months: [7, 8, 9],
   },
 
   // Blueberry
@@ -936,21 +975,21 @@ export const EXTRA_RECIPES: Recipe[] = [
     ingredient: 'blueberry',
     vibe: 'any',
     weight: 1,
-    months: ALL_MONTHS,
+    months: [7, 8],
   },
   {
     title: 'Blueberry Lemon Cake',
     ingredient: 'blueberry',
     vibe: 'any',
     weight: 1,
-    months: ALL_MONTHS,
+    months: [7, 8],
   },
   {
     title: 'Blueberry Oat Crumble',
     ingredient: 'blueberry',
     vibe: 'cozy',
     weight: 1,
-    months: ALL_MONTHS,
+    months: [7, 8],
   },
 
   // Blackberry
@@ -959,42 +998,42 @@ export const EXTRA_RECIPES: Recipe[] = [
     ingredient: 'blackberry',
     vibe: 'cozy',
     weight: 1,
-    months: ALL_MONTHS,
+    months: [8, 9],
   },
   {
     title: 'Blackberry Fool',
     ingredient: 'blackberry',
     vibe: 'any',
     weight: 1,
-    months: ALL_MONTHS,
+    months: [8, 9],
   },
   {
     title: 'Blackberry Oat Bars',
     ingredient: 'blackberry',
     vibe: 'any',
     weight: 1,
-    months: ALL_MONTHS,
+    months: [8, 9],
   },
 
   // Grape
-  { title: 'Grape Focaccia', ingredient: 'grape', vibe: 'any', weight: 1, months: ALL_MONTHS },
+  { title: 'Grape Focaccia', ingredient: 'grape', vibe: 'any', weight: 1, months: [9, 10] },
   {
     title: 'Roasted Grapes with Walnut Cake',
     ingredient: 'grape',
     vibe: 'any',
     weight: 1,
-    months: ALL_MONTHS,
+    months: [9, 10],
   },
   {
     title: 'Grape and Almond Tart',
     ingredient: 'grape',
     vibe: 'cozy',
     weight: 1,
-    months: ALL_MONTHS,
+    months: [9, 10],
   },
 
   // Pantry
-  { title: 'Caju Fresco', ingredient: 'pantry', vibe: 'fresh', weight: 5, months: ALL_MONTHS },
+  { title: 'Caju Fresco', ingredient: 'pantry', vibe: 'fresh', weight: 5, months: WARM_MONTHS },
   { title: 'Cashew Parmigiano', ingredient: 'pantry', vibe: 'any', weight: 5, months: ALL_MONTHS },
   { title: 'Spice Blend', ingredient: 'pantry', vibe: 'any', weight: 5, months: ALL_MONTHS },
 ];
