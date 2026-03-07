@@ -158,7 +158,7 @@ export const SAVORY_RECIPES: Recipe[] = [
   },
 
   // Peas
-  { title: 'Pasta Piselli Porri', ingredient: 'peas', vibe: 'any', weight: 5, months: ALL_MONTHS },
+  { title: 'Pasta e Piselli', ingredient: 'peas', vibe: 'any', weight: 5, months: ALL_MONTHS },
 
   // Green Beans
   {
