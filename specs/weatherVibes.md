@@ -18,18 +18,20 @@ Use only these values for `Recipe.vibe` and `WeatherVibe`:
 - `cozy`
 - `hearty`
 - `fresh`
+- `lightWarm`
 - `any`
 
 Do not introduce synonyms (for example `indoor`, `outdoor`, `comfort`, `light`).
 
 ## Vibe Semantics
 
-| Vibe     | Weather profile               | Cooking character                                      | Typical examples                                        |
-| -------- | ----------------------------- | ------------------------------------------------------ | ------------------------------------------------------- |
-| `cozy`   | Heavy rain, storm, cold + wet | Slow, aromatic, warming; good for homey cooking smells | soups, stews, gratins, pies, crumbles                   |
-| `hearty` | Cool/windy/wet middle ground  | Solid, warming, moderate effort everyday meals         | pasta, curries, braises, mash, stir-fries               |
-| `fresh`  | Dry, mild/warm, low wind      | Fast, easy, fresh prep; minimal kitchen heat/time      | salads, chilled dishes, light traybakes, assembly meals |
-| `any`    | All weather                   | Works year-round and across weather states             | baseline versatile dishes                               |
+| Vibe        | Weather profile                 | Cooking character                                        | Typical examples                                   |
+| ----------- | ------------------------------- | -------------------------------------------------------- | -------------------------------------------------- |
+| `cozy`      | Heavy rain, storm, cold + wet   | Slow, aromatic, warming; good for homey cooking smells   | soups, stews, gratins, pies, crumbles              |
+| `hearty`    | Cool/windy/wet middle ground    | Solid, warming, moderate effort everyday meals           | pasta, curries, braises, mash, stir-fries          |
+| `fresh`     | Dry, mild, low wind             | Fast, easy, fresh prep; light kitchen heat/time          | salads, citrus-forward pastas, light traybakes     |
+| `lightWarm` | Dry, hot (22+ feels-like), calm | Minimal heat, assembly-first, quick low-friction cooking | cold noodles, wraps, no-cook bowls, chilled dishes |
+| `any`       | All weather                     | Works year-round and across weather states               | baseline versatile dishes                          |
 
 ## Weather-to-Vibe Mapping
 
@@ -42,19 +44,22 @@ Do not introduce synonyms (for example `indoor`, `outdoor`, `comfort`, `light`).
    - `rainChance >= 55 && windbft >= 7`, or
    - `windbft >= 7 && feelsLike <= 5`, or
    - `rainChance >= 55 && feelsLike <= 5`
-2. Return `fresh` when weather is genuinely pleasant:
+2. Return `lightWarm` when weather is hot and pleasant:
+   - `rainChance < 40 && feelsLike >= 22 && windbft <= 5`
+3. Return `fresh` when weather is genuinely pleasant but not hot:
    - `rainChance < 40 && feelsLike >= 12 && windbft <= 5`
-3. Return `hearty` for all remaining conditions.
+4. Return `hearty` for all remaining conditions.
 
 ## Recipe Tagging Rules
 
 When adding or modifying recipes:
 
-1. Pick exactly one vibe from `cozy | hearty | fresh | any`.
+1. Pick exactly one vibe from `cozy | hearty | fresh | lightWarm | any`.
 2. Use `cozy` for long, aromatic, comfort-style dishes.
 3. Use `hearty` for warming but practical everyday meals that fit mixed weather.
-4. Use `fresh` for quick, light, low-friction cooking suitable for nice weather.
-5. Use `any` only when the recipe truly works in all weather contexts.
+4. Use `fresh` for quick, light, low-friction cooking in mild pleasant weather.
+5. Use `lightWarm` for hot-day meals where minimal kitchen heat is preferred.
+6. Use `any` only when the recipe truly works in all weather contexts.
 
 ## Required Invariants
 
@@ -65,8 +70,8 @@ These invariants must remain true:
 3. Recipe selection must use vibe multipliers (not hard match-only filtering):
    - exact vibe match uses `1.0`
    - `any` uses `0.65`
-   - adjacent vibes (`cozy` <-> `hearty`, `hearty` <-> `fresh`) use `0.8`
-   - opposite vibes (`cozy` <-> `fresh`) use `0.0`
+   - adjacent vibes (`cozy` <-> `hearty`, `hearty` <-> `fresh`, `fresh` <-> `lightWarm`) use `0.8`
+   - opposite vibes (distance >= 2; e.g. `cozy` <-> `fresh`, `cozy` <-> `lightWarm`, `hearty` <-> `lightWarm`) use `0.0`
 4. New vibe values must be reflected in tests (`src/lib/food.test.ts`).
 
 ## Selection Balancing

@@ -24,9 +24,9 @@ function isValidHistoryEntry(value: unknown): value is FoodHistoryEntry {
     typeof record.recipe === 'string' &&
     typeof record.ingredient === 'string' &&
     typeof record.recipeVibe === 'string' &&
-    ['cozy', 'hearty', 'fresh', 'any'].includes(record.recipeVibe) &&
+    ['cozy', 'hearty', 'fresh', 'lightWarm', 'any'].includes(record.recipeVibe) &&
     typeof record.weatherVibe === 'string' &&
-    ['cozy', 'hearty', 'fresh'].includes(record.weatherVibe)
+    ['cozy', 'hearty', 'fresh', 'lightWarm'].includes(record.weatherVibe)
   );
 }
 

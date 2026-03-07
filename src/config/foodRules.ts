@@ -1,7 +1,7 @@
 import type { DaySnapshot } from '../lib/weekend';
 
 export type Month = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12;
-export type WeatherVibe = 'cozy' | 'hearty' | 'fresh' | 'any';
+export type WeatherVibe = 'cozy' | 'hearty' | 'fresh' | 'lightWarm' | 'any';
 export type CoreWeatherVibe = Exclude<WeatherVibe, 'any'>;
 
 export type SeasonalVeg = {
@@ -83,9 +83,13 @@ export function getWeatherVibe(day: DaySnapshot): WeatherVibe {
 
   const dry = day.rainChance < 40;
   const mild = day.feelsLike >= 12;
+  const hot = day.feelsLike >= 22;
   const calm = day.windbft <= 5;
 
-  // Fresh: genuinely pleasant outdoor weather.
+  // LightWarm: hot, pleasant weather where low-friction cooking fits best.
+  if (dry && hot && calm) return 'lightWarm';
+
+  // Fresh: pleasantly dry and mild weather.
   if (dry && mild && calm) return 'fresh';
 
   // Hearty: everything in the broad middle ground.
@@ -96,6 +100,7 @@ const VIBE_DISTANCE: Record<CoreWeatherVibe, number> = {
   cozy: 0,
   hearty: 1,
   fresh: 2,
+  lightWarm: 3,
 };
 
 export function getVibeMultiplier(weatherVibe: CoreWeatherVibe, recipeVibe: WeatherVibe): number {
@@ -259,7 +264,7 @@ export const SAVORY_RECIPES: Recipe[] = [
 
 export const EXTRA_RECIPES: Recipe[] = [
   // Pantry
-  { title: 'Caju Fresco', ingredient: 'pantry', vibe: 'fresh', weight: 5, months: WARM_MONTHS },
+  { title: 'Caju Fresco', ingredient: 'pantry', vibe: 'lightWarm', weight: 5, months: WARM_MONTHS },
   { title: 'Cashew Parmigiano', ingredient: 'pantry', vibe: 'any', weight: 5, months: ALL_MONTHS },
   { title: 'Spice Blend', ingredient: 'pantry', vibe: 'any', weight: 5, months: ALL_MONTHS },
 ];

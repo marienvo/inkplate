@@ -86,6 +86,25 @@ test('does not produce fresh-only recipes in cozy weather', () => {
   expect(freshOnly.has(plan.sweet)).toBe(false);
 });
 
+test('does not produce lightWarm-only recipes in cozy weather', () => {
+  const badWeather = makeDay({ rainChance: 85, windbft: 8, feelsLike: 3 });
+  const otherDay = makeDay({ rainChance: 95, windbft: 7, feelsLike: 5 });
+
+  const plan = getWeekendFoodPlan(
+    new Date('2026-07-11T12:00:00.000Z'),
+    badWeather,
+    new Date('2026-07-12T12:00:00.000Z'),
+    otherDay,
+  );
+
+  const lightWarmOnly = new Set(
+    [...SAVORY_RECIPES, ...EXTRA_RECIPES].filter((r) => r.vibe === 'lightWarm').map((r) => r.title),
+  );
+
+  expect(lightWarmOnly.has(plan.savory)).toBe(false);
+  expect(lightWarmOnly.has(plan.sweet)).toBe(false);
+});
+
 test('does not produce cozy-only recipes in fresh weather', () => {
   const freshWeather = makeDay({ rainChance: 5, windbft: 2, feelsLike: 21 });
   const otherDay = makeDay({ rainChance: 10, windbft: 3, feelsLike: 19 });
@@ -105,11 +124,32 @@ test('does not produce cozy-only recipes in fresh weather', () => {
   expect(cozyOnly.has(plan.sweet)).toBe(false);
 });
 
-test('classifies wider pleasant conditions as fresh', () => {
+test('does not produce cozy-only recipes in lightWarm weather', () => {
+  const lightWarmWeather = makeDay({ rainChance: 5, windbft: 2, feelsLike: 24 });
+  const otherDay = makeDay({ rainChance: 10, windbft: 3, feelsLike: 23 });
+
+  const plan = getWeekendFoodPlan(
+    new Date('2026-09-12T12:00:00.000Z'),
+    lightWarmWeather,
+    new Date('2026-09-13T12:00:00.000Z'),
+    otherDay,
+  );
+
+  const cozyOnly = new Set(
+    [...SAVORY_RECIPES, ...EXTRA_RECIPES].filter((r) => r.vibe === 'cozy').map((r) => r.title),
+  );
+
+  expect(cozyOnly.has(plan.savory)).toBe(false);
+  expect(cozyOnly.has(plan.sweet)).toBe(false);
+});
+
+test('classifies mild weather as fresh and hot weather as lightWarm', () => {
   const pleasantButNotPerfect = makeDay({ rainChance: 35, feelsLike: 12, windbft: 5 });
+  const hotAndPleasant = makeDay({ rainChance: 35, feelsLike: 22, windbft: 5 });
   const tooWet = makeDay({ rainChance: 40, feelsLike: 12, windbft: 5 });
 
   expect(getWeatherVibe(pleasantButNotPerfect)).toBe('fresh');
+  expect(getWeatherVibe(hotAndPleasant)).toBe('lightWarm');
   expect(getWeatherVibe(tooWet)).toBe('hearty');
 });
 
@@ -160,7 +200,7 @@ test('every seasonal ingredient has an any-vibe recipe that covers its full seas
 });
 
 test('applies vibe multipliers as configured', () => {
-  const weatherVibes: CoreWeatherVibe[] = ['cozy', 'hearty', 'fresh'];
+  const weatherVibes: CoreWeatherVibe[] = ['cozy', 'hearty', 'fresh', 'lightWarm'];
 
   for (const weatherVibe of weatherVibes) {
     expect(getVibeMultiplier(weatherVibe, weatherVibe)).toBe(1.0);
@@ -171,8 +211,14 @@ test('applies vibe multipliers as configured', () => {
   expect(getVibeMultiplier('hearty', 'cozy')).toBe(0.8);
   expect(getVibeMultiplier('hearty', 'fresh')).toBe(0.8);
   expect(getVibeMultiplier('fresh', 'hearty')).toBe(0.8);
+  expect(getVibeMultiplier('fresh', 'lightWarm')).toBe(0.8);
+  expect(getVibeMultiplier('lightWarm', 'fresh')).toBe(0.8);
   expect(getVibeMultiplier('cozy', 'fresh')).toBe(0);
   expect(getVibeMultiplier('fresh', 'cozy')).toBe(0);
+  expect(getVibeMultiplier('cozy', 'lightWarm')).toBe(0);
+  expect(getVibeMultiplier('lightWarm', 'cozy')).toBe(0);
+  expect(getVibeMultiplier('hearty', 'lightWarm')).toBe(0);
+  expect(getVibeMultiplier('lightWarm', 'hearty')).toBe(0);
 });
 
 test('recency penalty strongly reduces repeated recipe suggestions', () => {
