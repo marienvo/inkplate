@@ -1,26 +1,15 @@
-import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
+import { PutObjectCommand } from '@aws-sdk/client-s3';
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import { pathToFileURL } from 'node:url';
 
-import {
-  R2_ACCOUNT_ID,
-  R2_ACCESS_KEY_ID,
-  R2_BUCKET_NAME,
-  R2_SECRET_ACCESS_KEY,
-} from '../config.js';
 import { getDateKey, hashDirectoryFiles } from './dataHash.ts';
+import { createR2Client, getR2Config } from './r2Client.ts';
+import type { R2Config } from './r2Client.ts';
 
 const dataDir = 'src/data';
 const hashFilePath = '.tmp/data-hash-r2';
 const dashboardPath = 'dist/dashboard.png';
 const objectKey = 'dashboard.png';
-
-export type R2Config = {
-  accountId: string;
-  accessKeyId: string;
-  secretAccessKey: string;
-  bucketName: string;
-};
 
 type DeployR2Dependencies = {
   config?: R2Config;
@@ -31,46 +20,6 @@ type DeployR2Dependencies = {
   upload?: (config: R2Config) => Promise<void>;
   logger?: Pick<Console, 'log'>;
 };
-
-function getRequiredString(value: unknown, keyName: string): string {
-  if (!value || typeof value !== 'string') {
-    throw new Error(`${keyName} is missing in config.js`);
-  }
-
-  return value;
-}
-
-export function getR2Config(source?: {
-  accountId?: unknown;
-  accessKeyId?: unknown;
-  secretAccessKey?: unknown;
-  bucketName?: unknown;
-}): R2Config {
-  const values = source ?? {
-    accountId: R2_ACCOUNT_ID,
-    accessKeyId: R2_ACCESS_KEY_ID,
-    secretAccessKey: R2_SECRET_ACCESS_KEY,
-    bucketName: R2_BUCKET_NAME,
-  };
-
-  return {
-    accountId: getRequiredString(values.accountId, 'R2_ACCOUNT_ID'),
-    accessKeyId: getRequiredString(values.accessKeyId, 'R2_ACCESS_KEY_ID'),
-    secretAccessKey: getRequiredString(values.secretAccessKey, 'R2_SECRET_ACCESS_KEY'),
-    bucketName: getRequiredString(values.bucketName, 'R2_BUCKET_NAME'),
-  };
-}
-
-function createR2Client(config: R2Config): S3Client {
-  return new S3Client({
-    region: 'auto',
-    endpoint: `https://${config.accountId}.r2.cloudflarestorage.com`,
-    credentials: {
-      accessKeyId: config.accessKeyId,
-      secretAccessKey: config.secretAccessKey,
-    },
-  });
-}
 
 async function uploadDashboardPng(config: R2Config): Promise<void> {
   const client = createR2Client(config);
@@ -136,3 +85,6 @@ if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) 
     process.exit(1);
   });
 }
+
+export { getR2Config };
+export type { R2Config } from './r2Client.ts';

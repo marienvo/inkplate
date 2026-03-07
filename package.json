@@ -13,13 +13,15 @@
     "typecheck": "tsc --noEmit -p tsconfig.json && tsc --noEmit -p scripts/tsconfig.json",
     "fetch-weather": "tsx scripts/fetchWeather.ts",
     "fetch-calendar": "tsx scripts/fetchCalendar.ts",
-    "prebuild": "npm run fetch-weather && npm run fetch-calendar",
+    "prebuild": "npm run fetch-weather && npm run fetch-calendar && npm run fetch-settings",
     "build": "vite build",
     "serve": "tsx server/index.ts",
     "generate": "tsx server/index.ts --once",
     "upload": "arduino-cli compile --fqbn Inkplate_Boards:esp32:Inkplate5V2 firmware && arduino-cli upload -p ${INKPLATE_PORT:?Set INKPLATE_PORT env var} --fqbn Inkplate_Boards:esp32:Inkplate5V2 firmware",
     "surge": "npm run generate && tsx scripts/deploySurge.ts",
-    "r2": "npm run generate && tsx scripts/deployR2.ts"
+    "r2": "npm run generate && tsx scripts/deployR2.ts",
+    "settings": "tsx scripts/deploySettings.ts",
+    "fetch-settings": "tsx scripts/fetchSettings.ts"
   },
   "keywords": [],
   "author": "",

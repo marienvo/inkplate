@@ -7,6 +7,7 @@ import {
   Calendar,
   UtensilsCrossed,
   CalendarDays,
+  CircleStar,
   Clock1,
   Clock2,
   Clock3,
@@ -25,9 +26,15 @@ import {
 } from 'lucide-react';
 import calendarData from './data/calendar.json';
 import weatherData from './data/weather.json';
+import settingsData from './data/settings.json';
 import { useSmartAgendaLimit } from './hooks/useSmartAgendaLimit';
 import type { OutdoorFeel } from './lib/outdoorFeel';
 import { renderActivityHint } from './lib/activityHintIcon';
+import {
+  getDefaultChallengeSettings,
+  isChallengeActive,
+  parseChallengeSettings,
+} from './lib/challengeSettings';
 import { renderFoodHint, splitFoodValueWrapGroups } from './lib/foodHintIcon';
 import { selectAgendaView, type Appointment } from './lib/agenda';
 
@@ -176,6 +183,13 @@ function renderGroupedFoodValue(value: string): ReactNode {
 export default function App() {
   const contentRef = useRef<HTMLDivElement>(null);
   const weather = weatherData as WeatherData;
+  const settings = (() => {
+    try {
+      return parseChallengeSettings(settingsData);
+    } catch {
+      return getDefaultChallengeSettings();
+    }
+  })();
   const outdoorFeel = weather.outdoorFeel;
   const hasOutdoorFeel = Boolean(outdoorFeel);
   const now = new Date();
@@ -250,14 +264,24 @@ export default function App() {
       value: warningParts.join(' · '),
     });
   }
-  const foodEntries = weather.food
-    ? showSecondFoodLine
-      ? [weather.food.savory, weather.food.sweet]
-      : [weather.food.savory]
+  const activeChallenge =
+    settings.challenge && isChallengeActive(settings, now) ? settings.challenge : null;
+  const foodItems = weather.food
+    ? [renderFoodHint(weather.food.savory)]
     : weather.foodHint
-      ? [weather.foodHint]
+      ? [renderFoodHint(weather.foodHint)]
       : [];
-  const foodItems = foodEntries.filter(Boolean).map((entry) => renderFoodHint(entry));
+  if (showSecondFoodLine) {
+    if (activeChallenge) {
+      foodItems.push({
+        icon: <CircleStar />,
+        label: activeChallenge.label,
+        value: activeChallenge.value,
+      });
+    } else if (weather.food?.sweet) {
+      foodItems.push(renderFoodHint(weather.food.sweet));
+    }
+  }
 
   return (
     <main className="frame">
@@ -310,7 +334,7 @@ export default function App() {
           </Section>
         )}
 
-        <Section icon={<UtensilsCrossed />} title="This Week’s Kitchen">
+        <Section icon={<UtensilsCrossed />} title="This Week">
           {foodItems.length > 0 ? (
             <ul className="list food-list">
               {foodItems.map((foodItem, index) => (

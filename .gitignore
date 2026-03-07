@@ -8,11 +8,13 @@ firmware/config.h
 
 # Local JS config (API keys, etc.)
 config.js
+settings.json
 
 # Build-time generated data
 src/data/weather.json
 src/data/calendar.json
 src/data/foodHistory.json
+src/data/settings.json
 
 # Cron runtime logs
 cron/deploy.log
