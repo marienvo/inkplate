@@ -70,6 +70,8 @@ test('renders active challenge instead of the sweet second food line', async () 
   expect(html).toContain('March');
   expect(html).toContain('No Sweets');
   expect(html).not.toContain('Cake');
+  expect(html).not.toContain('No challenge this week');
+  expect(html).not.toContain('No challenge next week');
 });
 
 test('keeps the sweet second food line when challenge is missing', async () => {
@@ -77,4 +79,36 @@ test('keeps the sweet second food line when challenge is missing', async () => {
 
   expect(html).toContain('Cake');
   expect(html).not.toContain('No Sweets');
+  expect(html).toContain('No challenge this week');
+});
+
+test('shows no challenge next week when active challenge ends this week', async () => {
+  const html = await renderAppWithSettings({
+    challenges: [
+      {
+        start: '2026-03-01',
+        end: '2026-03-18',
+        label: 'March',
+        value: 'No Sweets',
+      },
+    ],
+  });
+
+  expect(html).toContain('No challenge next week');
+});
+
+test('does not show challenge notice when challenge continues into next week', async () => {
+  const html = await renderAppWithSettings({
+    challenges: [
+      {
+        start: '2026-03-01',
+        end: '2026-03-31',
+        label: 'March',
+        value: 'No Sweets',
+      },
+    ],
+  });
+
+  expect(html).not.toContain('No challenge this week');
+  expect(html).not.toContain('No challenge next week');
 });

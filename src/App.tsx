@@ -265,6 +265,15 @@ export default function App() {
     });
   }
   const activeChallenge = getActiveChallenge(settings, now);
+  const nextWeekDate = new Date(now);
+  nextWeekDate.setDate(nextWeekDate.getDate() + 7);
+  const nextWeekChallenge = getActiveChallenge(settings, nextWeekDate);
+  let challengeNotice: string | null = null;
+  if (!activeChallenge) {
+    challengeNotice = 'No challenge this week';
+  } else if (!nextWeekChallenge) {
+    challengeNotice = 'No challenge next week';
+  }
   const foodItems = weather.food
     ? [renderFoodHint(weather.food.savory)]
     : weather.foodHint
@@ -351,6 +360,7 @@ export default function App() {
           ) : (
             <p className="empty-state">No meals planned</p>
           )}
+          {challengeNotice && <p className="more-indicator">{challengeNotice}</p>}
         </Section>
       </div>
 
