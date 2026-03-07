@@ -12,6 +12,7 @@ config.js
 # Build-time generated data
 src/data/weather.json
 src/data/calendar.json
+src/data/foodHistory.json
 
 # Cron runtime logs
 cron/deploy.log

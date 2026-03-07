@@ -62,10 +62,26 @@ These invariants must remain true:
 
 1. Every seasonal vegetable key in `SEASONAL_NL` has at least one `SAVORY_RECIPES` entry with `vibe: 'any'`.
 2. Every seasonal fruit key in `SEASONAL_NL_FRUIT` has at least one `EXTRA_RECIPES` entry with `vibe: 'any'`.
-3. `matchingRecipes` in `src/lib/food.ts` must keep allowing:
-   - exact vibe match, or
-   - `any` match.
+3. Recipe selection must use vibe multipliers (not hard match-only filtering):
+   - exact vibe match uses `1.0`
+   - `any` uses `0.65`
+   - adjacent vibes (`cozy` <-> `hearty`, `hearty` <-> `fresh`) use `0.8`
+   - opposite vibes (`cozy` <-> `fresh`) use `0.0`
 4. New vibe values must be reflected in tests (`src/lib/food.test.ts`).
+
+## Selection Balancing
+
+`src/lib/food.ts` combines base recipe `weight` with additional multipliers:
+
+1. Vibe multipliers from `getVibeMultiplier` (see invariants above).
+2. Recency penalties:
+   - same recipe within 6 weeks: `0.05`
+   - same ingredient in the last 2 weeks: `0.15`
+   - same ingredient in week 3: `0.3`
+   - same recipe vibe as last week: `0.8`
+3. Seasonal ingredient priority (`SeasonalVeg.seasonalPriority`) to bias ingredient picks by season.
+
+Recency penalties are soft multipliers, not hard exclusions. If penalties collapse effective weights, selection must still fall back to valid candidates.
 
 ## Recipe Months
 

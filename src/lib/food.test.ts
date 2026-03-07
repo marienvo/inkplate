@@ -1,13 +1,14 @@
 import { expect, test } from 'vitest';
 import { getWeekendFoodPlan, seasonalForDate } from './food';
 import type { DaySnapshot } from './weekend';
-import type { Month } from '../config/foodRules';
+import type { CoreWeatherVibe, Month } from '../config/foodRules';
 import {
   ALL_MONTHS,
   EXTRA_RECIPES,
   SAVORY_RECIPES,
   SEASONAL_NL,
   SEASONAL_NL_FRUIT,
+  getVibeMultiplier,
 } from '../config/foodRules';
 import { renderFoodHint } from './foodHintIcon';
 
@@ -147,4 +148,56 @@ test('every seasonal ingredient has an any-vibe recipe that covers its full seas
     expect(matches.length).toBeGreaterThan(0);
     expect(matches.some((recipe) => monthsCover(recipe.months, produce.months))).toBe(true);
   }
+});
+
+test('applies vibe multipliers as configured', () => {
+  const weatherVibes: CoreWeatherVibe[] = ['cozy', 'hearty', 'fresh'];
+
+  for (const weatherVibe of weatherVibes) {
+    expect(getVibeMultiplier(weatherVibe, weatherVibe)).toBe(1.0);
+    expect(getVibeMultiplier(weatherVibe, 'any')).toBe(0.65);
+  }
+
+  expect(getVibeMultiplier('cozy', 'hearty')).toBe(0.8);
+  expect(getVibeMultiplier('hearty', 'cozy')).toBe(0.8);
+  expect(getVibeMultiplier('hearty', 'fresh')).toBe(0.8);
+  expect(getVibeMultiplier('fresh', 'hearty')).toBe(0.8);
+  expect(getVibeMultiplier('cozy', 'fresh')).toBe(0);
+  expect(getVibeMultiplier('fresh', 'cozy')).toBe(0);
+});
+
+test('recency penalty strongly reduces repeated recipe suggestions', () => {
+  const date1 = new Date('2026-01-10T12:00:00.000Z');
+  const date2 = new Date('2026-01-11T12:00:00.000Z');
+  const freshDay = makeDay({ rainChance: 5, windbft: 2, feelsLike: 20 });
+  const baseline = getWeekendFoodPlan(date1, freshDay, date2, freshDay, {
+    currentWeekKey: '2026-01-10',
+    history: [],
+  });
+
+  const withRecentHistory = getWeekendFoodPlan(date1, freshDay, date2, freshDay, {
+    currentWeekKey: '2026-01-10',
+    history: [
+      {
+        weekKey: '2026-01-03',
+        recipe: baseline.sweetPick.title,
+        ingredient: baseline.sweetPick.ingredient,
+        recipeVibe: baseline.sweetPick.vibe,
+        weatherVibe: 'fresh',
+      },
+    ],
+  });
+
+  expect(withRecentHistory.sweet).not.toBe(baseline.sweet);
+});
+
+test('seasonal priorities keep all-year produce below seasonal stars', () => {
+  const priorities = new Map(SEASONAL_NL.map((veg) => [veg.key, veg.seasonalPriority]));
+
+  expect(priorities.get('tomato')).toBe(1.5);
+  expect(priorities.get('pumpkin')).toBe(1.5);
+  expect(priorities.get('cabbage')).toBe(1.5);
+  expect(priorities.get('onion')).toBeLessThan(priorities.get('tomato') ?? 0);
+  expect(priorities.get('spinach')).toBeLessThan(priorities.get('pumpkin') ?? 0);
+  expect(priorities.get('peas')).toBeLessThan(priorities.get('cabbage') ?? 0);
 });

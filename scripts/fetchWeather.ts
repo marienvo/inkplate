@@ -8,7 +8,14 @@ import {
   type OutdoorFeel,
   type WeatherApiSnapshot,
 } from '../src/lib/outdoorFeel.ts';
-import { getWeekendFoodPlan } from '../src/lib/food.ts';
+import { type FoodPlanHistoryContext, getWeekendFoodPlan } from '../src/lib/food.ts';
+import {
+  type FoodHistoryEntry,
+  appendFoodHistory,
+  pruneFoodHistory,
+  readFoodHistory,
+  writeFoodHistory,
+} from '../src/lib/foodHistory.ts';
 import { getWeekendOneLiner, type DaySnapshot } from '../src/lib/weekend.ts';
 
 type WeerLiveCurrent = {
@@ -83,6 +90,7 @@ type OpenMeteoResponse = {
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const WEATHER_FILE_PATH = resolve(__dirname, '../src/data/weather.json');
 const FOOD_CACHE_FILE_PATH = resolve(__dirname, '../.tmp/food-cache.json');
+const FOOD_HISTORY_FILE_PATH = resolve(__dirname, '../src/data/foodHistory.json');
 const LOCATION = 'Rotterdam';
 
 function requiredNumber(value: number | undefined, name: string): number {
@@ -223,9 +231,30 @@ async function writeFoodCache(weekKey: string, food: FoodData): Promise<void> {
   await writeFile(FOOD_CACHE_FILE_PATH, `${JSON.stringify(cache, null, 2)}\n`, 'utf8');
 }
 
-async function fetchWeekendData(cachedFood?: FoodData): Promise<{
+async function readFoodHistoryFile(): Promise<FoodHistoryEntry[]> {
+  try {
+    const raw = await readFile(FOOD_HISTORY_FILE_PATH, 'utf8');
+    return readFoodHistory(raw);
+  } catch (error) {
+    if ((error as NodeJS.ErrnoException).code === 'ENOENT') {
+      return [];
+    }
+    throw error;
+  }
+}
+
+async function writeFoodHistoryFile(entries: FoodHistoryEntry[]): Promise<void> {
+  await mkdir(dirname(FOOD_HISTORY_FILE_PATH), { recursive: true });
+  await writeFile(FOOD_HISTORY_FILE_PATH, writeFoodHistory(entries), 'utf8');
+}
+
+async function fetchWeekendData(
+  cachedFood?: FoodData,
+  historyContext?: FoodPlanHistoryContext,
+): Promise<{
   weekend: NonNullable<WeatherData['weekend']>;
   food: FoodData;
+  foodPlan?: ReturnType<typeof getWeekendFoodPlan>;
 }> {
   const endpoint = new URL('https://api.open-meteo.com/v1/forecast');
   endpoint.searchParams.set('latitude', '51.9225');
@@ -281,12 +310,26 @@ async function fetchWeekendData(cachedFood?: FoodData): Promise<{
     throw new Error('OpenMeteo returned invalid weekend dates');
   }
 
+  const foodPlan = cachedFood
+    ? undefined
+    : getWeekendFoodPlan(date1, day1, date2, day2, historyContext);
+  if (!cachedFood && !foodPlan) {
+    throw new Error('Food plan generation failed');
+  }
+  const food: FoodData = cachedFood
+    ? cachedFood
+    : {
+        savory: foodPlan!.savory,
+        sweet: foodPlan!.sweet,
+      };
+
   return {
     weekend: {
       label,
       value: getWeekendOneLiner(day1, day2),
     },
-    food: cachedFood ?? getWeekendFoodPlan(date1, day1, date2, day2),
+    food,
+    foodPlan,
   };
 }
 
@@ -356,13 +399,38 @@ async function fetchWeather(): Promise<WeatherData> {
     cachedFoodRecord && cachedFoodRecord.weekKey === foodWeekKey
       ? { savory: cachedFoodRecord.savory, sweet: cachedFoodRecord.sweet }
       : undefined;
+  const persistedHistory = await readFoodHistoryFile();
+  const history = pruneFoodHistory(persistedHistory, foodWeekKey, 12);
+  const historyContext: FoodPlanHistoryContext = {
+    currentWeekKey: foodWeekKey,
+    history,
+  };
 
   try {
-    const weekendData = await fetchWeekendData(cachedFood);
+    const weekendData = await fetchWeekendData(cachedFood, historyContext);
     weather.weekend = weekendData.weekend;
     weather.food = weekendData.food;
     if (!cachedFood) {
       await writeFoodCache(foodWeekKey, weekendData.food);
+      if (weekendData.foodPlan) {
+        const nextHistory = appendFoodHistory(history, [
+          {
+            weekKey: foodWeekKey,
+            recipe: weekendData.foodPlan.savoryPick.title,
+            ingredient: weekendData.foodPlan.savoryPick.ingredient,
+            recipeVibe: weekendData.foodPlan.savoryPick.vibe,
+            weatherVibe: weekendData.foodPlan.weatherVibe,
+          },
+          {
+            weekKey: foodWeekKey,
+            recipe: weekendData.foodPlan.sweetPick.title,
+            ingredient: weekendData.foodPlan.sweetPick.ingredient,
+            recipeVibe: weekendData.foodPlan.sweetPick.vibe,
+            weatherVibe: weekendData.foodPlan.weatherVibe,
+          },
+        ]);
+        await writeFoodHistoryFile(pruneFoodHistory(nextHistory, foodWeekKey, 12));
+      }
     }
   } catch (error) {
     const message = error instanceof Error ? error.message : String(error);

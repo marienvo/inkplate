@@ -2,10 +2,12 @@ import type { DaySnapshot } from '../lib/weekend';
 
 export type Month = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12;
 export type WeatherVibe = 'cozy' | 'hearty' | 'fresh' | 'any';
+export type CoreWeatherVibe = Exclude<WeatherVibe, 'any'>;
 
 export type SeasonalVeg = {
   key: string;
   label: string;
+  seasonalPriority: number;
   months: Month[];
 };
 
@@ -34,15 +36,15 @@ export const WARM_MONTHS: Month[] = [4, 5, 6, 7, 8, 9];
 // ---------------------------------------------------------------------------
 
 export const SEASONAL_NL: SeasonalVeg[] = [
-  { key: 'cabbage', label: 'cabbage', months: [1, 2, 3, 10, 11, 12] },
-  { key: 'onion', label: 'onion', months: ALL_MONTHS },
-  { key: 'spinach', label: 'spinach', months: ALL_MONTHS },
-  { key: 'endive', label: 'endive', months: [4, 5, 6, 9, 10] },
-  { key: 'peas', label: 'peas', months: ALL_MONTHS },
-  { key: 'greenBeans', label: 'green beans', months: [6, 7, 8, 9] },
-  { key: 'zucchini', label: 'zucchini', months: [6, 7, 8, 9] },
-  { key: 'tomato', label: 'tomato', months: [5, 6, 7, 8, 9, 10] },
-  { key: 'pumpkin', label: 'pumpkin', months: [9, 10, 11] },
+  { key: 'cabbage', label: 'cabbage', seasonalPriority: 1.5, months: [1, 2, 3, 10, 11, 12] },
+  { key: 'onion', label: 'onion', seasonalPriority: 0.5, months: ALL_MONTHS },
+  { key: 'spinach', label: 'spinach', seasonalPriority: 0.6, months: ALL_MONTHS },
+  { key: 'endive', label: 'endive', seasonalPriority: 1.2, months: [4, 5, 6, 9, 10] },
+  { key: 'peas', label: 'peas', seasonalPriority: 0.6, months: ALL_MONTHS },
+  { key: 'greenBeans', label: 'green beans', seasonalPriority: 1.2, months: [6, 7, 8, 9] },
+  { key: 'zucchini', label: 'zucchini', seasonalPriority: 1.2, months: [6, 7, 8, 9] },
+  { key: 'tomato', label: 'tomato', seasonalPriority: 1.5, months: [5, 6, 7, 8, 9, 10] },
+  { key: 'pumpkin', label: 'pumpkin', seasonalPriority: 1.5, months: [9, 10, 11] },
 ];
 
 export const SEASONAL_NL_FRUIT: SeasonalFruit[] = [
@@ -88,6 +90,21 @@ export function getWeatherVibe(day: DaySnapshot): WeatherVibe {
 
   // Hearty: everything in the broad middle ground.
   return 'hearty';
+}
+
+const VIBE_DISTANCE: Record<CoreWeatherVibe, number> = {
+  cozy: 0,
+  hearty: 1,
+  fresh: 2,
+};
+
+export function getVibeMultiplier(weatherVibe: CoreWeatherVibe, recipeVibe: WeatherVibe): number {
+  if (recipeVibe === 'any') return 0.65;
+  if (recipeVibe === weatherVibe) return 1.0;
+
+  const distance = Math.abs(VIBE_DISTANCE[weatherVibe] - VIBE_DISTANCE[recipeVibe]);
+  if (distance === 1) return 0.8;
+  return 0;
 }
 
 // ---------------------------------------------------------------------------
