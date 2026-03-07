@@ -81,9 +81,9 @@ export function getWeatherVibe(day: DaySnapshot): WeatherVibe {
   if (gale && cold) return 'cozy';
   if (wet && cold) return 'cozy';
 
-  const dry = day.rainChance < 30;
-  const mild = day.feelsLike > 14;
-  const calm = day.windbft <= 4;
+  const dry = day.rainChance < 40;
+  const mild = day.feelsLike >= 12;
+  const calm = day.windbft <= 5;
 
   // Fresh: genuinely pleasant outdoor weather.
   if (dry && mild && calm) return 'fresh';

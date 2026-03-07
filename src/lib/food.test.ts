@@ -8,6 +8,7 @@ import {
   SAVORY_RECIPES,
   SEASONAL_NL,
   SEASONAL_NL_FRUIT,
+  getWeatherVibe,
   getVibeMultiplier,
 } from '../config/foodRules';
 import { renderFoodHint } from './foodHintIcon';
@@ -102,6 +103,14 @@ test('does not produce cozy-only recipes in fresh weather', () => {
 
   expect(cozyOnly.has(plan.savory)).toBe(false);
   expect(cozyOnly.has(plan.sweet)).toBe(false);
+});
+
+test('classifies wider pleasant conditions as fresh', () => {
+  const pleasantButNotPerfect = makeDay({ rainChance: 35, feelsLike: 12, windbft: 5 });
+  const tooWet = makeDay({ rainChance: 40, feelsLike: 12, windbft: 5 });
+
+  expect(getWeatherVibe(pleasantButNotPerfect)).toBe('fresh');
+  expect(getWeatherVibe(tooWet)).toBe('hearty');
 });
 
 test('produces non-empty output for every season', () => {

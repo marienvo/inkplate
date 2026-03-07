@@ -43,7 +43,7 @@ Do not introduce synonyms (for example `indoor`, `outdoor`, `comfort`, `light`).
    - `windbft >= 7 && feelsLike <= 5`, or
    - `rainChance >= 55 && feelsLike <= 5`
 2. Return `fresh` when weather is genuinely pleasant:
-   - `rainChance < 30 && feelsLike > 14 && windbft <= 4`
+   - `rainChance < 40 && feelsLike >= 12 && windbft <= 5`
 3. Return `hearty` for all remaining conditions.
 
 ## Recipe Tagging Rules
