@@ -19,24 +19,28 @@ test('writes fetched settings after validation', async () => {
     config: demoConfig,
     fetchObject: async () =>
       JSON.stringify({
-        challenge: {
-          start: '2026-03-01',
-          end: '2026-03-31',
-          label: 'March',
-          value: 'No Sweets',
-        },
+        challenges: [
+          {
+            start: '2026-03-01',
+            end: '2026-03-31',
+            label: 'March',
+            value: 'No Sweets',
+          },
+        ],
       }),
     writeSettings,
     logger,
   });
 
   expect(writeSettings).toHaveBeenCalledWith({
-    challenge: {
-      start: '2026-03-01',
-      end: '2026-03-31',
-      label: 'March',
-      value: 'No Sweets',
-    },
+    challenges: [
+      {
+        start: '2026-03-01',
+        end: '2026-03-31',
+        label: 'March',
+        value: 'No Sweets',
+      },
+    ],
   });
   expect(logger.log).toHaveBeenCalledWith('Settings written to src/data/settings.json');
   expect(logger.warn).not.toHaveBeenCalled();

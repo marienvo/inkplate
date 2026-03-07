@@ -32,7 +32,7 @@ import type { OutdoorFeel } from './lib/outdoorFeel';
 import { renderActivityHint } from './lib/activityHintIcon';
 import {
   getDefaultChallengeSettings,
-  isChallengeActive,
+  getActiveChallenge,
   parseChallengeSettings,
 } from './lib/challengeSettings';
 import { renderFoodHint, splitFoodValueWrapGroups } from './lib/foodHintIcon';
@@ -264,8 +264,7 @@ export default function App() {
       value: warningParts.join(' · '),
     });
   }
-  const activeChallenge =
-    settings.challenge && isChallengeActive(settings, now) ? settings.challenge : null;
+  const activeChallenge = getActiveChallenge(settings, now);
   const foodItems = weather.food
     ? [renderFoodHint(weather.food.savory)]
     : weather.foodHint

@@ -2,12 +2,12 @@ import { renderToStaticMarkup } from 'react-dom/server';
 import { afterEach, expect, test, vi } from 'vitest';
 
 type SettingsFixture = {
-  challenge: {
+  challenges: Array<{
     start: string;
     end: string;
     label: string;
     value: string;
-  } | null;
+  }>;
 };
 
 async function renderAppWithSettings(settings: SettingsFixture): Promise<string> {
@@ -57,12 +57,14 @@ afterEach(() => {
 
 test('renders active challenge instead of the sweet second food line', async () => {
   const html = await renderAppWithSettings({
-    challenge: {
-      start: '2026-03-01',
-      end: '2026-03-31',
-      label: 'March',
-      value: 'No Sweets',
-    },
+    challenges: [
+      {
+        start: '2026-03-01',
+        end: '2026-03-31',
+        label: 'March',
+        value: 'No Sweets',
+      },
+    ],
   });
 
   expect(html).toContain('March');
@@ -71,7 +73,7 @@ test('renders active challenge instead of the sweet second food line', async () 
 });
 
 test('keeps the sweet second food line when challenge is missing', async () => {
-  const html = await renderAppWithSettings({ challenge: null });
+  const html = await renderAppWithSettings({ challenges: [] });
 
   expect(html).toContain('Cake');
   expect(html).not.toContain('No Sweets');

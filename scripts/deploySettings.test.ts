@@ -17,19 +17,21 @@ test('uploads normalized settings JSON', async () => {
     config: demoConfig,
     readLocalSettings: async () =>
       JSON.stringify({
-        challenge: {
-          start: '2026-03-01',
-          end: '2026-03-31',
-          label: 'March',
-          value: 'No Sweets',
-        },
+        challenges: [
+          {
+            start: '2026-03-01',
+            end: '2026-03-31',
+            label: 'March',
+            value: 'No Sweets',
+          },
+        ],
       }),
     upload,
   });
 
   expect(upload).toHaveBeenCalledWith(
     demoConfig,
-    '{\n  "challenge": {\n    "start": "2026-03-01",\n    "end": "2026-03-31",\n    "label": "March",\n    "value": "No Sweets"\n  }\n}\n',
+    '{\n  "challenges": [\n    {\n      "start": "2026-03-01",\n      "end": "2026-03-31",\n      "label": "March",\n      "value": "No Sweets"\n    }\n  ]\n}\n',
   );
 });
 
@@ -37,8 +39,8 @@ test('throws when settings have an invalid challenge schema', async () => {
   await expect(
     runDeploySettings({
       config: demoConfig,
-      readLocalSettings: async () => JSON.stringify({ challenge: { label: 'March' } }),
+      readLocalSettings: async () => JSON.stringify({ challenges: [{ label: 'March' }] }),
       upload: async () => undefined,
     }),
-  ).rejects.toThrow('settings.challenge.start must be a non-empty string');
+  ).rejects.toThrow('settings.challenges[0].start must be a non-empty string');
 });

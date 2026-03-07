@@ -6,11 +6,11 @@ export type Challenge = {
 };
 
 export type ChallengeSettings = {
-  challenge: Challenge | null;
+  challenges: Challenge[];
 };
 
 export function getDefaultChallengeSettings(): ChallengeSettings {
-  return { challenge: null };
+  return { challenges: [] };
 }
 
 function readNonEmptyString(value: unknown, fieldName: string, objectName: string): string {
@@ -20,17 +20,17 @@ function readNonEmptyString(value: unknown, fieldName: string, objectName: strin
   return value.trim();
 }
 
-function asChallenge(value: unknown): Challenge {
+function asChallenge(value: unknown, objectName: string): Challenge {
   if (!value || typeof value !== 'object') {
-    throw new Error('settings.challenge must be an object or null');
+    throw new Error(`settings.${objectName} must be an object`);
   }
 
   const record = value as Record<string, unknown>;
   return {
-    start: readNonEmptyString(record.start, 'start', 'challenge'),
-    end: readNonEmptyString(record.end, 'end', 'challenge'),
-    label: readNonEmptyString(record.label, 'label', 'challenge'),
-    value: readNonEmptyString(record.value, 'value', 'challenge'),
+    start: readNonEmptyString(record.start, 'start', objectName),
+    end: readNonEmptyString(record.end, 'end', objectName),
+    label: readNonEmptyString(record.label, 'label', objectName),
+    value: readNonEmptyString(record.value, 'value', objectName),
   };
 }
 
@@ -40,12 +40,17 @@ export function parseChallengeSettings(value: unknown): ChallengeSettings {
   }
 
   const record = value as Record<string, unknown>;
-  if (!('challenge' in record) || record.challenge === null) {
+  if (!('challenges' in record) || record.challenges === null) {
     return getDefaultChallengeSettings();
+  }
+  if (!Array.isArray(record.challenges)) {
+    throw new Error('settings.challenges must be an array');
   }
 
   return {
-    challenge: asChallenge(record.challenge),
+    challenges: record.challenges.map((challenge, index) =>
+      asChallenge(challenge, `challenges[${index}]`),
+    ),
   };
 }
 
@@ -72,19 +77,24 @@ function toUtcDayIndex(date: Date): number {
   return Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate());
 }
 
-export function isChallengeActive(settings: ChallengeSettings, now: Date = new Date()): boolean {
-  if (!settings.challenge) return false;
-
-  const startDate = parseIsoDateOnly(settings.challenge.start);
-  const endDate = parseIsoDateOnly(settings.challenge.end);
-  if (!startDate || !endDate) return false;
-
+export function getActiveChallenge(
+  settings: ChallengeSettings,
+  now: Date = new Date(),
+): Challenge | null {
   const today = new Date(now);
   const todayUtc = Date.UTC(today.getFullYear(), today.getMonth(), today.getDate());
-  const startUtc = toUtcDayIndex(startDate);
-  const endUtc = toUtcDayIndex(endDate);
+  for (const challenge of settings.challenges) {
+    const startDate = parseIsoDateOnly(challenge.start);
+    const endDate = parseIsoDateOnly(challenge.end);
+    if (!startDate || !endDate) continue;
 
-  return startUtc <= todayUtc && todayUtc <= endUtc;
+    const startUtc = toUtcDayIndex(startDate);
+    const endUtc = toUtcDayIndex(endDate);
+    if (startUtc <= todayUtc && todayUtc <= endUtc) {
+      return challenge;
+    }
+  }
+  return null;
 }
 
 export function formatChallengeText(challenge: Challenge): string {
