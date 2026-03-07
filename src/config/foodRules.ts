@@ -100,7 +100,7 @@ export function getWeatherVibe(day: DaySnapshot): WeatherVibe {
 export const SAVORY_RECIPES: Recipe[] = [
   // Cabbage
   {
-    title: 'Warm Cabbage and Potato Skillet',
+    title: 'Krautsalat',
     ingredient: 'cabbage',
     vibe: 'fresh',
     weight: 5,
@@ -125,7 +125,7 @@ export const SAVORY_RECIPES: Recipe[] = [
   },
 
   // Spinach
-  { title: 'Almkase Pasta', ingredient: 'spinach', vibe: 'hearty', weight: 5, months: COLD_MONTHS },
+  { title: 'Almkäse Pasta', ingredient: 'spinach', vibe: 'hearty', weight: 5, months: COLD_MONTHS },
   {
     title: 'Linguine Spinaci e Ricotta',
     ingredient: 'spinach',
@@ -222,7 +222,7 @@ export const SAVORY_RECIPES: Recipe[] = [
     months: [5, 6, 7, 8, 9, 10],
   },
   {
-    title: 'Ragu di Lenticchie',
+    title: 'Ragù di Lenticchie',
     ingredient: 'tomato',
     vibe: 'cozy',
     weight: 5,
