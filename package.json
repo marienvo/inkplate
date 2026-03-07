@@ -20,7 +20,8 @@
     "upload": "arduino-cli compile --fqbn Inkplate_Boards:esp32:Inkplate5V2 firmware && arduino-cli upload -p ${INKPLATE_PORT:?Set INKPLATE_PORT env var} --fqbn Inkplate_Boards:esp32:Inkplate5V2 firmware",
     "surge": "npm run generate && tsx scripts/deploySurge.ts",
     "r2": "npm run generate && tsx scripts/deployR2.ts",
-    "settings": "tsx scripts/deploySettings.ts",
+    "settings": "tsx scripts/editSettings.ts",
+    "deploy-settings": "tsx scripts/deploySettings.ts",
     "fetch-settings": "tsx scripts/fetchSettings.ts"
   },
   "keywords": [],
@@ -37,6 +38,7 @@
     "react-dom": "^19.2.4"
   },
   "devDependencies": {
+    "@clack/prompts": "^1.1.0",
     "@eslint/js": "^9.39.3",
     "@types/express": "^5.0.6",
     "@types/node": "^25.3.3",
