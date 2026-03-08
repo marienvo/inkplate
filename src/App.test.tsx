@@ -35,7 +35,7 @@ async function renderAppWithSettings(settings: SettingsFixture): Promise<string>
   vi.doMock('./data/calendar.json', () => ({ default: [] }));
   vi.doMock('./data/settings.json', () => ({ default: settings }));
   vi.doMock('./hooks/useSmartAgendaLimit', () => ({
-    useSmartAgendaLimit: () => ({ maxEvents: 0, showSecondFoodLine: true }),
+    useSmartAgendaLimit: () => ({ showFeelLine: true, maxEvents: 0, showSecondFoodLine: true }),
   }));
   vi.doMock('./lib/agenda', () => ({
     selectAgendaView: () => ({

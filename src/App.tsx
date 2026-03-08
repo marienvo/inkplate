@@ -197,7 +197,7 @@ export default function App() {
   const tomorrowDate = new Date(now);
   tomorrowDate.setDate(tomorrowDate.getDate() + 1);
   const tomorrowTitle = formatDateForTitle(tomorrowDate);
-  const { maxEvents, showSecondFoodLine } = useSmartAgendaLimit(contentRef);
+  const { showFeelLine, maxEvents, showSecondFoodLine } = useSmartAgendaLimit(contentRef);
   const { showTomorrow, visibleAppointments, hiddenAppointmentsCount } = selectAgendaView(
     calendarData as Appointment[],
     now,
@@ -244,7 +244,7 @@ export default function App() {
     },
   ];
 
-  if (hasOutdoorFeel && outdoorFeel) {
+  if (showFeelLine && hasOutdoorFeel && outdoorFeel) {
     // weatherItems.push({ icon: <Eye />, label: "Visibility", value: outdoorFeel.details.visibilityFeel });
     weatherItems.push({ icon: <Smile />, label: 'Feel', value: outdoorFeel.feelText });
   }

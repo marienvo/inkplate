@@ -1,16 +1,18 @@
 import { useLayoutEffect, useState, type RefObject } from 'react';
 
 export type LayoutConstraints = {
+  showFeelLine: boolean;
   maxEvents: number;
   showSecondFoodLine: boolean;
 };
 
 export const AGENDA_REDUCTION_STEPS: readonly LayoutConstraints[] = [
-  { maxEvents: 3, showSecondFoodLine: true },
-  { maxEvents: 2, showSecondFoodLine: true },
-  { maxEvents: 1, showSecondFoodLine: true },
-  { maxEvents: 1, showSecondFoodLine: false },
-  { maxEvents: 0, showSecondFoodLine: false },
+  { showFeelLine: true, maxEvents: 3, showSecondFoodLine: true },
+  { showFeelLine: false, maxEvents: 3, showSecondFoodLine: true },
+  { showFeelLine: false, maxEvents: 2, showSecondFoodLine: true },
+  { showFeelLine: false, maxEvents: 1, showSecondFoodLine: true },
+  { showFeelLine: false, maxEvents: 1, showSecondFoodLine: false },
+  { showFeelLine: false, maxEvents: 0, showSecondFoodLine: false },
 ];
 
 export function useSmartAgendaLimit(ref: RefObject<HTMLElement | null>): LayoutConstraints {
