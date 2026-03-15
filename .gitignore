@@ -18,3 +18,5 @@ src/data/settings.json
 
 # Cron runtime logs
 cron/deploy.log
+sonos-grouper/.env
+sonos-grouper/.venv/

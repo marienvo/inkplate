@@ -1,0 +1,18 @@
+[Unit]
+Description=Sonos Grouper Service
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=pi
+WorkingDirectory=/home/pi/inkplate/sonos-grouper
+EnvironmentFile=/home/pi/inkplate/sonos-grouper/.env
+ExecStart=/home/pi/inkplate/sonos-grouper/.venv/bin/python -m sonos_grouper
+Restart=always
+RestartSec=5
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target
