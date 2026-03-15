@@ -5,7 +5,7 @@ Wants=network-online.target
 
 [Service]
 Type=simple
-User=pi
+User=marienvanoverbeek
 WorkingDirectory=/home/marienvanoverbeek/git/inkplate/sonos-grouper
 EnvironmentFile=/home/marienvanoverbeek/git/inkplate/sonos-grouper/.env
 ExecStart=/home/marienvanoverbeek/git/inkplate/sonos-grouper/.venv/bin/python -m sonos_grouper
