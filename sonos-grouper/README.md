@@ -237,7 +237,7 @@ Step-by-step:
 1. Copy the unit file:
 
    ```bash
-   sudo cp /home/pi/inkplate/sonos-grouper/sonos-grouper.service /etc/systemd/system/sonos-grouper.service
+   sudo cp /home/marienvanoverbeek/git/inkplate/sonos-grouper/sonos-grouper.service /etc/systemd/system/sonos-grouper.service
    ```
 
 2. Reload systemd:
